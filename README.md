@@ -20,8 +20,44 @@ var data    = [ 76, 70, 23, 41, 86, 59, 85, 57 ],
 $('#bobbograph').bobbograph( data, options );
 ```
 
+Usage
+-----
+
+The basic setup is as follows:
+
+```javascript
+$('#bobbograph').bobbograph( Data, Options );
+```
+
+In the above example, the graph will be added to an element with an ID of "bobbograph."  This should **NOT** be a Canvas element;  Bobbograph will create the Canvas element for you.
+
+Data
+----
+
+Data is an array of points to be graphed.  Points are accepted in 3 formats: Array, Object, or a Number.
+
+If you pass a number as a point, the **x** value will be automatically calculated for you based on the index of the Data array.
+
+If you pass an array for a point, the first value is the **x** and the second value is the **y**.
+
+Example (x: 5, y: 10):
+
+```javascript
+[ 5, 10 ]
+```
+
+If you pass an object for a point, it's pretty self-explanatory.  The expected keys are **x** and **y**.
+
+Example:
+
+```javascript
+{ x: 5, y: 10 }
+```
+
 Options
 -------
+
+The options object accepts a number of configurable options that will help determine the look and feel of the rendered line graph.
 
 ## Setting Dimensions
 
