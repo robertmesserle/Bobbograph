@@ -31,11 +31,6 @@ Todo: Add value-based divider spacing (rather than the current percentage-based 
 	}
 	function get_child ( obj, key, not_found_value ) { return typeof obj !== 'undefined' && typeof obj[ key ] !== 'undefined' ? obj[ key ] : typeof not_found_value !== 'undefined' ? not_found_value : false; }
 	function if_defined( val, not_found_value ) { return typeof val !== 'undefined' ? val : typeof not_found_value !== 'undefined' ? not_found_value : false; }
-	function bind ( self, func ) {
-		return function () {
-			return func.apply( self, arguments );
-		}
-	}
 	function max_min( num, min, max ) { return num > max ? max : num < min ? min : num; }
 
 	// Bobbograph Main Object
@@ -102,7 +97,7 @@ Todo: Add value-based divider spacing (rather than the current percentage-based 
 	BobbographAnimator.prototype = {
 		play: function () {
 			if ( this.duration === 0 || $.browser.msie && parseInt( $.browser.version, 10 ) < 9 ) return this.step( this.diff );
-			else this.interval = setInterval( bind( this, this.step_forward ), this.wait );
+			else this.interval = setInterval( $.proxy( this, 'step_forward' ), this.wait );
 		},
 		step_forward: function () {
 			var time = +new Date() - this.start_time,
@@ -300,7 +295,7 @@ Todo: Add value-based divider spacing (rather than the current percentage-based 
 		this.shadow_x       = get_child( this.shadow, 'x', 3 );
 		this.shadow_y       = get_child( this.shadow, 'y', 3 );
 		this.shadow_color   = get_child( this.shadow, 'color', 'rgba( 0, 0, 0, 0.075' );
-		new BobbographAnimator( this, { duration: this.parent.anim_duration, easing: this.parent.easing_method, step: bind( this, this.update_percent ), callback: parent.callback } );
+		new BobbographAnimator( this, { duration: this.parent.anim_duration, easing: this.parent.easing_method, step: $.proxy( this, 'update_percent' ), callback: parent.callback } );
 	}
 	BobbographRender.prototype = {
 		draw: function () {
@@ -474,7 +469,7 @@ Todo: Add value-based divider spacing (rather than the current percentage-based 
 		var bobbograph = new Bobbograph( $(this), raw_data, obj );
 		return {
 			_object: bobbograph,
-			get_y_at: bind( bobbograph.data, bobbograph.data.get_y_at ),
+			get_y_at: $.proxy( bobbograph.data.get_y_at, bobbograph.data ),
 			get_high_point: function () { return bobbograph.data.points.high; }
 		};
 	};
