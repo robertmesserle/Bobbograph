@@ -34,7 +34,7 @@ $('#bobbograph').bobbograph( data, {
 } );
 ```
 
-*   height
-	> The height of the canvas element in pixels.
-*   width
-	> The width of the canvas element in pixels.
+* height
+  > The height of the canvas element in pixels.
+* width
+  > The width of the canvas element in pixels.
