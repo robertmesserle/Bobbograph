@@ -36,3 +36,43 @@ $('#bobbograph').bobbograph( data, {
 
 **height**:  The height of the canvas element in pixels.  
 **width**:  The width of the canvas element in pixels.
+
+## Padding
+
+You can add padding to your graph.  This is useful when using thicker lines to prevent the line from being cut off by the canvas borders.
+
+Padding values are overridden by more specific padding.  So the **padding** value will be overridden by **y_padding** or **left_padding** because they are both more specific.
+
+```javascript
+$('#bobbograph').bobbograph( data, {
+	left_padding: 10,
+	right_padding: 10,
+	y_padding: 20
+} );
+```
+
+**padding**: Padding applied to all 4 sides (in pixels).  
+**x_padding**: Padding applied to the left and right.  
+**y_padding**: Padding applied to the top and bottom.  
+**left_padding**: Padding applied to the left.  
+**right_padding**: Padding applied to the right.  
+**top_padding**: Padding applied to the top.  
+**bottom_padding**: Padding applied to the bottom.
+
+## Scaling
+
+Scaling is completely optional, but can give you more control over the rendered graph.  By default, the graph will scale to fill the provided canvas space; however, you can customize it as follows:
+
+```javascript
+$('#bobbograph').bobbograph( data, {
+	min_x: 0,
+	max_x: 50,
+	min_y: 0,
+	max_y: 100
+} );
+```
+
+**min_x**: The value at the left side of the graph.  
+**max_x**: The value at the right side of the graph.  
+**min_y**: The value at the bottom of the graph.  
+**max_y**: The value at the top of the graph.
