@@ -42,19 +42,8 @@
 	<span class="var">$</span>(<span class="string">'#container'</span>).bobbograph( <span class="var">data</span>, <span class="var">options</span> );
 </code>
 
-<h2>Pie Chart</h2>
-<div id="pie"></div>
-<code>
-	var <span class="var">data</span> = [<br />
-	&nbsp; &nbsp; { val: <span class="number">6</span>, color: <span class="string">'#3c90af'</span>, side_color: <span class="string">'#2b667e'</span> },<br />
-	&nbsp; &nbsp; { val: <span class="number">9</span>, color: <span class="string">'#ea3030'</span>, side_color: <span class="string">'#aa2323'</span> }<br />
-	];<br />
-	<span class="var">$</span>(<span class="string">'#container'</span>).pie( <span class="var">data</span>, { padding:	<span class="number">100</span> } );
-</code>
-
 <script type="text/javascript" src="jquery.min.js"></script>
-<script type="text/javascript" src="jquery.bobbograph.js"></script>
-<script type="text/javascript" src="pie.js"></script>
+<script type="text/javascript" src="../jquery.bobbograph.js"></script>
 <script type="text/javascript">
 	(function () {
 		var data    = [ 76, 70, 23, 41, 86, 59, 85, 57 ],
@@ -71,13 +60,6 @@
 				color: [ '#fc0', '#0cf' ]
 			};
 		$('#line_graph').bobbograph( data, options );
-	})();
-	(function () {
-		var data = [
-			{ val: 6, color: '#af3c90', side_color: '#7e2b66' },
-			{ val: 9, color: '#30ea30', side_color: '#23aa23' }
-		];
-		$('#pie').pie( data, { padding: 100 } );
 	})();
 </script>
 
