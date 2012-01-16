@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Bobbograph</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+	<!--[if IE]><script src="excanvas.js"></script><![endif]-->
+</head>
+<body>
+
+<h1>Bobbograph</h1>
+
+<h2>Line Graph</h2>
+<div id="line_graph"></div>
+<code>
+	var <span class="var">data</span> = [ [
+	<span class="number">76</span>,
+	<span class="number">70</span>,
+	<span class="number">23</span>,
+	<span class="number">41</span>,
+	<span class="number">86</span>,
+	<span class="number">59</span>,
+	<span class="number">85</span>,
+	<span class="number">57</span>
+	] ],<br />
+	&nbsp; &nbsp; <span class="var">options</span>  = {<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; duration: <span class="number">1000</span>,<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; padding: <span class="number">20</span>,<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; normal_range: <span class="number">0</span>,<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; line_width: <span class="number">10</span>,<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; smooth_graph: <span class="string">true</span>,<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; peaks_and_valleys: <span class="string">true</span>,<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; bevel: <span class="string">true</span>,<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; dividers: [ { count: <span class="number">25</span>, line_width: <span class="number">0.5</span> }, { count: <span class="number">5</span>, line_width: <span class="number">1.5</span> } ],<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; fill: [ <span class="string">'rgba(0, 204, 255, 0.25)'</span>, <span class="string">'rgba(0, 204, 255, 0)'</span> ],<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; fill: [<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="string">'rgba('</span> + [ <span class="number">0xff</span>, <span class="number">0xcc</span>, <span class="number">0</span>, <span class="number">0.25</span> ] + <span class="string">')'</span>,<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="string">'rgba('</span> + [ <span class="number">0</span>, <span class="number">0xcc</span>, <span class="number">0xff</span>, <span class="number">0.25</span> ] + <span class="string">')'</span><br />
+	&nbsp; &nbsp; &nbsp; &nbsp; ],<br />
+	&nbsp; &nbsp; &nbsp; &nbsp; color: [ <span class="string">'#fc0'</span>, <span class="string">'#0cf'</span> ]<br />
+	&nbsp; &nbsp; };<br />
+	<span class="var">$</span>(<span class="string">'#container'</span>).bobbograph( <span class="var">data</span>, <span class="var">options</span> );
+</code>
+
+<h2>Pie Chart</h2>
+<div id="pie"></div>
+<code>
+	var <span class="var">data</span> = [<br />
+	&nbsp; &nbsp; { val: <span class="number">6</span>, color: <span class="string">'#3c90af'</span>, side_color: <span class="string">'#2b667e'</span> },<br />
+	&nbsp; &nbsp; { val: <span class="number">9</span>, color: <span class="string">'#ea3030'</span>, side_color: <span class="string">'#aa2323'</span> }<br />
+	];<br />
+	<span class="var">$</span>(<span class="string">'#container'</span>).pie( <span class="var">data</span>, { padding:	<span class="number">100</span> } );
+</code>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="jquery.bobbograph.js"></script>
+<script type="text/javascript" src="pie.js"></script>
+<script type="text/javascript">
+	(function () {
+		var data    = [ 76, 70, 23, 41, 86, 59, 85, 57 ],
+			options = {
+				duration: 1000,
+				padding: 20,
+				normal_range: 0,
+				line_width: 10,
+				smooth_graph: true,
+				peaks_and_valleys: true,
+				bevel: true,
+				dividers: [ { count: 25, line_width: 0.5 }, { count: 5, line_width: 1.5 } ],
+				fill: [ 'rgba(' + [ 0xff, 0xcc, 0, 0.25 ] + ')', 'rgba(' + [ 0, 0xcc, 0xff, 0.25 ] + ')' ],
+				color: [ '#fc0', '#0cf' ]
+			};
+		$('#line_graph').bobbograph( data, options );
+	})();
+	(function () {
+		var data = [
+			{ val: 6, color: '#af3c90', side_color: '#7e2b66' },
+			{ val: 9, color: '#30ea30', side_color: '#23aa23' }
+		];
+		$('#pie').pie( data, { padding: 100 } );
+	})();
+</script>
+
+</body>
+</html>
