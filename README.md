@@ -27,14 +27,12 @@ Options
 
 Dimensions are set with the options **width** and **height**.
 
+**height**:  The height of the canvas element in pixels.  
+**width**:  The width of the canvas element in pixels.
+
 ```javascript
 $('#bobbograph').bobbograph( data, {
 	height: 300,
 	width:  400
 } );
 ```
-
-* height
-  > The height of the canvas element in pixels.
-* width
-  > The width of the canvas element in pixels.
