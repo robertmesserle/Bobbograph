@@ -25,7 +25,7 @@ Options
 
 ## Setting Dimensions
 
-Dimensions are set with the options *width* and *height*.
+Dimensions are set with the options **width** and **height**.
 
 ```javascript
 var options = {
