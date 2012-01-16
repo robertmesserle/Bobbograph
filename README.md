@@ -28,9 +28,8 @@ Options
 Dimensions are set with the options **width** and **height**.
 
 ```javascript
-var options = {
+$('#bobbograph').bobbograph( data, {
 	height: 300,
 	width:  400
-};
-$('#bobbograph').bobbograph( data, options );
+} );
 ```
