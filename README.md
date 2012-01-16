@@ -17,7 +17,7 @@ var data    = [ 76, 70, 23, 41, 86, 59, 85, 57 ],
 		fill: [ 'rgba(' + [ 0xff, 0xcc, 0, 0.25 ] + ')', 'rgba(' + [ 0, 0xcc, 0xff, 0.25 ] + ')' ],
 		color: [ '#fc0', '#0cf' ]
 	};
-$('#line_graph').bobbograph( data, options );
+$('#bobbograph').bobbograph( data, options );
 ```
 
 Options
