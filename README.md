@@ -250,3 +250,10 @@ var point2 = bg.get_high_point();
 
 **get_y_at( x:Number )**:  This method returns the point for the requested x value in the format ```{ x: 0, y: 0 }```  
 **get_high*point()**:  This method returns the point for the greatest y value in the format ```{ x: 0, y: 0 }```
+
+Upcoming Features
+-----------------
+
+* Fully configurable dropshadows
+* Optional IE fill and stroke colors (used in place of unsupported gradients in IE8 and earlier)
+* More animation control (ie. replay)
