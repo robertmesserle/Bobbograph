@@ -112,3 +112,36 @@ $('#bobbograph').bobbograph( data, {
 **max_x**: The value at the right side of the graph.  
 **min_y**: The value at the bottom of the graph.  
 **max_y**: The value at the top of the graph.
+
+## Colors
+
+With Bobbograph, you can specify a custom fill or line color by passing a color to Bobbograph.  Colors are accepted in a number of formats.
+
+The basic color formats are:
+
+```javascript
+'#ffffff'
+'rgb( 255, 255, 255 )'
+'rgba( 255, 255, 255, 0.5 )'
+```
+
+You can also specify gradients for the fills by passing an array as follows:
+
+```javascript
+[ '#ffffff', '#000000' ]
+[ { color: '#ffffff', offset: 0 }, { color: '#000000', offset: 1 } ]
+```
+
+If you are just doing a simple gradient with evenly spaced colors, you only need to pass an array of colors.  If you need more control than that, you can pass objects as in the second example, which allows you to specify an offset as well as a color.
+
+Colors can be passed to the object as **fill** or **color**:
+
+```javascript
+$('#bobbograph').bobbograph( data, {
+	fill: [ 'rgba( 255, 204, 0, 0.25 )', 'rgba( 0, 204, 255, 0.25 )' ],
+	color: [ '#fc0', '#0cf' ]
+} );
+```
+
+**fill**:  A color representing the area under the graph.  
+**color**:  A color representing the styling of the line.
