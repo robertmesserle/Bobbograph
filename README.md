@@ -242,5 +242,11 @@ $('#bobbograph').bobbograph( data, {
 Public Methods
 --------------
 
+```javascript
+var bg = $('#bobbograph').bobbograph( data, options );
+var point1 = bg.get_y_at( 10 );
+var point2 = bg.get_high_point();
+```
+
 **get_y_at( x:Number )**:  This method returns the point for the requested x value in the format ```{ x: 0, y: 0 }```  
 **get_high*point()**:  This method returns the point for the greatest y value in the format ```{ x: 0, y: 0 }```
