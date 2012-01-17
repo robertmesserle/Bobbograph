@@ -162,3 +162,32 @@ $('#bobbograph').bobbograph( data, {
 
 **duration**: The duration of the animation in milliseconds.  
 **easing_method**: A custom easing method (following the format of jQuery's easing plugin).
+
+## Graph Smoothing
+
+There are a number of tools provided for smoothing out your graph and making it more visually appealing.  The first is simply a boolean property called **smooth_graph** that tells the graph to use a curved line between points to make it look less jagged.
+
+```javascript
+$('#bobbograph').bobbograph( data, {
+	smooth_graph: true,
+	smoothing_method: $.easing.easeInOutQuad,
+	peaks_and_valleys: true
+} );
+```
+
+**smooth_graph**:  Boolean value that tells Bobbograph to use curves between points rather than straight lines.  
+**smoothing_method**:  This will not be useful for the vast majority of cases.  This allows you to pass your own function (following the structure used by jQuery's easing plugin) to handle the smoothing between points.  
+**peaks_and_valleys**:  This will ignore all points in between the peaks and valleys of your graph to give a smoother graph.
+
+## Data Smoothing
+
+Along with smoothing out the graph's visuals, you are given a number of tools to smooth the data itself.
+
+```javascript
+$('#bobbograph').bobbograph( data, {
+	normal_range: 2,
+	max_num_points: 200
+} );
+
+**normal_range**:  A number used to determine the range of normalization performed on each point.  This method will use a moving average to normalize all points in the graph based on the range provided.  
+**max_num_points**:  The maximum number of points you would like to be rendered.  When set, this will average points together to compress your data down within the maximum number of points.
