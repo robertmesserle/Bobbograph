@@ -238,3 +238,9 @@ $('#bobbograph').bobbograph( data, {
 ## Miscellaneous
 
 **percent**:  The percentage of the graph that you would like to display.
+
+Public Methods
+--------------
+
+**get_y_at( x:Number )**:  This method returns the point for the requested x value in the format ```{ x: 0, y: 0 }```  
+**get_high*point()**:  This method returns the point for the greatest y value in the format ```{ x: 0, y: 0 }```
