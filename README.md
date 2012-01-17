@@ -145,3 +145,19 @@ $('#bobbograph').bobbograph( data, {
 
 **fill**:  A color representing the area under the graph.  
 **color**:  A color representing the styling of the line.
+
+## Animation
+
+You can have Bobbograph animate your graph on load by specifying a **duration**.
+
+You can also override the default easing method with one of jQuery's easing plugin methods.
+
+```javascript
+$('#bobbograph').bobbograph( data, {
+	duration: 1000,
+	easing_method: $.easing.easeOutBounce
+} );
+```
+
+**duration**: The duration of the animation in milliseconds.  
+**easing_method**: A custom easing method (following the format of jQuery's easing plugin).
