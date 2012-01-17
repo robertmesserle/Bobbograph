@@ -73,6 +73,30 @@ $('#bobbograph').bobbograph( data, {
 **height**:  The height of the canvas element in pixels.  
 **width**:  The width of the canvas element in pixels.
 
+## Styling
+
+You can style your graph with the following options.
+
+```javascript
+$('#bobbograph').bobbograph( data, {
+	line_width: 5,
+	shadow: true,
+	bevel: true,
+	bevel_intensity: 1,
+	shine_intensity: 0.65
+	shadow_intensity: 0.3,
+	smooth_bevel: true
+} );
+```
+
+**line_width**:  The thickness of the line in pixels (defaults to 5).  
+**shadow**:  A boolean value that adds a dropshadow to the line.  (More configuration coming soon.)  
+**bevel**:  A boolean value that tells Bobbograph to bevel your line.  
+**bevel_intensity**:  The opacity of the bevel as a whole - both shine and shadow are affected.  
+**shine_intensity**:  Opacity applied only to the shine portion of the bevel.  
+**shadow_intensity**:  Opacity applied only to the shadow portion of the bevel.  
+**smooth_bevel**:  A boolean value that toggles a smoother bevel effect.  (Note:  This is much slower to render and may cause lag when animation is turned on.)
+
 ## Padding
 
 You can add padding to your graph.  This is useful when using thicker lines to prevent the line from being cut off by the canvas borders.
@@ -144,6 +168,7 @@ $('#bobbograph').bobbograph( data, {
 ```
 
 **color**:  A color representing the styling of the line.  
+**vert_line_fill**:  A boolean value that specifies that you want your gradient line fill to be displayed vertically.  
 **fill**:  A color representing the area under the graph.  
 **vertical_fill**:  A boolean value that specifies that you want your gradient fill to be displayed vertically.
 
@@ -161,7 +186,8 @@ $('#bobbograph').bobbograph( data, {
 ```
 
 **duration**: The duration of the animation in milliseconds.  
-**easing_method**: A custom easing method (following the format of jQuery's easing plugin).
+**easing_method**: A custom easing method (following the format of jQuery's easing plugin).  
+**callback**:  A callback function to be fired when the animation has completed.
 
 ## Graph Smoothing
 
@@ -192,3 +218,23 @@ $('#bobbograph').bobbograph( data, {
 
 **normal_range**:  A number used to determine the range of normalization performed on each point.  This method will use a moving average to normalize all points in the graph based on the range provided.  
 **max_num_points**:  The maximum number of points you would like to be rendered.  When set, this will average points together to compress your data down within the maximum number of points.
+
+## Dividers
+
+You can add vertical dividers to your line graph by using the dividers property.  The structure for this property is as follows:
+
+```javascript
+$('#bobbograph').bobbograph( data, {
+	dividers: [
+		{ count: 25, line_width: 0.5 },
+		{ count: 5, line_width: 1.5 }
+	],
+} );
+```
+
+**count**:  The count specifies how many dividers you would like to display within the graph area.  
+**line_width**:  The thickness of the dividing lines.
+
+## Miscellaneous
+
+**percent**:  The percentage of the graph that you would like to display.
