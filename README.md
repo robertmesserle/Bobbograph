@@ -143,8 +143,9 @@ $('#bobbograph').bobbograph( data, {
 } );
 ```
 
+**color**:  A color representing the styling of the line.  
 **fill**:  A color representing the area under the graph.  
-**color**:  A color representing the styling of the line.
+**vertical_fill**:  A boolean value that specifies that you want your gradient fill to be displayed vertically.
 
 ## Animation
 
