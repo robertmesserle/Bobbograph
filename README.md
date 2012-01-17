@@ -188,6 +188,7 @@ $('#bobbograph').bobbograph( data, {
 	normal_range: 2,
 	max_num_points: 200
 } );
+```
 
 **normal_range**:  A number used to determine the range of normalization performed on each point.  This method will use a moving average to normalize all points in the graph based on the range provided.  
 **max_num_points**:  The maximum number of points you would like to be rendered.  When set, this will average points together to compress your data down within the maximum number of points.
