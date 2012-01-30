@@ -1,11 +1,4 @@
-/*
-Bobbograph jQuery Plugin v2.1
-Copyright (c) 2011 Robert Messerle (http://www.robertmesserle.com)
-Website: http://bobbograph.robertmesserle.com
-
-Todo: Add vertical divider support (vertical trigger inside each divider object)
-Todo: Add value-based divider spacing (rather than the current percentage-based division)
-*/
+/*! Bobbograph v2.1 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
 ( function ( $ ) {
 	'use strict';
 	var easing_methods = {
