@@ -1,5 +1,4 @@
-Bobbograph v2.1
-===============
+# Bobbograph v2.1
 
 Bobbograph is a highly configurable Canvas-based graphing library for jQuery.  It provides you with the power to render great looking graphs across all modern browsers.  Bobbograph is also built to utilize Excanvas for older versions of IE that do not support Canvas.
 
@@ -20,8 +19,7 @@ var data    = [ 76, 70, 23, 41, 86, 59, 85, 57 ],
 $('#bobbograph').bobbograph( data, options );
 ```
 
-Usage
------
+## Usage
 
 The basic setup is as follows:
 
@@ -31,8 +29,7 @@ $('#bobbograph').bobbograph( Data, Options );
 
 In the above example, the graph will be added to an element with an ID of "bobbograph."  This should **NOT** be a Canvas element;  Bobbograph will create the Canvas element for you.
 
-Data
-----
+## Data
 
 Data is an array of points to be graphed.  Points are accepted in 3 formats: Array, Object, or a Number.
 
@@ -54,12 +51,11 @@ Example:
 { x: 5, y: 10 }
 ```
 
-Options
--------
+## Options
 
 The options object accepts a number of configurable options that will help determine the look and feel of the rendered line graph.
 
-## Setting Dimensions
+### Setting Dimensions
 
 Dimensions are set with the options **width** and **height**.
 
@@ -73,7 +69,7 @@ $('#bobbograph').bobbograph( data, {
 **height**:  The height of the canvas element in pixels.  
 **width**:  The width of the canvas element in pixels.
 
-## Styling
+### Styling
 
 You can style your graph with the following options.
 
@@ -97,7 +93,7 @@ $('#bobbograph').bobbograph( data, {
 **shadow_intensity**:  Opacity applied only to the shadow portion of the bevel.  
 **smooth_bevel**:  A boolean value that toggles a smoother bevel effect.  (Note:  This is much slower to render and may cause lag when animation is turned on.)
 
-## Padding
+### Padding
 
 You can add padding to your graph.  This is useful when using thicker lines to prevent the line from being cut off by the canvas borders.
 
@@ -119,7 +115,7 @@ $('#bobbograph').bobbograph( data, {
 **top_padding**: Padding applied to the top.  
 **bottom_padding**: Padding applied to the bottom.
 
-## Scaling
+### Scaling
 
 Scaling is completely optional, but can give you more control over the rendered graph.  By default, the graph will scale to fill the provided canvas space; however, you can customize it as follows:
 
@@ -137,7 +133,7 @@ $('#bobbograph').bobbograph( data, {
 **min_y**: The value at the bottom of the graph.  
 **max_y**: The value at the top of the graph.
 
-## Colors
+### Colors
 
 With Bobbograph, you can specify a custom fill or line color by passing a color to Bobbograph.  Colors are accepted in a number of formats.
 
@@ -172,7 +168,7 @@ $('#bobbograph').bobbograph( data, {
 **fill**:  A color representing the area under the graph.  
 **vertical_fill**:  A boolean value that specifies that you want your gradient fill to be displayed vertically.
 
-## Animation
+### Animation
 
 You can have Bobbograph animate your graph on load by specifying a **duration**.
 
@@ -189,7 +185,7 @@ $('#bobbograph').bobbograph( data, {
 **easing_method**: A custom easing method (following the format of jQuery's easing plugin).  
 **callback**:  A callback function to be fired when the animation has completed.
 
-## Graph Smoothing
+### Graph Smoothing
 
 There are a number of tools provided for smoothing out your graph and making it more visually appealing.  The first is simply a boolean property called **smooth_graph** that tells the graph to use a curved line between points to make it look less jagged.
 
@@ -205,7 +201,7 @@ $('#bobbograph').bobbograph( data, {
 **smoothing_method**:  This will not be useful for the vast majority of cases.  This allows you to pass your own function (following the structure used by jQuery's easing plugin) to handle the smoothing between points.  
 **peaks_and_valleys**:  This will ignore all points in between the peaks and valleys of your graph to give a smoother graph.
 
-## Data Smoothing
+### Data Smoothing
 
 Along with smoothing out the graph's visuals, you are given a number of tools to smooth the data itself.
 
@@ -219,7 +215,7 @@ $('#bobbograph').bobbograph( data, {
 **normal_range**:  A number used to determine the range of normalization performed on each point.  This method will use a moving average to normalize all points in the graph based on the range provided.  
 **max_num_points**:  The maximum number of points you would like to be rendered.  When set, this will average points together to compress your data down within the maximum number of points.
 
-## Dividers
+### Dividers
 
 You can add vertical dividers to your line graph by using the dividers property.  The structure for this property is as follows:
 
@@ -235,7 +231,7 @@ $('#bobbograph').bobbograph( data, {
 **count**:  The count specifies how many dividers you would like to display within the graph area.  
 **line_width**:  The thickness of the dividing lines.
 
-## Miscellaneous
+### Miscellaneous
 
 **percent**:  The percentage of the graph that you would like to display.
 
@@ -251,8 +247,7 @@ var point2 = bg.get_high_point();
 **get_y_at( x:Number )**:  This method returns the point for the requested x value in the format ```{ x: 0, y: 0 }```  
 **get_high*point()**:  This method returns the point for the greatest y value in the format ```{ x: 0, y: 0 }```
 
-Upcoming Features
------------------
+## Upcoming Features
 
 * Fully configurable dropshadows
 * Optional IE fill and stroke colors (used in place of unsupported gradients in IE8 and earlier)
