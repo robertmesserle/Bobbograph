@@ -26,6 +26,15 @@
   function if_defined( val, not_found_value ) { return typeof val !== 'undefined' ? val : typeof not_found_value !== 'undefined' ? not_found_value : false; }
   function max_min( num, min, max ) { return num > max ? max : num < min ? min : num; }
 
+  //-- Object.create polyfill
+  Object.create || ( Object.create = ( function () {
+    function Obj () {}
+    return function ( proto ) {
+      Obj.prototype = proto;
+      return new Obj;
+    };
+  } )() );
+
   // Bobbograph Main Object
   function Bobbograph ( $container, raw_data, obj ) {
     if ( !obj ) obj = {};
@@ -68,7 +77,7 @@
     this.usable_height     = this.height - this.top_padding  - this.bottom_padding;
 
     //-- child objects
-    this.data              = new BobbographData( this, $.extend( [], raw_data ) );
+    this.data              = new BobbographData( this, Object.create( raw_data ) );
     new BobbographRender( this, $container );
 
     if ( typeof this.easing_method === 'string' ) this.easing_method = get_property( $, 'easing.' + this.easing_method, easing_methods.ease_out_quad );
