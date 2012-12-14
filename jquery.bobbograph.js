@@ -1,4 +1,6 @@
 /*! Bobbograph v2.1 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
+/*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */
+
 ( function ( $ ) {
   'use strict';
   var easing_methods = {
