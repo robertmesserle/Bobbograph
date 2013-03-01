@@ -100,7 +100,7 @@
   }
   BobbographAnimator.prototype = {
     play: function () {
-      if ( this.duration === 0 || $.browser.msie && parseInt( $.browser.version, 10 ) < 9 ) return this.step( this.diff );
+      if ( this.duration === 0 || !$.support.leadingWhitespace ) return this.step( this.diff );
       else this.interval = setInterval( $.proxy( this, 'step_forward' ), this.wait );
     },
     step_forward: function () {
