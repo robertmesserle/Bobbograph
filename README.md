@@ -2,6 +2,10 @@
 
 Bobbograph is a highly configurable Canvas-based graphing library for jQuery.  It provides you with the power to render great looking graphs across all modern browsers.  Bobbograph is also built to utilize Excanvas for older versions of IE that do not support Canvas.
 
+## Demo
+
+You can view it in action [here](http://jsbin.com/EzALoDOh/1/).
+
 ```javascript
 var data    = [ 76, 70, 23, 41, 86, 59, 85, 57 ],
 	options = {
