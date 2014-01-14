@@ -15,7 +15,7 @@ Bobbograph = (function() {
     this.options = new Options(options);
     this.context = this.getContext(id);
     this.data = new Data(data, this.options);
-    new Render(this.data.pixels, this.context);
+    new Render(this.data.pixels, this.context, this.options);
   }
 
   Bobbograph.prototype.getContext = function(id) {
@@ -195,6 +195,10 @@ Options = (function() {
 
   Options.prototype.verticalFill = false;
 
+  Options.prototype.dashed = false;
+
+  Options.prototype.dashSize = 5;
+
   Options.prototype.maxPoints = false;
 
   Options.prototype.peaksAndValleys = false;
@@ -280,16 +284,55 @@ var Render;
 
 Render = (function() {
   function Render(pixels, context, options) {
-    var index, _i, _ref;
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    this.context.moveTo(0, this.pixels[0]);
-    for (index = _i = 1, _ref = this.pixels.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; index = 1 <= _ref ? ++_i : --_i) {
-      this.context.lineTo(index, this.pixels[index]);
+    if (this.options.dashed) {
+      this.renderDashed(this.pixels, this.context, this.options.dashSize);
+    } else {
+      this.renderSolid(this.pixels, this.context);
     }
-    this.context.stroke();
   }
+
+  Render.prototype.renderDashed = function(pixels, context, size) {
+    var dist, index, last, line, _i, _ref, _results;
+    last = {
+      x: 0,
+      y: pixels[0]
+    };
+    context.moveTo(last.x, last.y);
+    line = true;
+    _results = [];
+    for (index = _i = 1, _ref = pixels.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; index = 1 <= _ref ? ++_i : --_i) {
+      dist = Trig.getDistanceBetweenPoints(last.x, last.y, index, pixels[index]);
+      if (dist > size) {
+        if (line) {
+          context.lineTo(index, pixels[index]);
+          context.stroke();
+        } else {
+          context.beginPath();
+          context.moveTo(index, pixels[index]);
+        }
+        line = !line;
+        _results.push(last = {
+          x: index,
+          y: pixels[index]
+        });
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+
+  Render.prototype.renderSolid = function(pixels, context) {
+    var index, _i, _ref;
+    context.moveTo(0, pixels[0]);
+    for (index = _i = 1, _ref = pixels.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; index = 1 <= _ref ? ++_i : --_i) {
+      context.lineTo(index, pixels[index]);
+    }
+    return context.stroke();
+  };
 
   return Render;
 

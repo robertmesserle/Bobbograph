@@ -15,6 +15,8 @@ class Options
   shadow:             false
   fill:               false
   verticalFill:       false
+  dashed:             false
+  dashSize:           5
 
   # Smoothing info
   maxPoints:          false
