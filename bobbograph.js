@@ -39,15 +39,33 @@ var Data;
 Data = (function() {
   function Data(data, options) {
     this.options = options;
-    this.points = this.getPoints(data);
+    this.data = this.formatData(data);
+    this.stats = this.getStats(this.data);
+    this.points = this.getPoints(this.data, this.options, this.stats);
   }
 
-  Data.prototype.getPoints = function(raw, options) {
-    var data, dx, dy, point, scalePoint, xarr, xmax, xmin, yarr, ymax, ymin, _i, _len, _results;
-    if (options == null) {
-      options = this.options;
+  Data.prototype.scalePoint = function(val, min, delta, scale) {
+    var percent, scaled, scoped;
+    scoped = val - min;
+    percent = scoped / delta;
+    return scaled = percent * scale;
+  };
+
+  Data.prototype.getPoints = function(data, options, stats) {
+    var point, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = data.length; _i < _len; _i++) {
+      point = data[_i];
+      _results.push({
+        x: this.scalePoint(point.x, stats.xmin, stats.dx, options.width),
+        y: this.scalePoint(point.y, stats.ymin, stats.dy, options.height)
+      });
     }
-    data = this.formatData(raw);
+    return _results;
+  };
+
+  Data.prototype.getStats = function(data) {
+    var point, stats, xarr, yarr;
     xarr = (function() {
       var _i, _len, _results;
       _results = [];
@@ -57,9 +75,6 @@ Data = (function() {
       }
       return _results;
     })();
-    xmin = Math.min.apply(null, xarr);
-    xmax = Math.max.apply(null, xarr);
-    dx = xmax - xmin;
     yarr = (function() {
       var _i, _len, _results;
       _results = [];
@@ -69,28 +84,22 @@ Data = (function() {
       }
       return _results;
     })();
-    ymin = Math.min.apply(null, yarr);
-    ymax = Math.max.apply(null, yarr);
-    dy = ymax - ymin;
-    scalePoint = function(val, min, delta, scale) {
-      var percent, scaled, scoped;
-      scoped = val - min;
-      percent = scoped / delta;
-      return scaled = percent * scale;
+    stats = {
+      xmin: Math.min.apply(null, xarr),
+      xmax: Math.max.apply(null, xarr),
+      ymin: Math.min.apply(null, yarr),
+      ymax: Math.max.apply(null, yarr)
     };
-    _results = [];
-    for (_i = 0, _len = data.length; _i < _len; _i++) {
-      point = data[_i];
-      _results.push({
-        x: scalePoint(point.x, xmin, dx, options.width),
-        y: scalePoint(point.y, ymin, dy, options.height)
-      });
-    }
-    return _results;
+    stats.dx = stats.xmax - stats.xmin;
+    stats.dy = stats.ymax - stats.ymin;
+    return stats;
   };
 
   Data.prototype.formatData = function(data) {
-    var index, val, _i, _j, _len, _len1, _results, _results1;
+    var index, sort, val, _i, _len, _results;
+    sort = function(a, b) {
+      return a.x - b.x;
+    };
     if (typeof data[0] === 'number') {
       _results = [];
       for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
@@ -102,17 +111,20 @@ Data = (function() {
       }
       return _results;
     } else if (data[0] instanceof Array) {
-      _results1 = [];
-      for (index = _j = 0, _len1 = data.length; _j < _len1; index = ++_j) {
-        val = data[index];
-        _results1.push({
-          x: val[0],
-          y: val[1]
-        });
-      }
-      return _results1;
+      return ((function() {
+        var _j, _len1, _results1;
+        _results1 = [];
+        for (index = _j = 0, _len1 = data.length; _j < _len1; index = ++_j) {
+          val = data[index];
+          _results1.push({
+            x: val[0],
+            y: val[1]
+          });
+        }
+        return _results1;
+      })()).sort(sort);
     } else if (data[0] && (data[0].x != null) && (data[0].y != null)) {
-      return data;
+      return data.sort(sort);
     }
   };
 

@@ -24,8 +24,6 @@ describe 'Data', ->
 
     it 'should support objects', ->
       data = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 }, { x: 3, y: 4 }, { x: 4, y: 5 } ]
-
-
       points = Data.prototype.formatData(data)
       expect( points[0] ).toEqual x: 0, y: 1
       expect( points[1] ).toEqual x: 1, y: 2
@@ -33,20 +31,34 @@ describe 'Data', ->
       expect( points[3] ).toEqual x: 3, y: 4
       expect( points[4] ).toEqual x: 4, y: 5
 
+  describe 'Data#getStats()', ->
+    data = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 }, { x: 3, y: 4 }, { x: 4, y: 5 } ]
+    stats = Data.prototype.getStats(data)
+
+    it 'should have the proper x max', ->
+      expect( stats.xmax ).toBe 4
+    it 'should have the proper y max', ->
+      expect( stats.ymax ).toBe 5
+
   describe 'Data#getPoints()', ->
 
     options = { width: 600, height: 300 }
 
-    do ->
-      raw = [ 1, 2, 3 ]
-      points = Data.prototype.getPoints(raw, options)
-      expect( points[0] ).toEqual x:   0, y:   0
-      expect( points[1] ).toEqual x: 300, y: 150
-      expect( points[2] ).toEqual x: 600, y: 300
+    it 'should scale data to the graph dimensions', ->
+      do ->
+        raw     = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 } ]
+        stats   = xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2
+        points  = Data.prototype.getPoints(raw, options, stats)
 
-    do ->
-      raw = [ 1, 3, 2 ]
-      points = Data.prototype.getPoints(raw, options)
-      expect( points[0] ).toEqual x:   0, y: 0
-      expect( points[1] ).toEqual x: 300, y: 300
-      expect( points[2] ).toEqual x: 600, y: 150
+        expect( points[0] ).toEqual x:   0, y:   0
+        expect( points[1] ).toEqual x: 300, y: 150
+        expect( points[2] ).toEqual x: 600, y: 300
+
+      do ->
+        raw     = [ { x: 0, y: 1 }, { x: 1, y: 3 }, { x: 2, y: 2 } ]
+        stats   = xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2
+        points  = Data.prototype.getPoints(raw, options, stats)
+        
+        expect( points[0] ).toEqual x:   0, y: 0
+        expect( points[1] ).toEqual x: 300, y: 300
+        expect( points[2] ).toEqual x: 600, y: 150

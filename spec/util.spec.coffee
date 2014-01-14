@@ -1,4 +1,4 @@
-describe 'util.js', ->
+describe 'Util', ->
 
   Util = get 'Util'
 
