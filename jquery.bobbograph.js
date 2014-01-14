@@ -3,6 +3,7 @@
 
 ( function ( $ ) {
   'use strict';
+  var devicePixelRatio = window.devicePixelRatio;
   var easing_methods = {
       ease_out_quad:    function ( x, t, b, c, d ) { return -c *(t/=d)*(t-2) + b; },
       ease_in_out_quad: function ( x, t, b, c, d ) { return (t/=d/2) < 1 ? c/2*t*t + b : -c/2 * ((--t)*(t-2) - 1) + b; },
@@ -292,6 +293,7 @@
   function BobbographRender ( parent, $container ) {
     this.parent         = parent;
     this.data           = parent.data;
+    this.multiplier		= devicePixelRatio == 2 ? 4 : 1;
     this.ctx            = this.get_context( $container );
     this.bevel_shine    = parent.bevel ? this.bevel( true )  : false;
     this.bevel_shadow   = parent.bevel ? this.bevel( false ) : false;
@@ -299,6 +301,7 @@
     this.shadow_x       = get_child( this.shadow, 'x', 3 );
     this.shadow_y       = get_child( this.shadow, 'y', 3 );
     this.shadow_color   = get_child( this.shadow, 'color', 'rgba( 0, 0, 0, 0.075' );
+    this.ctx.scale(this.multiplier,this.multiplier);
     new BobbographAnimator( this, { duration: this.parent.anim_duration, easing: this.parent.easing_method, step: $.proxy( this, 'update_percent' ), callback: parent.callback } );
   }
   BobbographRender.prototype = {
@@ -347,7 +350,7 @@
     },
     get_context: function ( $container ) {
       var $canvas;
-      $container.empty().append( $canvas = $('<canvas />').attr({ height: this.parent.height, width: this.parent.width }) );
+      $container.empty().append( $canvas = $('<canvas />').attr({ height: this.parent.height * this.multiplier, width: this.parent.width * this.multiplier  }) );
       if ( excanvas ) G_vmlCanvasManager.initElement( $canvas.get(0) );
       return $canvas.get(0).getContext( '2d' );
     },
