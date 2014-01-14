@@ -18,6 +18,7 @@ Bobbograph = (function() {
     this.options = new Options(options);
     this.context = this.getContext(id);
     this.data = new Data(data, this.options);
+    new Render(this.data.pixels, this.context);
   }
 
   Bobbograph.prototype.getContext = function(id) {
@@ -275,6 +276,25 @@ Options = (function() {
   };
 
   return Options;
+
+})();
+
+var Render;
+
+Render = (function() {
+  function Render(pixels, context, options) {
+    var index, _i, _ref;
+    this.pixels = pixels;
+    this.context = context;
+    this.options = options;
+    this.context.moveTo(0, this.pixels[0]);
+    for (index = _i = 1, _ref = this.pixels.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; index = 1 <= _ref ? ++_i : --_i) {
+      this.context.lineTo(index, this.pixels[index]);
+    }
+    this.context.stroke();
+  }
+
+  return Render;
 
 })();
 
