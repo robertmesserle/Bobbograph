@@ -10,7 +10,6 @@ class Options
   shineIntensity:     0.65
   shadowIntensity:    0.3
   smoothBevel:        false
-  smoothGraph:        false
   lineWidth:          5
   color:              '#000'
   shadow:             false
@@ -21,6 +20,7 @@ class Options
   maxPoints:          false
   peaksAndValleys:    false
   verticalLineFill:   false
+  smoothGraph:        false
   smoothingMethod:    false
   normalRange:        false
 

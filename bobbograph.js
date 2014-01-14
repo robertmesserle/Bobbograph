@@ -42,6 +42,7 @@ Data = (function() {
     this.data = this.formatData(data);
     this.stats = this.getStats(this.data);
     this.points = this.getPoints(this.data, this.options, this.stats);
+    this.pixels = this.getPixels(this.points, this.options.width, this.options.smoothGraph);
   }
 
   Data.prototype.scalePoint = function(val, min, delta, scale) {
@@ -128,6 +129,22 @@ Data = (function() {
     }
   };
 
+  Data.prototype.getPixels = function(points, width, curve) {
+    var index, lastPoint, method, pixels, point, _i, _j, _len, _ref, _ref1;
+    method = curve ? Easing.curve : Easing.linear;
+    pixels = new Array(width);
+    for (_i = 0, _len = points.length; _i < _len; _i++) {
+      point = points[_i];
+      if (typeof lastPoint !== "undefined" && lastPoint !== null) {
+        for (index = _j = _ref = lastPoint.x, _ref1 = point.x; _ref <= _ref1 ? _j <= _ref1 : _j >= _ref1; index = _ref <= _ref1 ? ++_j : --_j) {
+          pixels[index] = method(index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x);
+        }
+      }
+      lastPoint = point;
+    }
+    return pixels;
+  };
+
   return Data;
 
 })();
@@ -170,8 +187,6 @@ Options = (function() {
 
   Options.prototype.smoothBevel = false;
 
-  Options.prototype.smoothGraph = false;
-
   Options.prototype.lineWidth = 5;
 
   Options.prototype.color = '#000';
@@ -187,6 +202,8 @@ Options = (function() {
   Options.prototype.peaksAndValleys = false;
 
   Options.prototype.verticalLineFill = false;
+
+  Options.prototype.smoothGraph = false;
 
   Options.prototype.smoothingMethod = false;
 
