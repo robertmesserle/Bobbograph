@@ -69,7 +69,7 @@ module.exports = ( grunt ) ->
     connect:
       server:
         options:
-          port: 8383
+          port: 9393
           base: '.'
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
