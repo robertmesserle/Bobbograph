@@ -38,7 +38,7 @@ Data = (function() {
   function Data(data, options) {
     this.options = options;
     this.data = this.formatData(data);
-    this.stats = this.getStats(this.data);
+    this.stats = new Stats(this.data);
     this.points = this.getPoints(this.data, this.options, this.stats);
     this.pixels = this.getPixels(this.points, this.options.width, this.options.smoothGraph);
   }
@@ -51,79 +51,53 @@ Data = (function() {
   };
 
   Data.prototype.getPoints = function(data, options, stats) {
-    var point, _i, _len, _results;
+    var dx, dy, height, point, width, x, xmin, y, ymin, _i, _len, _results;
+    width = options.width, height = options.height;
+    xmin = stats.xmin, ymin = stats.ymin, dx = stats.dx, dy = stats.dy;
     _results = [];
     for (_i = 0, _len = data.length; _i < _len; _i++) {
       point = data[_i];
-      _results.push({
-        x: this.scalePoint(point.x, stats.xmin, stats.dx, options.width),
-        y: this.scalePoint(point.y, stats.ymin, stats.dy, options.height)
-      });
+      x = this.scalePoint(point.x, xmin, dx, width);
+      y = this.scalePoint(point.y, ymin, dy, height);
+      _results.push(new Point(x, y));
     }
     return _results;
   };
 
-  Data.prototype.getStats = function(data) {
-    var point, stats, xarr, yarr;
-    xarr = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = data.length; _i < _len; _i++) {
-        point = data[_i];
-        _results.push(point.x);
-      }
-      return _results;
-    })();
-    yarr = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = data.length; _i < _len; _i++) {
-        point = data[_i];
-        _results.push(point.y);
-      }
-      return _results;
-    })();
-    stats = {
-      xmin: Math.min.apply(null, xarr),
-      xmax: Math.max.apply(null, xarr),
-      ymin: Math.min.apply(null, yarr),
-      ymax: Math.max.apply(null, yarr)
-    };
-    stats.dx = stats.xmax - stats.xmin;
-    stats.dy = stats.ymax - stats.ymin;
-    return stats;
-  };
-
   Data.prototype.formatData = function(data) {
-    var index, sort, val, _i, _len, _results;
-    sort = function(a, b) {
+    var index, points, sortMethod, val, _i, _len, _results;
+    sortMethod = function(a, b) {
       return a.x - b.x;
     };
     if (typeof data[0] === 'number') {
       _results = [];
       for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
         val = data[index];
-        _results.push({
-          x: index,
-          y: val
-        });
+        _results.push(new Point(index, val));
       }
       return _results;
     } else if (data[0] instanceof Array) {
-      return ((function() {
+      points = (function() {
         var _j, _len1, _results1;
         _results1 = [];
         for (index = _j = 0, _len1 = data.length; _j < _len1; index = ++_j) {
           val = data[index];
-          _results1.push({
-            x: val[0],
-            y: val[1]
-          });
+          _results1.push(new Point(val[0], val[1]));
         }
         return _results1;
-      })()).sort(sort);
+      })();
+      return points.sort(sortMethod);
     } else if (data[0] && (data[0].x != null) && (data[0].y != null)) {
-      return data.sort(sort);
+      points = (function() {
+        var _j, _len1, _results1;
+        _results1 = [];
+        for (index = _j = 0, _len1 = data.length; _j < _len1; index = ++_j) {
+          val = data[index];
+          _results1.push(new Point(val.x, val.y));
+        }
+        return _results1;
+      })();
+      return points.sort(sortMethod);
     }
   };
 
@@ -135,7 +109,7 @@ Data = (function() {
       point = points[_i];
       if (typeof lastPoint !== "undefined" && lastPoint !== null) {
         for (index = _j = _ref = lastPoint.x, _ref1 = point.x; _ref <= _ref1 ? _j <= _ref1 : _j >= _ref1; index = _ref <= _ref1 ? ++_j : --_j) {
-          pixels[index] = method(index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x);
+          pixels[index] = new Point(index, method(index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x));
         }
       }
       lastPoint = point;
@@ -280,6 +254,45 @@ Options = (function() {
 
 })();
 
+var Point;
+
+Point = (function() {
+  Point.prototype.x = null;
+
+  Point.prototype.y = null;
+
+  Point.prototype.prev = null;
+
+  Point.prototype.next = null;
+
+  Point.prototype.angle = null;
+
+  Point.prototype.nextAngle = null;
+
+  Point.prototype.prevAngle = null;
+
+  function Point(x, y, prev, next) {
+    this.x = x;
+    this.y = y;
+    this.prev = prev;
+    this.next = next;
+    if (this.prev) {
+      this.prevAngle = this.getAngle(this.prev, this);
+    }
+    if (this.next) {
+      this.nextAngle = this.getAngle(this, this.next);
+    }
+    this.angle = this.prev && this.next ? this.getAngle(this.prev, this.next) : this.prevAngle || this.nextAngle;
+  }
+
+  Point.prototype.getAngle = function(p1, p2) {
+    return Trig.getAngleFromPoints(p1, p2);
+  };
+
+  return Point;
+
+})();
+
 var Render;
 
 Render = (function() {
@@ -294,32 +307,42 @@ Render = (function() {
     }
   }
 
+  Render.prototype.move = function(point) {
+    this.context.beginPath();
+    return this.context.moveTo(point.x, point.y);
+  };
+
+  Render.prototype.line = function(point) {
+    return this.context.lineTo(point.x, point.y);
+  };
+
+  Render.prototype.stroke = function() {
+    return this.context.stroke();
+  };
+
   Render.prototype.renderDashed = function(pixels, context, size) {
-    var dist, index, last, line, _i, _ref, _results;
-    last = {
-      x: 0,
-      y: pixels[0]
-    };
-    context.moveTo(last.x, last.y);
-    line = true;
+    var dist, index, last, move, point, _i, _len, _results;
+    move = false;
+    last = null;
     _results = [];
-    for (index = _i = 1, _ref = pixels.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; index = 1 <= _ref ? ++_i : --_i) {
-      dist = Trig.getDistanceBetweenPoints(last.x, last.y, index, pixels[index]);
-      if (dist > size) {
-        if (line) {
-          context.lineTo(index, pixels[index]);
-          context.stroke();
+    for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
+      point = pixels[index];
+      if (last) {
+        dist = Trig.getDistanceBetweenPoints(last, point);
+        if (dist > size) {
+          last = point;
+          if (move) {
+            this.move(point);
+          } else {
+            this.line(point);
+            this.stroke();
+          }
+          _results.push(move = !move);
         } else {
-          context.beginPath();
-          context.moveTo(index, pixels[index]);
+          _results.push(void 0);
         }
-        line = !line;
-        _results.push(last = {
-          x: index,
-          y: pixels[index]
-        });
       } else {
-        _results.push(void 0);
+        _results.push(this.move(last = point));
       }
     }
     return _results;
@@ -335,6 +358,45 @@ Render = (function() {
   };
 
   return Render;
+
+})();
+
+var Stats;
+
+Stats = (function() {
+  function Stats(data) {
+    this.getRangeData(data);
+  }
+
+  Stats.prototype.getRangeData = function(data) {
+    var point, xarr, yarr;
+    xarr = (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        point = data[_i];
+        _results.push(point.x);
+      }
+      return _results;
+    })();
+    yarr = (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = data.length; _i < _len; _i++) {
+        point = data[_i];
+        _results.push(point.y);
+      }
+      return _results;
+    })();
+    this.xmin = Math.min.apply(null, xarr);
+    this.xmax = Math.max.apply(null, xarr);
+    this.ymin = Math.min.apply(null, yarr);
+    this.ymax = Math.max.apply(null, yarr);
+    this.dx = this.xmax - this.xmin;
+    return this.dy = this.ymax - this.ymin;
+  };
+
+  return Stats;
 
 })();
 
@@ -357,71 +419,59 @@ Trig = (function() {
     return Math.abs(angle);
   };
 
-  Trig.getAngleFromPoints = function(x1, y1, x2, y2) {
-    var baseAngle, dx, dy;
-    dx = x2 - x1;
-    dy = y2 - y1;
-    baseAngle = this.getBaseAngleFromPoints(dx, dy);
-    if (dx > 0) {
-      if (dy > 0) {
-        return baseAngle;
-      } else if (dy < 0) {
-        return 2 * Math.PI - baseAngle;
+  Trig.getQuadrant = function(dx, dy) {
+    if (dy >= 0) {
+      if (dx >= 0) {
+        return 1;
       } else {
-        return 0;
-      }
-    } else if (dx < 0) {
-      if (dy > 0) {
-        return Math.PI - baseAngle;
-      } else if (dy < 0) {
-        return Math.PI + baseAngle;
-      } else {
-        return Math.PI;
+        return 2;
       }
     } else {
-      if (dy > 0) {
-        return Math.PI / 2;
-      } else if (dy < 0) {
-        return Math.PI * 1.5;
+      if (dx < 0) {
+        return 3;
       } else {
-        return 0;
+        return 4;
       }
     }
   };
 
-  Trig.getDistanceBetweenPoints = function(x1, y1, x2, y2) {
+  Trig.getAngleFromPoints = function(p1, p2) {
+    var baseAngle, dx, dy;
+    dx = p2.x - p1.x;
+    dy = p2.y - p1.y;
+    baseAngle = this.getBaseAngleFromPoints(dx, dy);
+    switch (this.getQuadrant(dx, dy)) {
+      case 1:
+        return baseAngle;
+      case 2:
+        return Math.PI - baseAngle;
+      case 3:
+        return Math.PI + baseAngle;
+      case 4:
+        return 2 * Math.PI - baseAngle;
+    }
+  };
+
+  Trig.getDistanceBetweenPoints = function(p1, p2) {
     var distance, dx, dy;
-    dx = x2 - x1;
-    dy = y2 - y1;
+    dx = p2.x - p1.x;
+    dy = p2.y - p1.y;
     return distance = Math.sqrt(dx * dx + dy * dy);
   };
 
-  Trig.getPointFromAngle = function(x, y, angle, distance) {
+  Trig.getPointFromAngle = function(origin, angle, distance) {
+    var x, y;
+    x = origin.x, y = origin.y;
     if (angle === Math.PI) {
-      return {
-        x: x - distance,
-        y: y
-      };
+      return new Point(x - distance, y);
     } else if (angle === Math.PI / 2) {
-      return {
-        x: x,
-        y: y + distance
-      };
+      return new Point(x, y + distance);
     } else if (angle === Math.PI * 1.5) {
-      return {
-        x: x,
-        y: y - distance
-      };
+      return new Point(x, y - distance);
     } else if (angle === 0) {
-      return {
-        x: x + distance,
-        y: y
-      };
+      return new Point(x + distance, y);
     } else {
-      return {
-        x: Math.cos(angle) * distance + x,
-        y: Math.sin(angle) * distance + y
-      };
+      return new Point(Math.cos(angle) * distance + x, Math.sin(angle) * distance + y);
     }
   };
 

@@ -10,31 +10,39 @@ class Trig
     angle = Math.atan(dy / dx)
     return Math.abs angle
 
-  @getAngleFromPoints: (x1, y1, x2, y2) ->
-    dx = x2 - x1
-    dy = y2 - y1
-    baseAngle = @getBaseAngleFromPoints(dx, dy)
-    if dx > 0
-      if dy > 0 then baseAngle
-      else if dy < 0 then 2 * Math.PI - baseAngle
-      else 0
-    else if dx < 0
-      if dy > 0 then Math.PI - baseAngle
-      else if dy < 0 then Math.PI + baseAngle
-      else Math.PI
+  @getQuadrant: (dx, dy) ->
+    if dy >= 0
+      if dx >= 0 then 1
+      else 2
     else
-      if dy > 0 then Math.PI / 2
-      else if dy < 0 then Math.PI * 1.5
-      else 0
+      if dx < 0 then 3
+      else 4
 
-  @getDistanceBetweenPoints: (x1, y1, x2, y2) ->
-    dx = x2 - x1
-    dy = y2 - y1
+  @getAngleFromPoints: (p1, p2) ->
+    dx          = p2.x - p1.x
+    dy          = p2.y - p1.y
+    baseAngle   = @getBaseAngleFromPoints dx, dy
+
+    switch @getQuadrant dx, dy
+      when 1 then baseAngle
+      when 2 then Math.PI - baseAngle
+      when 3 then Math.PI + baseAngle
+      when 4 then 2 * Math.PI - baseAngle
+
+  @getDistanceBetweenPoints: (p1, p2) ->
+    dx = p2.x - p1.x
+    dy = p2.y - p1.y
     distance = Math.sqrt(dx * dx + dy * dy)
 
-  @getPointFromAngle: (x, y, angle, distance) ->
-    if angle is Math.PI then x: x - distance, y: y
-    else if angle is Math.PI / 2 then x: x, y: y + distance
-    else if angle is Math.PI * 1.5 then x: x, y: y - distance
-    else if angle is 0 then x: x + distance, y: y
-    else x: Math.cos(angle) * distance + x, y: Math.sin(angle) * distance + y
+  @getPointFromAngle: (origin, angle, distance) ->
+    { x, y } = origin
+    if angle is Math.PI
+      new Point x - distance, y
+    else if angle is Math.PI / 2
+      new Point x, y + distance
+    else if angle is Math.PI * 1.5
+      new Point x, y - distance
+    else if angle is 0
+      new Point x + distance, y
+    else
+      new Point Math.cos(angle) * distance + x, Math.sin(angle) * distance + y

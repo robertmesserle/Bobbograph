@@ -1,29 +1,36 @@
 class Render
 
   constructor: (@pixels, @context, @options) ->
-    if @options.dashed
-      @renderDashed(@pixels, @context, @options.dashSize)
-    else
-      @renderSolid(@pixels, @context)
+    if @options.dashed then @renderDashed @pixels, @context, @options.dashSize
+    else @renderSolid @pixels, @context
+
+  move: (point) ->
+    @context.beginPath()
+    @context.moveTo point.x, point.y
+  line: (point) ->
+    @context.lineTo point.x, point.y
+  stroke: ->
+    @context.stroke()
 
   renderDashed: (pixels, context, size) ->
-    last = x: 0, y: pixels[ 0 ]
-    context.moveTo last.x, last.y
-    line = true
-    for index in [ 1 .. pixels.length - 1 ]
-      dist = Trig.getDistanceBetweenPoints last.x, last.y, index, pixels[ index ]
-      if dist > size
-        if line
-          context.lineTo index, pixels[ index ]
-          context.stroke()
-        else
-          context.beginPath()
-          context.moveTo index, pixels[ index ]
-        line = not line
-        last = x: index, y: pixels[ index ]
+    move = false
+    last = null
+    for point, index in pixels
+      if last
+        dist = Trig.getDistanceBetweenPoints( last, point )
+        if dist > size
+          last = point
+          if move
+            @move point
+          else
+            @line point
+            @stroke()
+          move = not move
+      else
+        @move last = point
 
   renderSolid: (pixels, context) ->
-    context.moveTo 0, pixels[0]
+    context.moveTo 0, pixels[ 0 ]
     for index in [ 1 .. pixels.length - 1 ]
       context.lineTo index, pixels[ index ]
     context.stroke()
