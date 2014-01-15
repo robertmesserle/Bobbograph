@@ -1,9 +1,9 @@
 class Bobbograph
 
   constructor: (id, data, options) ->
-    @options = new Options(options)
-    @context = @getContext(id)
-    @data    = new Data(data, @options)
+    @options = new Options options
+    @context = @getContext id
+    @data    = new Data data, @options
     new Render @data.pixels, @context, @options
 
   getContext: (id) ->

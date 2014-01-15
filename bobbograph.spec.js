@@ -8,6 +8,59 @@ Animator = (function() {
 
 })();
 
+var Canvas;
+
+Canvas = (function() {
+  function Canvas() {}
+
+  Canvas.prototype.scaleX = function(x) {
+    return x + this.options.leftPadding;
+  };
+
+  Canvas.prototype.scaleY = function(y) {
+    return this.options.usableHeight - y + this.options.topPadding;
+  };
+
+  Canvas.prototype.begin = function() {
+    return this["continue"] = false;
+  };
+
+  Canvas.prototype.line = function(point) {
+    var left, top;
+    left = this.scaleX(point.x);
+    top = this.scaleY(point.y);
+    if (this["continue"]) {
+      return this.context.lineTo(left, top);
+    } else {
+      this.context.beginPath();
+      this.context.moveTo(left, top);
+      return this["continue"] = true;
+    }
+  };
+
+  Canvas.prototype.stroke = function() {
+    return this.context.stroke();
+  };
+
+  Canvas.prototype.fill = function() {
+    return this.context.fill();
+  };
+
+  Canvas.prototype.close = function() {
+    return this.context.closePath();
+  };
+
+  Canvas.prototype.arc = function(point, offset, angle1, angle2, ccw) {
+    var x, y;
+    x = this.scaleX(point.x);
+    y = this.scaleY(point.y);
+    return this.context.arc(x, y, offset, angle1, angle2, ccw);
+  };
+
+  return Canvas;
+
+})();
+
 var Bobbograph;
 
 Bobbograph = (function() {
@@ -40,7 +93,7 @@ Data = (function() {
     this.data = this.formatData(data);
     this.stats = new Stats(this.data);
     this.points = this.getPoints(this.data, this.options, this.stats);
-    this.pixels = this.getPixels(this.points, this.options.width, this.options.smoothGraph);
+    this.pixels = this.getPixels(this.points, this.options.usableWidth, this.options.smoothGraph);
   }
 
   Data.prototype.scalePoint = function(val, min, delta, scale) {
@@ -51,14 +104,14 @@ Data = (function() {
   };
 
   Data.prototype.getPoints = function(data, options, stats) {
-    var dx, dy, height, point, width, x, xmin, y, ymin, _i, _len, _results;
-    width = options.width, height = options.height;
+    var dx, dy, point, usableHeight, usableWidth, x, xmin, y, ymin, _i, _len, _results;
+    usableWidth = options.usableWidth, usableHeight = options.usableHeight;
     xmin = stats.xmin, ymin = stats.ymin, dx = stats.dx, dy = stats.dy;
     _results = [];
     for (_i = 0, _len = data.length; _i < _len; _i++) {
       point = data[_i];
-      x = this.scalePoint(point.x, xmin, dx, width);
-      y = this.scalePoint(point.y, ymin, dy, height);
+      x = this.scalePoint(point.x, xmin, dx, usableWidth);
+      y = this.scalePoint(point.y, ymin, dy, usableHeight);
       _results.push(new Point(x, y));
     }
     return _results;
@@ -108,7 +161,7 @@ Data = (function() {
     for (_i = 0, _len = points.length; _i < _len; _i++) {
       point = points[_i];
       if (typeof lastPoint !== "undefined" && lastPoint !== null) {
-        for (index = _j = _ref = lastPoint.x, _ref1 = point.x; _ref <= _ref1 ? _j <= _ref1 : _j >= _ref1; index = _ref <= _ref1 ? ++_j : --_j) {
+        for (index = _j = _ref = Math.round(lastPoint.x), _ref1 = Math.round(point.x); _ref <= _ref1 ? _j <= _ref1 : _j >= _ref1; index = _ref <= _ref1 ? ++_j : --_j) {
           pixels[index] = new Point(index, method(index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x));
         }
       }
@@ -159,7 +212,7 @@ Options = (function() {
 
   Options.prototype.smoothBevel = false;
 
-  Options.prototype.lineWidth = 5;
+  Options.prototype.lineWidth = 10;
 
   Options.prototype.color = '#000';
 
@@ -201,7 +254,7 @@ Options = (function() {
 
   Options.prototype.percent = 1;
 
-  Options.prototype.padding = 0;
+  Options.prototype.padding = null;
 
   Options.prototype.xPadding = null;
 
@@ -215,9 +268,9 @@ Options = (function() {
 
   Options.prototype.bottomPadding = null;
 
-  Options.prototype.usableWidth = 600;
+  Options.prototype.usableWidth = null;
 
-  Options.prototype.usableHeight = 300;
+  Options.prototype.usableHeight = null;
 
   function Options(options) {
     var key, value;
@@ -232,6 +285,9 @@ Options = (function() {
   }
 
   Options.prototype.calculatePadding = function() {
+    if (this.padding == null) {
+      this.padding = this.lineWidth;
+    }
     if (this.xPadding == null) {
       this.xPadding = this.padding;
     }
@@ -247,7 +303,11 @@ Options = (function() {
     if (this.topPadding == null) {
       this.topPadding = this.yPadding;
     }
-    return this.bottomPadding != null ? this.bottomPadding : this.bottomPadding = this.yPadding;
+    if (this.bottomPadding == null) {
+      this.bottomPadding = this.yPadding;
+    }
+    this.usableWidth = this.width - this.leftPadding - this.rightPadding;
+    return this.usableHeight = this.height - this.topPadding - this.bottomPadding;
   };
 
   return Options;
@@ -268,80 +328,73 @@ Point = (function() {
     return Trig.getAngleFromPoints(p1, p2);
   };
 
+  Point.prototype.offsetPoint = function(prev, next, offset, angleOffset) {
+    var angle, perp, point;
+    if (prev == null) {
+      prev = this;
+    }
+    if (next == null) {
+      next = this;
+    }
+    angle = Trig.getAngleFromPoints(prev, next);
+    perp = angle + angleOffset;
+    return point = Trig.getPointFromAngle(this, perp, offset);
+  };
+
   return Point;
 
 })();
 
-var Render;
+var Render,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Render = (function() {
+Render = (function(_super) {
+  __extends(Render, _super);
+
   function Render(pixels, context, options) {
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    if (this.options.dashed) {
-      this.renderDashed(this.pixels, this.context, this.options.dashSize);
-    } else {
-      this.renderSolid(this.pixels, this.context);
-    }
+    this.renderSolid(this.pixels, this.options.lineWidth);
   }
 
-  Render.prototype.move = function(point) {
-    this.context.beginPath();
-    return this.context.moveTo(point.x, point.y);
-  };
-
-  Render.prototype.line = function(point) {
-    return this.context.lineTo(point.x, point.y);
-  };
-
-  Render.prototype.stroke = function() {
-    return this.context.stroke();
-  };
-
-  Render.prototype.renderDashed = function(pixels, context, size) {
-    var dist, index, last, move, point, _i, _len, _results;
-    move = false;
-    last = null;
+  Render.prototype.renderLine = function(pixels, lineWidth, angleOffset) {
+    var index, next, pixel, prev, _i, _len, _results;
     _results = [];
     for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
-      point = pixels[index];
-      if (last) {
-        dist = Trig.getDistanceBetweenPoints(last, point);
-        if (dist > size) {
-          if (!move) {
-            this.renderSegment(last, point);
-          }
-          last = point;
-          _results.push(move = !move);
-        } else {
-          _results.push(void 0);
-        }
-      } else {
-        _results.push(this.move(last = point));
-      }
+      pixel = pixels[index];
+      prev = pixels[index - 1];
+      next = pixels[index + 1];
+      _results.push(this.line(pixel.offsetPoint(prev, next, lineWidth, angleOffset)));
     }
     return _results;
   };
 
-  Render.prototype.renderSegment = function(p1, p2) {
-    this.move(p1);
-    this.line(p2);
-    return this.stroke();
+  Render.prototype.renderCap = function(point, right, offset) {
+    if (right) {
+      return this.arc(point, offset, -Math.PI / 2, Math.PI / 2);
+    } else {
+      return this.arc(point, offset, Math.PI / 2, -Math.PI / 2);
+    }
   };
 
-  Render.prototype.renderSolid = function(pixels, context) {
-    var index, _i, _ref;
-    context.moveTo(0, pixels[0]);
-    for (index = _i = 1, _ref = pixels.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; index = 1 <= _ref ? ++_i : --_i) {
-      context.lineTo(index, pixels[index]);
-    }
-    return context.stroke();
+  Render.prototype.renderSolid = function(pixels, lineWidth) {
+    var angle, offset;
+    offset = lineWidth / 2;
+    angle = Math.PI / 2;
+    this.begin();
+    this.renderLine(pixels, offset, angle);
+    this.renderCap(pixels[pixels.length - 1], true, offset);
+    this.renderLine(pixels.slice().reverse(), offset, angle);
+    this.renderCap(pixels[0], false, offset);
+    this.close();
+    return this.stroke();
   };
 
   return Render;
 
-})();
+})(Canvas);
 
 var Stats;
 

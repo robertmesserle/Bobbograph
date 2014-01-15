@@ -4,7 +4,7 @@ class Data
     @data   = @formatData data
     @stats  = new Stats @data
     @points = @getPoints @data, @options, @stats
-    @pixels = @getPixels @points, @options.width, @options.smoothGraph
+    @pixels = @getPixels @points, @options.usableWidth, @options.smoothGraph
 
   scalePoint: (val, min, delta, scale) ->
     scoped    = val - min
@@ -12,11 +12,11 @@ class Data
     scaled    = percent * scale
 
   getPoints: (data, options, stats) ->
-    { width, height }       = options
-    { xmin, ymin, dx, dy }  = stats
+    { usableWidth, usableHeight }   = options
+    { xmin, ymin, dx, dy }          = stats
     for point in data
-      x = @scalePoint point.x, xmin, dx, width
-      y = @scalePoint point.y, ymin, dy, height
+      x = @scalePoint point.x, xmin, dx, usableWidth
+      y = @scalePoint point.y, ymin, dy, usableHeight
       new Point x, y
 
   formatData: (data) ->
@@ -37,7 +37,7 @@ class Data
     pixels = new Array width
     for point in points
       if lastPoint?
-        for index in [ lastPoint.x .. point.x ]
+        for index in [ Math.round( lastPoint.x ) .. Math.round( point.x ) ]
           pixels[ index ] = new Point index, method( index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x )
       lastPoint = point
     pixels

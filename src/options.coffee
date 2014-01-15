@@ -10,7 +10,7 @@ class Options
   shineIntensity:     0.65
   shadowIntensity:    0.3
   smoothBevel:        false
-  lineWidth:          5
+  lineWidth:          10
   color:              '#000'
   shadow:             false
   fill:               false
@@ -40,7 +40,7 @@ class Options
   percent:            1     # Percentage of the graph to render
   
   # Padding
-  padding:            0
+  padding:            null  # Default: lineWidth
   xPadding:           null  # Default: padding
   yPadding:           null  # Default: padding
   leftPadding:        null  # Default: xPadding
@@ -49,17 +49,21 @@ class Options
   bottomPadding:      null  # Default: yPadding
   
   # Canvas info
-  usableWidth:        600
-  usableHeight:       300
+  usableWidth:        null
+  usableHeight:       null
 
   constructor: (options = {}) ->
     for key, value of options then @[key] = value
     @calculatePadding()
 
   calculatePadding: ->
+    @padding        ?= @lineWidth
     @xPadding       ?= @padding
     @yPadding       ?= @padding
     @leftPadding    ?= @xPadding
     @rightPadding   ?= @xPadding
     @topPadding     ?= @yPadding
     @bottomPadding  ?= @yPadding
+
+    @usableWidth    = @width - @leftPadding - @rightPadding
+    @usableHeight   = @height - @topPadding - @bottomPadding
