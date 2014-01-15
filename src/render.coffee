@@ -19,15 +19,17 @@ class Render
       if last
         dist = Trig.getDistanceBetweenPoints( last, point )
         if dist > size
+          unless move
+            @renderSegment(last, point)
           last = point
-          if move
-            @move point
-          else
-            @line point
-            @stroke()
           move = not move
       else
         @move last = point
+
+  renderSegment: (p1, p2) ->
+    @move p1
+    @line p2
+    @stroke()
 
   renderSolid: (pixels, context) ->
     context.moveTo 0, pixels[ 0 ]

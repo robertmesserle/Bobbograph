@@ -102,7 +102,7 @@ Data = (function() {
   };
 
   Data.prototype.getPixels = function(points, width, curve) {
-    var index, lastPoint, method, pixels, point, _i, _j, _k, _len, _len1, _ref, _ref1;
+    var index, lastPoint, method, pixels, point, _i, _j, _len, _ref, _ref1;
     method = curve ? Easing.curve : Easing.linear;
     pixels = new Array(width);
     for (_i = 0, _len = points.length; _i < _len; _i++) {
@@ -113,11 +113,6 @@ Data = (function() {
         }
       }
       lastPoint = point;
-    }
-    for (index = _k = 0, _len1 = pixels.length; _k < _len1; index = ++_k) {
-      point = pixels[index];
-      point.setNext(pixels[index + 1]);
-      point.setPrevious(pixels[index - 1]);
     }
     return pixels;
   };
@@ -262,35 +257,15 @@ Options = (function() {
 var Point;
 
 Point = (function() {
-  Point.prototype.x = null;
-
-  Point.prototype.y = null;
-
-  Point.prototype.prev = null;
-
-  Point.prototype.next = null;
-
-  Point.prototype.prevAngle = null;
-
-  Point.prototype.nextAngle = null;
-
-  Point.prototype.angle = null;
-
   function Point(x, y) {
     this.x = x;
     this.y = y;
   }
 
-  Point.prototype.setPrevious = function(prev) {
-    this.prev = prev;
-    this.prevAngle = Trig.getAngleFromPoints(this.prev, this);
-    return this.angle = Trig.getAngleFromPoints(this.prev, this.next || this);
-  };
-
-  Point.prototype.setNext = function(next) {
-    this.next = next;
-    this.nextAngle = Trig.getAngleFromPoints(this, this.next);
-    return this.angle = Trig.getAngleFromPoints(this.prev || this, this.next);
+  Point.prototype.getAngle = function(point) {
+    var p1, p2, _ref;
+    _ref = point.x > this.x ? [this, point] : [point, this], p1 = _ref[0], p2 = _ref[1];
+    return Trig.getAngleFromPoints(p1, p2);
   };
 
   return Point;
@@ -334,13 +309,10 @@ Render = (function() {
       if (last) {
         dist = Trig.getDistanceBetweenPoints(last, point);
         if (dist > size) {
-          last = point;
-          if (move) {
-            this.move(point);
-          } else {
-            this.line(point);
-            this.stroke();
+          if (!move) {
+            this.renderSegment(last, point);
           }
+          last = point;
           _results.push(move = !move);
         } else {
           _results.push(void 0);
@@ -350,6 +322,12 @@ Render = (function() {
       }
     }
     return _results;
+  };
+
+  Render.prototype.renderSegment = function(p1, p2) {
+    this.move(p1);
+    this.line(p2);
+    return this.stroke();
   };
 
   Render.prototype.renderSolid = function(pixels, context) {
