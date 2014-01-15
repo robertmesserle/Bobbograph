@@ -102,7 +102,7 @@ Data = (function() {
   };
 
   Data.prototype.getPixels = function(points, width, curve) {
-    var index, lastPoint, method, pixels, point, _i, _j, _len, _ref, _ref1;
+    var index, lastPoint, method, pixels, point, _i, _j, _k, _len, _len1, _ref, _ref1;
     method = curve ? Easing.curve : Easing.linear;
     pixels = new Array(width);
     for (_i = 0, _len = points.length; _i < _len; _i++) {
@@ -113,6 +113,11 @@ Data = (function() {
         }
       }
       lastPoint = point;
+    }
+    for (index = _k = 0, _len1 = pixels.length; _k < _len1; index = ++_k) {
+      point = pixels[index];
+      point.next = pixels[index + 1];
+      point.prev = pixels[index - 1];
     }
     return pixels;
   };
@@ -265,28 +270,26 @@ Point = (function() {
 
   Point.prototype.next = null;
 
-  Point.prototype.angle = null;
-
-  Point.prototype.nextAngle = null;
-
-  Point.prototype.prevAngle = null;
-
   function Point(x, y, prev, next) {
     this.x = x;
     this.y = y;
     this.prev = prev;
     this.next = next;
-    if (this.prev) {
-      this.prevAngle = this.getAngle(this.prev, this);
-    }
-    if (this.next) {
-      this.nextAngle = this.getAngle(this, this.next);
-    }
-    this.angle = this.prev && this.next ? this.getAngle(this.prev, this.next) : this.prevAngle || this.nextAngle;
   }
 
-  Point.prototype.getAngle = function(p1, p2) {
+  Point.prototype.getAngle = function() {
+    var p1, p2;
+    p1 = this.prev || this;
+    p2 = this.next || this;
     return Trig.getAngleFromPoints(p1, p2);
+  };
+
+  Point.prototype.getNextAngle = function() {
+    return Trig.getAngleFromPoints(this, this.next);
+  };
+
+  Point.prototype.getPreviousAngle = function() {
+    return Trig.getAngleFromPoints(this.prev, this);
   };
 
   return Point;
