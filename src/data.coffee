@@ -41,6 +41,6 @@ class Data
           pixels[ index ] = new Point index, method( index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x )
       lastPoint = point
     for point, index in pixels
-      point.next = pixels[ index + 1 ]
-      point.prev = pixels[ index - 1 ]
+      point.setNext pixels[ index + 1 ]
+      point.setPrevious pixels[ index - 1 ]
     pixels

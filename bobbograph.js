@@ -119,8 +119,8 @@ Data = (function() {
     }
     for (index = _k = 0, _len1 = pixels.length; _k < _len1; index = ++_k) {
       point = pixels[index];
-      point.next = pixels[index + 1];
-      point.prev = pixels[index - 1];
+      point.setNext(pixels[index + 1]);
+      point.setPrevious(pixels[index - 1]);
     }
     return pixels;
   };
@@ -273,26 +273,27 @@ Point = (function() {
 
   Point.prototype.next = null;
 
-  function Point(x, y, prev, next) {
+  Point.prototype.prevAngle = null;
+
+  Point.prototype.nextAngle = null;
+
+  Point.prototype.angle = null;
+
+  function Point(x, y) {
     this.x = x;
     this.y = y;
-    this.prev = prev;
-    this.next = next;
   }
 
-  Point.prototype.getAngle = function() {
-    var p1, p2;
-    p1 = this.prev || this;
-    p2 = this.next || this;
-    return Trig.getAngleFromPoints(p1, p2);
+  Point.prototype.setPrevious = function(prev) {
+    this.prev = prev;
+    this.prevAngle = Trig.getAngleFromPoints(this.prev, this);
+    return this.angle = Trig.getAngleFromPoints(this.prev, this.next || this);
   };
 
-  Point.prototype.getNextAngle = function() {
-    return Trig.getAngleFromPoints(this, this.next);
-  };
-
-  Point.prototype.getPreviousAngle = function() {
-    return Trig.getAngleFromPoints(this.prev, this);
+  Point.prototype.setNext = function(next) {
+    this.next = next;
+    this.nextAngle = Trig.getAngleFromPoints(this, this.next);
+    return this.angle = Trig.getAngleFromPoints(this.prev || this, this.next);
   };
 
   return Point;
