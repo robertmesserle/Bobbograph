@@ -4,7 +4,11 @@ class Bobbograph
     @options = new Options options
     @context = @getContext id
     @data    = new Data data, @options
-    new Render @data.pixels, @context, @options
+
+    if @options.smoothGraph
+      new CurvedRender @data.pixels, @context, @options
+    else
+      new LinearRender @data.points, @context, @options
 
   getContext: (id) ->
     element = document.getElementById(id)

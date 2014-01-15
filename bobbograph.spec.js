@@ -14,7 +14,7 @@ Canvas = (function() {
   function Canvas() {}
 
   Canvas.prototype.scaleX = function(x) {
-    return x + this.options.leftPadding;
+    return this.options.leftPadding + x;
   };
 
   Canvas.prototype.scaleY = function(y) {
@@ -22,6 +22,12 @@ Canvas = (function() {
   };
 
   Canvas.prototype.begin = function() {
+    this["continue"] = false;
+    return this.context.beginPath();
+  };
+
+  Canvas.prototype.close = function() {
+    this.context.closePath();
     return this["continue"] = false;
   };
 
@@ -32,29 +38,30 @@ Canvas = (function() {
     if (this["continue"]) {
       return this.context.lineTo(left, top);
     } else {
-      this.context.beginPath();
       this.context.moveTo(left, top);
       return this["continue"] = true;
     }
   };
 
-  Canvas.prototype.stroke = function() {
+  Canvas.prototype.arc = function(point, radius, angle1, angle2, ccw) {
+    var left, top;
+    left = this.scaleX(point.x);
+    top = this.scaleY(point.y);
+    return this.context.arc(left, top, radius, -angle1, -angle2, ccw);
+  };
+
+  Canvas.prototype.stroke = function(color) {
+    if (color) {
+      this.context.strokeStyle = color;
+    }
     return this.context.stroke();
   };
 
-  Canvas.prototype.fill = function() {
+  Canvas.prototype.fill = function(color) {
+    if (color) {
+      this.context.fillColor = color;
+    }
     return this.context.fill();
-  };
-
-  Canvas.prototype.close = function() {
-    return this.context.closePath();
-  };
-
-  Canvas.prototype.arc = function(point, offset, angle1, angle2, ccw) {
-    var x, y;
-    x = this.scaleX(point.x);
-    y = this.scaleY(point.y);
-    return this.context.arc(x, y, offset, angle1, angle2, ccw);
   };
 
   return Canvas;
@@ -68,7 +75,11 @@ Bobbograph = (function() {
     this.options = new Options(options);
     this.context = this.getContext(id);
     this.data = new Data(data, this.options);
-    new Render(this.data.pixels, this.context, this.options);
+    if (this.options.smoothGraph) {
+      new CurvedRender(this.data.pixels, this.context, this.options);
+    } else {
+      new LinearRender(this.data.points, this.context, this.options);
+    }
   }
 
   Bobbograph.prototype.getContext = function(id) {
@@ -84,6 +95,59 @@ Bobbograph = (function() {
   return Bobbograph;
 
 })();
+
+var CurvedRender,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+CurvedRender = (function(_super) {
+  __extends(CurvedRender, _super);
+
+  function CurvedRender(pixels, context, options) {
+    this.pixels = pixels;
+    this.context = context;
+    this.options = options;
+    this.renderSolid(this.pixels, this.options.lineWidth);
+  }
+
+  CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
+    var index, next, pixel, prev, _i, _len, _results;
+    _results = [];
+    for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
+      pixel = pixels[index];
+      prev = pixels[index - 1];
+      next = pixels[index + 1];
+      _results.push(this.line(pixel.offsetPoint(prev, next, offset, angleOffset)));
+    }
+    return _results;
+  };
+
+  CurvedRender.prototype.renderCap = function(point, right, offset) {
+    var angle;
+    angle = Math.PI / 2;
+    if (right) {
+      return this.arc(point, offset, angle, -angle);
+    } else {
+      return this.arc(point, offset, -angle, angle);
+    }
+  };
+
+  CurvedRender.prototype.renderSolid = function(pixels, lineWidth) {
+    var angle, offset;
+    offset = lineWidth / 2;
+    angle = Math.PI / 2;
+    this.begin();
+    this.renderLine(pixels, offset, angle);
+    this.renderCap(pixels[pixels.length - 1], true, offset);
+    this.renderLine(pixels.slice().reverse(), offset, angle);
+    this.renderCap(pixels[0], false, offset);
+    this.close();
+    return this.stroke();
+  };
+
+  return CurvedRender;
+
+})(Canvas);
 
 var Data;
 
@@ -194,6 +258,85 @@ Easing = (function() {
   return Easing;
 
 })();
+
+var LinearRender,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+LinearRender = (function(_super) {
+  __extends(LinearRender, _super);
+
+  function LinearRender(points, context, options) {
+    this.points = points;
+    this.context = context;
+    this.options = options;
+    this.renderSolid(this.points, this.options.lineWidth);
+  }
+
+  LinearRender.prototype.getSegments = function(points, offset) {
+    var index, _i, _ref, _results;
+    _results = [];
+    for (index = _i = 1, _ref = points.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; index = 1 <= _ref ? ++_i : --_i) {
+      _results.push(new Segment(points[index - 1], points[index], offset));
+    }
+    return _results;
+  };
+
+  LinearRender.prototype.renderLine = function(points, offset) {
+    var index, next, reverse, s1, s2, segment, segments, _i, _j, _len, _len1, _results;
+    segments = this.getSegments(points, offset);
+    for (index = _i = 0, _len = segments.length; _i < _len; index = ++_i) {
+      segment = segments[index];
+      next = segments[index + 1];
+      if (!index) {
+        this.line(segment.corner1);
+      }
+      if (next) {
+        if (segment.angle > next.angle) {
+          this.line(segment.corner2);
+          this.arc(next.p1, offset, segment.topAngle, next.topAngle);
+        } else {
+          s1 = new Segment(segment.corner1, segment.corner2, 0);
+          s2 = new Segment(next.corner1, next.corner2, 0);
+          this.line(s1.intersects(s2));
+        }
+      } else {
+        this.arc(segment.p2, offset, segment.topAngle, segment.bottomAngle);
+      }
+    }
+    reverse = segments.slice().reverse();
+    _results = [];
+    for (index = _j = 0, _len1 = reverse.length; _j < _len1; index = ++_j) {
+      segment = reverse[index];
+      next = reverse[index + 1];
+      if (next) {
+        if (segment.angle > next.angle) {
+          this.line(segment.corner4);
+          _results.push(this.arc(next.p2, offset, segment.bottomAngle, next.bottomAngle));
+        } else {
+          s1 = new Segment(segment.corner3, segment.corner4, 0);
+          s2 = new Segment(next.corner3, next.corner4, 0);
+          _results.push(this.line(s1.intersects(s2)));
+        }
+      } else {
+        _results.push(this.arc(segment.p1, offset, segment.bottomAngle, segment.topAngle));
+      }
+    }
+    return _results;
+  };
+
+  LinearRender.prototype.renderSolid = function(points, lineWidth) {
+    var offset;
+    offset = lineWidth / 2;
+    this.begin();
+    this.renderLine(points, offset, true);
+    this.close();
+    return this.stroke();
+  };
+
+  return LinearRender;
+
+})(Canvas);
 
 var Options;
 
@@ -345,56 +488,41 @@ Point = (function() {
 
 })();
 
-var Render,
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var Segment;
 
-Render = (function(_super) {
-  __extends(Render, _super);
-
-  function Render(pixels, context, options) {
-    this.pixels = pixels;
-    this.context = context;
-    this.options = options;
-    this.renderSolid(this.pixels, this.options.lineWidth);
+Segment = (function() {
+  function Segment(p1, p2, offset) {
+    this.p1 = p1;
+    this.p2 = p2;
+    this.offset = offset;
+    this.angle = this.reduceAngle(Trig.getAngleFromPoints(this.p1, this.p2));
+    this.slope = (this.p2.y - this.p1.y) / (this.p2.x - this.p1.x);
+    this.yint = this.p1.y - this.slope * this.p1.x;
+    this.topAngle = this.angle + Trig.rad(90);
+    this.bottomAngle = this.angle - Trig.rad(90);
+    this.corner1 = Trig.getPointFromAngle(this.p1, this.topAngle, this.offset);
+    this.corner2 = Trig.getPointFromAngle(this.p2, this.topAngle, this.offset);
+    this.corner3 = Trig.getPointFromAngle(this.p2, this.bottomAngle, this.offset);
+    this.corner4 = Trig.getPointFromAngle(this.p1, this.bottomAngle, this.offset);
   }
 
-  Render.prototype.renderLine = function(pixels, lineWidth, angleOffset) {
-    var index, next, pixel, prev, _i, _len, _results;
-    _results = [];
-    for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
-      pixel = pixels[index];
-      prev = pixels[index - 1];
-      next = pixels[index + 1];
-      _results.push(this.line(pixel.offsetPoint(prev, next, lineWidth, angleOffset)));
+  Segment.prototype.reduceAngle = function(angle) {
+    while (angle > Math.PI) {
+      angle -= 2 * Math.PI;
     }
-    return _results;
+    return angle;
   };
 
-  Render.prototype.renderCap = function(point, right, offset) {
-    if (right) {
-      return this.arc(point, offset, -Math.PI / 2, Math.PI / 2);
-    } else {
-      return this.arc(point, offset, Math.PI / 2, -Math.PI / 2);
-    }
+  Segment.prototype.intersects = function(segment) {
+    var x, y;
+    x = (segment.yint - this.yint) / (this.slope - segment.slope);
+    y = this.slope * x + this.yint;
+    return new Point(x, y);
   };
 
-  Render.prototype.renderSolid = function(pixels, lineWidth) {
-    var angle, offset;
-    offset = lineWidth / 2;
-    angle = Math.PI / 2;
-    this.begin();
-    this.renderLine(pixels, offset, angle);
-    this.renderCap(pixels[pixels.length - 1], true, offset);
-    this.renderLine(pixels.slice().reverse(), offset, angle);
-    this.renderCap(pixels[0], false, offset);
-    this.close();
-    return this.stroke();
-  };
+  return Segment;
 
-  return Render;
-
-})(Canvas);
+})();
 
 var Stats;
 

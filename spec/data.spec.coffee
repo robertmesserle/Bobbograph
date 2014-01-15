@@ -37,7 +37,7 @@ describe 'Data', ->
 
   describe 'Data#getPoints()', ->
 
-    options = { width: 600, height: 300 }
+    options = { usableWidth: 600, usableHeight: 300 }
 
     it 'should scale data to the graph dimensions', ->
       do ->
@@ -59,7 +59,7 @@ describe 'Data', ->
         expect( points[2] ).toEqual new Point 600, 150
 
   describe 'Data#getPixels()', ->
-    options = { width: 600, height: 300 }
+    options = { usableWidth: 600, usableHeight: 300 }
     raw     = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 } ]
     stats   = xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2
     points  = Data.prototype.getPoints raw, options, stats
