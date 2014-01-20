@@ -346,10 +346,6 @@ Options = (function() {
 
   Options.prototype.width = 600;
 
-  Options.prototype.line = null;
-
-  Options.prototype.padding = null;
-
   function Options(options) {
     var key, value;
     if (options == null) {
@@ -359,8 +355,10 @@ Options = (function() {
       value = options[key];
       this[key] = value;
     }
-    this.line = new Line(this.line);
-    this.padding = new Padding(this.padding, this.line.width);
+    this.line = new LineOptions(this.line);
+    this.padding = new PaddingOptions(this.padding, this.line.width);
+    this.xAxis = new AxisLineOptions(this.xAxis);
+    this.yAxis = new AxisLineOptions(this.yAxis);
     this.usableWidth = this.width - this.padding.left - this.padding.right;
     this.usableHeight = this.height - this.padding.top - this.padding.bottom;
   }

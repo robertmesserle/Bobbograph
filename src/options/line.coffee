@@ -1,4 +1,4 @@
-class Line
+class LineOptions
 
   width  : 1
   color  : '#000'

@@ -1,4 +1,4 @@
-class Padding
+class PaddingOptions
 
   top    : null
   bottom : null

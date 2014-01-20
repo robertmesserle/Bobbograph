@@ -349,10 +349,6 @@ Options = (function() {
 
   Options.prototype.width = 600;
 
-  Options.prototype.line = null;
-
-  Options.prototype.padding = null;
-
   function Options(options) {
     var key, value;
     if (options == null) {
@@ -362,8 +358,10 @@ Options = (function() {
       value = options[key];
       this[key] = value;
     }
-    this.line = new Line(this.line);
-    this.padding = new Padding(this.padding, this.line.width);
+    this.line = new LineOptions(this.line);
+    this.padding = new PaddingOptions(this.padding, this.line.width);
+    this.xAxis = new AxisLineOptions(this.xAxis);
+    this.yAxis = new AxisLineOptions(this.yAxis);
     this.usableWidth = this.width - this.padding.left - this.padding.right;
     this.usableHeight = this.height - this.padding.top - this.padding.bottom;
   }
@@ -594,16 +592,36 @@ Util = (function() {
 
 })();
 
-var Line;
+var AxisLineOptions;
 
-Line = (function() {
-  Line.prototype.width = 1;
+AxisLineOptions = (function() {
+  AxisLineOptions.prototype.incriment = 0;
 
-  Line.prototype.color = '#000';
+  function AxisLineOptions(axis) {
+    var key, value, _i, _len;
+    if (axis == null) {
+      axis = {};
+    }
+    for (value = _i = 0, _len = axis.length; _i < _len; value = ++_i) {
+      key = axis[value];
+      this[key] = value;
+    }
+  }
 
-  Line.prototype.smooth = false;
+  return AxisLineOptions;
 
-  function Line(line) {
+})();
+
+var LineOptions;
+
+LineOptions = (function() {
+  LineOptions.prototype.width = 1;
+
+  LineOptions.prototype.color = '#000';
+
+  LineOptions.prototype.smooth = false;
+
+  function LineOptions(line) {
     var key, value;
     if (line == null) {
       line = {};
@@ -614,26 +632,26 @@ Line = (function() {
     }
   }
 
-  return Line;
+  return LineOptions;
 
 })();
 
-var Padding;
+var PaddingOptions;
 
-Padding = (function() {
-  Padding.prototype.top = null;
+PaddingOptions = (function() {
+  PaddingOptions.prototype.top = null;
 
-  Padding.prototype.bottom = null;
+  PaddingOptions.prototype.bottom = null;
 
-  Padding.prototype.left = null;
+  PaddingOptions.prototype.left = null;
 
-  Padding.prototype.right = null;
+  PaddingOptions.prototype.right = null;
 
-  Padding.prototype.x = null;
+  PaddingOptions.prototype.x = null;
 
-  Padding.prototype.y = null;
+  PaddingOptions.prototype.y = null;
 
-  function Padding(padding, lineWidth) {
+  function PaddingOptions(padding, lineWidth) {
     if (padding == null) {
       padding = {};
     }
@@ -649,7 +667,7 @@ Padding = (function() {
     this.right = padding.right || this.y;
   }
 
-  return Padding;
+  return PaddingOptions;
 
 })();
 if ( typeof define === 'function' && define.amd ) define( function () { return Bobbograph } )
