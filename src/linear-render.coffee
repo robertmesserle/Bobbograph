@@ -8,7 +8,7 @@ class LinearRender extends Canvas
       new Segment points[ index - 1 ], points[ index ], offset
 
   renderLine: (points, offset) ->
-    segments = @getSegments( points, offset )
+    segments = @getSegments points, offset
     for segment, index in segments
       next = segments[ index + 1 ]
       @line segment.corner1 unless index
@@ -19,7 +19,7 @@ class LinearRender extends Canvas
         else
           s1 = new Segment segment.corner1, segment.corner2, 0
           s2 = new Segment next.corner1, next.corner2, 0
-          @line s1.intersects( s2 )
+          @line s1.intersects s2
       else
         @arc segment.p2, offset, segment.topAngle, segment.bottomAngle
     reverse = segments.slice().reverse()
@@ -32,7 +32,7 @@ class LinearRender extends Canvas
         else
           s1 = new Segment segment.corner3, segment.corner4, 0
           s2 = new Segment next.corner3, next.corner4, 0
-          @line s1.intersects( s2 )
+          @line s1.intersects s2
       else
         @arc segment.p1, offset, segment.bottomAngle, segment.topAngle
 

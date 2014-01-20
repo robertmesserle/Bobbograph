@@ -1,28 +1,28 @@
 class Options
 
   # Size info
-  height:             300
-  width:              600
+  height        : 300
+  width         : 600
 
   # Visual details
-  lineWidth:          10
-  color:              '#000'
+  lineWidth     : 10
+  color         : '#000'
 
   # Smoothing info
-  smoothGraph:        false
+  smoothGraph   : false
 
   # Padding
-  padding:            null  # Default: lineWidth
-  xPadding:           null  # Default: padding
-  yPadding:           null  # Default: padding
-  leftPadding:        null  # Default: xPadding
-  rightPadding:       null  # Default: xPadding
-  topPadding:         null  # Default: yPadding
-  bottomPadding:      null  # Default: yPadding
+  padding       : null  # Default: lineWidth
+  xPadding      : null  # Default: padding
+  yPadding      : null  # Default: padding
+  leftPadding   : null  # Default: xPadding
+  rightPadding  : null  # Default: xPadding
+  topPadding    : null  # Default: yPadding
+  bottomPadding : null  # Default: yPadding
   
   # Canvas info
-  usableWidth:        null
-  usableHeight:       null
+  usableWidth   : null
+  usableHeight  : null
 
   constructor: ( options = {} ) ->
     for key, value of options then @[ key ] = value

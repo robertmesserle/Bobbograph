@@ -184,11 +184,12 @@ Data = (function() {
     return _results;
   };
 
+  Data.prototype.sortMethod = function(a, b) {
+    return a.x - b.x;
+  };
+
   Data.prototype.formatData = function(data) {
-    var index, points, sortMethod, val, _i, _len, _results;
-    sortMethod = function(a, b) {
-      return a.x - b.x;
-    };
+    var index, points, val, _i, _len, _results;
     if (typeof data[0] === 'number') {
       _results = [];
       for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
@@ -576,7 +577,7 @@ Trig = (function() {
     var distance, dx, dy;
     dx = p2.x - p1.x;
     dy = p2.y - p1.y;
-    return distance = Math.sqrt(dx * dx + dy * dy);
+    return distance = Math.sqrtdx * dx + dy * dy;
   };
 
   Trig.getPointFromAngle = function(origin, angle, distance) {
