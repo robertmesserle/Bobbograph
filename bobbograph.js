@@ -273,7 +273,7 @@ LinearRender = (function(_super) {
     this.points = points;
     this.context = context;
     this.options = options;
-    this.renderSolid(this.points, this.options.lineWidth);
+    this.renderSolid(this.points, this.options.lineWidth, this.options.fill);
   }
 
   LinearRender.prototype.getSegments = function(points, offset) {
@@ -328,13 +328,13 @@ LinearRender = (function(_super) {
     return _results;
   };
 
-  LinearRender.prototype.renderSolid = function(points, lineWidth) {
+  LinearRender.prototype.renderSolid = function(points, lineWidth, color) {
     var offset;
     offset = lineWidth / 2;
     this.begin();
     this.renderLine(points, offset, true);
     this.close();
-    return this.stroke();
+    return this.fill(color);
   };
 
   return LinearRender;
@@ -348,57 +348,13 @@ Options = (function() {
 
   Options.prototype.width = 600;
 
-  Options.prototype.bevel = false;
-
-  Options.prototype.bevelIntensity = 1;
-
-  Options.prototype.shineIntensity = 0.65;
-
-  Options.prototype.shadowIntensity = 0.3;
-
-  Options.prototype.smoothBevel = false;
-
   Options.prototype.lineWidth = 10;
 
   Options.prototype.color = '#000';
 
-  Options.prototype.shadow = false;
-
   Options.prototype.fill = false;
 
-  Options.prototype.verticalFill = false;
-
-  Options.prototype.dashed = false;
-
-  Options.prototype.dashSize = 5;
-
-  Options.prototype.maxPoints = false;
-
-  Options.prototype.peaksAndValleys = false;
-
-  Options.prototype.verticalLineFill = false;
-
   Options.prototype.smoothGraph = false;
-
-  Options.prototype.smoothingMethod = false;
-
-  Options.prototype.normalRange = false;
-
-  Options.prototype.animationDuration = 0;
-
-  Options.prototype.easingMethod = false;
-
-  Options.prototype.callback = false;
-
-  Options.prototype.maxX = false;
-
-  Options.prototype.maxY = false;
-
-  Options.prototype.minX = false;
-
-  Options.prototype.minY = false;
-
-  Options.prototype.percent = 1;
 
   Options.prototype.padding = null;
 

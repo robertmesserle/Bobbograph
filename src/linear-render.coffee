@@ -1,7 +1,7 @@
 class LinearRender extends Canvas
 
-  constructor: (@points, @context, @options) ->
-    @renderSolid @points, @options.lineWidth
+  constructor: ( @points, @context, @options ) ->
+    @renderSolid @points, @options.lineWidth, @options.fill
 
   getSegments: ( points, offset ) ->
     for index in [ 1 .. points.length - 1 ]
@@ -36,11 +36,11 @@ class LinearRender extends Canvas
       else
         @arc segment.p1, offset, segment.bottomAngle, segment.topAngle
 
-  renderSolid: (points, lineWidth) ->
+  renderSolid: ( points, lineWidth, color ) ->
     offset = lineWidth / 2
     @begin()
 
     @renderLine points, offset, true
     
     @close()
-    @stroke()
+    @fill color
