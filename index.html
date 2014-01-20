@@ -10,10 +10,11 @@
   <script>
     var data = [ 1, 5, 2, 30, 4, 3, 10 ],
         options = {
-          smoothGraph: true,
-          dashed: true,
-          lineWidth: 35,
-          color: '#f00'
+          line: {
+            color: '#0cf',
+            width: 10,
+            smooth: true
+          }
         };
     new Bobbograph( 'wrapper', data, options );
   </script>

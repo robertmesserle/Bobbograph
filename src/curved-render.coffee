@@ -1,7 +1,7 @@
 class CurvedRender extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
-    @renderSolid @pixels, @options.lineWidth, @options.color
+    @renderSolid @pixels, @options.line.width, @options.line.color
 
   renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels

@@ -4,7 +4,7 @@ class Data
     @data   = @formatData data
     @stats  = new Stats @data
     @points = @getPoints @data, @options, @stats
-    @pixels = @getPixels @points, @options.usableWidth, @options.smoothGraph
+    @pixels = @getPixels @points, @options.usableWidth, @options.line.smooth
 
   scalePoint: ( val, min, delta, scale ) ->
     scoped    = val - min

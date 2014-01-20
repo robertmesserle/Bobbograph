@@ -5,7 +5,7 @@ class Bobbograph
     @context = @getContext id
     @data    = new Data data, @options
 
-    if @options.smoothGraph
+    if @options.line.smooth
       new CurvedRender @data.pixels, @context, @options
     else
       new LinearRender @data.points, @context, @options

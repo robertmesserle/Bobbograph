@@ -75,7 +75,7 @@ Bobbograph = (function() {
     this.options = new Options(options);
     this.context = this.getContext(id);
     this.data = new Data(data, this.options);
-    if (this.options.smoothGraph) {
+    if (this.options.line.smooth) {
       new CurvedRender(this.data.pixels, this.context, this.options);
     } else {
       new LinearRender(this.data.points, this.context, this.options);
@@ -107,7 +107,7 @@ CurvedRender = (function(_super) {
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    this.renderSolid(this.pixels, this.options.lineWidth, this.options.color);
+    this.renderSolid(this.pixels, this.options.line.width, this.options.line.color);
   }
 
   CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
@@ -157,7 +157,7 @@ Data = (function() {
     this.data = this.formatData(data);
     this.stats = new Stats(this.data);
     this.points = this.getPoints(this.data, this.options, this.stats);
-    this.pixels = this.getPixels(this.points, this.options.usableWidth, this.options.smoothGraph);
+    this.pixels = this.getPixels(this.points, this.options.usableWidth, this.options.line.smooth);
   }
 
   Data.prototype.scalePoint = function(val, min, delta, scale) {
@@ -271,7 +271,7 @@ LinearRender = (function(_super) {
     this.points = points;
     this.context = context;
     this.options = options;
-    this.renderSolid(this.points, this.options.lineWidth, this.options.color);
+    this.renderSolid(this.points, this.options.line.width, this.options.line.color);
   }
 
   LinearRender.prototype.getSegments = function(points, offset) {
@@ -346,17 +346,9 @@ Options = (function() {
 
   Options.prototype.width = 600;
 
-  Options.prototype.lineWidth = 10;
-
-  Options.prototype.color = '#000';
-
-  Options.prototype.smoothGraph = false;
+  Options.prototype.line = null;
 
   Options.prototype.padding = null;
-
-  Options.prototype.usableWidth = null;
-
-  Options.prototype.usableHeight = null;
 
   function Options(options) {
     var key, value;
@@ -367,7 +359,8 @@ Options = (function() {
       value = options[key];
       this[key] = value;
     }
-    this.padding = new Padding(this.padding, this.lineWidth);
+    this.line = new Line(this.line);
+    this.padding = new Padding(this.padding, this.line.width);
     this.usableWidth = this.width - this.padding.left - this.padding.right;
     this.usableHeight = this.height - this.padding.top - this.padding.bottom;
   }
