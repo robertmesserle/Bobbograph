@@ -7,8 +7,8 @@ class Padding
   x      : null
   y      : null
 
-  constructor: ( padding = {} ) ->
-    @size   = padding.size  or 0
+  constructor: ( padding = {}, lineWidth = 0 ) ->
+    @size   = padding.size  or lineWidth
     @x      = padding.x     or @size
     @top    = padding.top   or @x
     @bottom = padding.top   or @x

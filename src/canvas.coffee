@@ -1,10 +1,10 @@
 class Canvas
 
   scaleX: ( x ) ->
-    @options.leftPadding + x
+    @options.padding.left + x
 
   scaleY: ( y ) ->
-    @options.usableHeight - y + @options.topPadding
+    @options.usableHeight - y + @options.padding.top
 
   begin: ->
     @continue = false

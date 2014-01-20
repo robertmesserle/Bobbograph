@@ -42,7 +42,7 @@ module.exports = ( grunt ) ->
           stripBanners: true
           banner: "#{ header.banner }\n\n#{ header.js }\n"
           footer: "#{ footer.js }"
-        src: [ 'tmp/*.js' ]
+        src: [ 'tmp/*.js', 'tmp/**/*.js' ]
         dest: 'bobbograph.js'
       spec:
         options:

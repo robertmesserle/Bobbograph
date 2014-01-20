@@ -14,11 +14,11 @@ Canvas = (function() {
   function Canvas() {}
 
   Canvas.prototype.scaleX = function(x) {
-    return this.options.leftPadding + x;
+    return this.options.padding.left + x;
   };
 
   Canvas.prototype.scaleY = function(y) {
-    return this.options.usableHeight - y + this.options.topPadding;
+    return this.options.usableHeight - y + this.options.padding.top;
   };
 
   Canvas.prototype.begin = function() {
@@ -354,18 +354,6 @@ Options = (function() {
 
   Options.prototype.padding = null;
 
-  Options.prototype.xPadding = null;
-
-  Options.prototype.yPadding = null;
-
-  Options.prototype.leftPadding = null;
-
-  Options.prototype.rightPadding = null;
-
-  Options.prototype.topPadding = null;
-
-  Options.prototype.bottomPadding = null;
-
   Options.prototype.usableWidth = null;
 
   Options.prototype.usableHeight = null;
@@ -379,34 +367,10 @@ Options = (function() {
       value = options[key];
       this[key] = value;
     }
-    this.calculatePadding();
+    this.padding = new Padding(this.padding, this.lineWidth);
+    this.usableWidth = this.width - this.padding.left - this.padding.right;
+    this.usableHeight = this.height - this.padding.top - this.padding.bottom;
   }
-
-  Options.prototype.calculatePadding = function() {
-    if (this.padding == null) {
-      this.padding = this.lineWidth;
-    }
-    if (this.xPadding == null) {
-      this.xPadding = this.padding;
-    }
-    if (this.yPadding == null) {
-      this.yPadding = this.padding;
-    }
-    if (this.leftPadding == null) {
-      this.leftPadding = this.xPadding;
-    }
-    if (this.rightPadding == null) {
-      this.rightPadding = this.xPadding;
-    }
-    if (this.topPadding == null) {
-      this.topPadding = this.yPadding;
-    }
-    if (this.bottomPadding == null) {
-      this.bottomPadding = this.yPadding;
-    }
-    this.usableWidth = this.width - this.leftPadding - this.rightPadding;
-    return this.usableHeight = this.height - this.topPadding - this.bottomPadding;
-  };
 
   return Options;
 
