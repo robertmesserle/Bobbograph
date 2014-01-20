@@ -33,5 +33,5 @@ class Canvas
     @context.stroke()
 
   fill: ( color ) ->
-    if color then @context.fillColor = color
+    if color then @context.fillStyle = color
     @context.fill()

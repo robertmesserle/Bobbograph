@@ -7,7 +7,6 @@ class Options
   # Visual details
   lineWidth:          10
   color:              '#000'
-  fill:               false
 
   # Smoothing info
   smoothGraph:        false

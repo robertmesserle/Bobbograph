@@ -59,7 +59,7 @@ Canvas = (function() {
 
   Canvas.prototype.fill = function(color) {
     if (color) {
-      this.context.fillColor = color;
+      this.context.fillStyle = color;
     }
     return this.context.fill();
   };
@@ -107,7 +107,7 @@ CurvedRender = (function(_super) {
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    this.renderSolid(this.pixels, this.options.lineWidth);
+    this.renderSolid(this.pixels, this.options.lineWidth, this.options.color);
   }
 
   CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
@@ -132,7 +132,7 @@ CurvedRender = (function(_super) {
     }
   };
 
-  CurvedRender.prototype.renderSolid = function(pixels, lineWidth) {
+  CurvedRender.prototype.renderSolid = function(pixels, lineWidth, color) {
     var angle, offset;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
@@ -142,7 +142,7 @@ CurvedRender = (function(_super) {
     this.renderLine(pixels.slice().reverse(), offset, angle);
     this.renderCap(pixels[0], false, offset);
     this.close();
-    return this.stroke();
+    return this.fill(color);
   };
 
   return CurvedRender;
@@ -270,7 +270,7 @@ LinearRender = (function(_super) {
     this.points = points;
     this.context = context;
     this.options = options;
-    this.renderSolid(this.points, this.options.lineWidth, this.options.fill);
+    this.renderSolid(this.points, this.options.lineWidth, this.options.color);
   }
 
   LinearRender.prototype.getSegments = function(points, offset) {
@@ -348,8 +348,6 @@ Options = (function() {
   Options.prototype.lineWidth = 10;
 
   Options.prototype.color = '#000';
-
-  Options.prototype.fill = false;
 
   Options.prototype.smoothGraph = false;
 

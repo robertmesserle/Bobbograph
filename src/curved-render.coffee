@@ -1,22 +1,22 @@
 class CurvedRender extends Canvas
 
-  constructor: (@pixels, @context, @options) ->
-    @renderSolid @pixels, @options.lineWidth
+  constructor: ( @pixels, @context, @options ) ->
+    @renderSolid @pixels, @options.lineWidth, @options.color
 
-  renderLine: (pixels, offset, angleOffset) ->
+  renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels
       prev    = pixels[ index - 1 ]
       next    = pixels[ index + 1 ]
       @line pixel.offsetPoint prev, next, offset, angleOffset
 
-  renderCap: (point, right, offset) ->
+  renderCap: ( point, right, offset ) ->
     angle = Math.PI / 2
     if right
       @arc point, offset, angle, -angle
     else
       @arc point, offset, -angle, angle
 
-  renderSolid: (pixels, lineWidth) ->
+  renderSolid: ( pixels, lineWidth, color ) ->
     offset = lineWidth / 2
     angle  = Math.PI / 2
     @begin()
@@ -27,4 +27,4 @@ class CurvedRender extends Canvas
     @renderCap  pixels[ 0 ], false, offset
     
     @close()
-    @stroke()
+    @fill color

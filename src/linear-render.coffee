@@ -1,7 +1,7 @@
 class LinearRender extends Canvas
 
   constructor: ( @points, @context, @options ) ->
-    @renderSolid @points, @options.lineWidth, @options.fill
+    @renderSolid @points, @options.lineWidth, @options.color
 
   getSegments: ( points, offset ) ->
     for index in [ 1 .. points.length - 1 ]
