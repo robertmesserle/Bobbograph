@@ -72,19 +72,20 @@ var Bobbograph;
 
 Bobbograph = (function() {
   function Bobbograph(id, data, options) {
+    this.element = document.getElementById(id);
     this.options = new Options(options);
-    this.context = this.getContext(id);
+    this.context = this.getContext(this.element);
     this.data = new Data(data, this.options);
     if (this.options.line.smooth) {
       new CurvedRender(this.data.pixels, this.context, this.options);
     } else {
       new LinearRender(this.data.points, this.context, this.options);
     }
+    this.xAxis = new XAxis(this.options.xAxis, this.element, this.options);
   }
 
-  Bobbograph.prototype.getContext = function(id) {
-    var canvas, context, element;
-    element = document.getElementById(id);
+  Bobbograph.prototype.getContext = function(element) {
+    var canvas, context;
     canvas = document.createElement('canvas');
     canvas.setAttribute('height', this.options.height);
     canvas.setAttribute('width', this.options.width);
@@ -586,6 +587,19 @@ Util = (function() {
   };
 
   return Util;
+
+})();
+
+var XAxis;
+
+XAxis = (function() {
+  function XAxis(axis, wrapper, options) {
+    this.axis = axis;
+    this.wrapper = wrapper;
+    this.options = options;
+  }
+
+  return XAxis;
 
 })();
   root.get = function (str) { return eval(str) };

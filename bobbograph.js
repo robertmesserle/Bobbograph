@@ -75,19 +75,20 @@ var Bobbograph;
 
 Bobbograph = (function() {
   function Bobbograph(id, data, options) {
+    this.element = document.getElementById(id);
     this.options = new Options(options);
-    this.context = this.getContext(id);
+    this.context = this.getContext(this.element);
     this.data = new Data(data, this.options);
     if (this.options.line.smooth) {
       new CurvedRender(this.data.pixels, this.context, this.options);
     } else {
       new LinearRender(this.data.points, this.context, this.options);
     }
+    this.xAxis = new XAxis(this.options.xAxis, this.element, this.options);
   }
 
-  Bobbograph.prototype.getContext = function(id) {
-    var canvas, context, element;
-    element = document.getElementById(id);
+  Bobbograph.prototype.getContext = function(element) {
+    var canvas, context;
     canvas = document.createElement('canvas');
     canvas.setAttribute('height', this.options.height);
     canvas.setAttribute('width', this.options.width);
@@ -592,18 +593,31 @@ Util = (function() {
 
 })();
 
+var XAxis;
+
+XAxis = (function() {
+  function XAxis(axis, wrapper, options) {
+    this.axis = axis;
+    this.wrapper = wrapper;
+    this.options = options;
+  }
+
+  return XAxis;
+
+})();
+
 var AxisLineOptions;
 
 AxisLineOptions = (function() {
-  AxisLineOptions.prototype.incriment = 0;
+  AxisLineOptions.prototype.increment = 0;
 
   function AxisLineOptions(axis) {
-    var key, value, _i, _len;
+    var key, value;
     if (axis == null) {
       axis = {};
     }
-    for (value = _i = 0, _len = axis.length; _i < _len; value = ++_i) {
-      key = axis[value];
+    for (key in axis) {
+      value = axis[key];
       this[key] = value;
     }
   }

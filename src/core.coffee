@@ -1,8 +1,9 @@
 class Bobbograph
 
   constructor: ( id, data, options ) ->
+    @element = document.getElementById id
     @options = new Options options
-    @context = @getContext id
+    @context = @getContext @element
     @data    = new Data data, @options
 
     if @options.line.smooth
@@ -10,8 +11,9 @@ class Bobbograph
     else
       new LinearRender @data.points, @context, @options
 
-  getContext: ( id ) ->
-    element = document.getElementById id
+    @xAxis = new XAxis @options.xAxis, @element, @options
+
+  getContext: ( element ) ->
     canvas  = document.createElement 'canvas'
     canvas.setAttribute 'height', @options.height
     canvas.setAttribute 'width',  @options.width
