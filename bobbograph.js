@@ -1,5 +1,4 @@
-/* Bobbograph v2.0.0 by Robert Messerle / http://github.com/robertmesserle/Bobbograph.git */
-(function ( global ) {
+(function ( root ) {
 var Canvas;
 
 Canvas = (function() {
@@ -683,5 +682,5 @@ PaddingOptions = (function() {
 
 })();
 
-global.Bobbograph=Bobbograph;
-})(this);
+root.Bobbograph = Bobbograph;
+})( this );
