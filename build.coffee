@@ -11,22 +11,19 @@ head    = "(function ( root ) {\n"
 spec    = "\nroot.spec = function ( str ) { return eval( str ); };"
 foot    = "\nroot.Bobbograph = Bobbograph;\n})( this );"
 
-gulp.task 'coffee', ->
+parseCoffee = ( filename, head, foot ) ->
   gulp.src( [ 'src/canvas.coffee', 'src/**' ] )
     .pipe( coffee bare: true )
-    .pipe( concat 'bobbograph.js' )
+    .pipe( concat filename )
     .pipe( header head )
     .pipe( footer foot )
     .pipe( gulp.dest '.' )
 
-gulp.task 'spec', [ 'coffee' ], ->
-  gulp.src( [ 'src/canvas.coffee', 'src/**' ] )
-    .pipe( coffee bare: true )
-    .pipe( concat 'bobbograph.js' )
-    .pipe( header comment + head )
-    .pipe( footer spec + foot )
-    .pipe( rename 'bobbograph.spec.js' )
-    .pipe( gulp.dest '.' )
+gulp.task 'coffee', ->
+  parseCoffee 'bobbograph.js', comment + head, foot
+
+gulp.task 'spec', ->
+  parseCoffee 'bobbograph.spec.js', comment + head, spec + foot
 
 gulp.task 'min', [ 'coffee' ], ->
   gulp.src( [ 'bobbograph.js' ] )
@@ -34,6 +31,3 @@ gulp.task 'min', [ 'coffee' ], ->
     .pipe( rename 'bobbograph.min.js' )
     .pipe( header comment )
     .pipe( gulp.dest '.' )
-
-gulp.task 'build', ->
-  gulp

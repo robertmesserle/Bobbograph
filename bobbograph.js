@@ -1,3 +1,4 @@
+/* Bobbograph v2.0.0 by Robert Messerle - http://github.com/robertmesserle/Bobbograph.git */
 (function ( root ) {
 var Canvas;
 
