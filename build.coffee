@@ -19,7 +19,7 @@ gulp.task 'coffee', ->
     .pipe( footer foot )
     .pipe( gulp.dest '.' )
 
-gulp.task 'spec', ->
+gulp.task 'spec', [ 'coffee' ], ->
   gulp.src( [ 'src/canvas.coffee', 'src/**' ] )
     .pipe( coffee bare: true )
     .pipe( concat 'bobbograph.js' )
@@ -28,9 +28,12 @@ gulp.task 'spec', ->
     .pipe( rename 'bobbograph.spec.js' )
     .pipe( gulp.dest '.' )
 
-gulp.task 'min', ->
+gulp.task 'min', [ 'coffee' ], ->
   gulp.src( [ 'bobbograph.js' ] )
     .pipe( uglify() )
     .pipe( rename 'bobbograph.min.js' )
     .pipe( header comment )
     .pipe( gulp.dest '.' )
+
+gulp.task 'build', ->
+  gulp
