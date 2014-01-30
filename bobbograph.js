@@ -1,16 +1,5 @@
-/*! Bobbograph (Alpha) by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
-/*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */
-
-( function ( root ) {
-var Animator;
-
-Animator = (function() {
-  function Animator() {}
-
-  return Animator;
-
-})();
-
+/* Bobbograph v2.0.0 by Robert Messerle / http://github.com/robertmesserle/Bobbograph.git */
+(function ( global ) {
 var Canvas;
 
 Canvas = (function() {
@@ -68,6 +57,15 @@ Canvas = (function() {
   };
 
   return Canvas;
+
+})();
+
+var Animator;
+
+Animator = (function() {
+  function Animator() {}
+
+  return Animator;
 
 })();
 
@@ -684,6 +682,6 @@ PaddingOptions = (function() {
   return PaddingOptions;
 
 })();
-if ( typeof define === 'function' && define.amd ) define( function () { return Bobbograph } )
-else root.Bobbograph = Bobbograph
-} )( this )
+
+global.Bobbograph=Bobbograph;
+})(this);
