@@ -6,7 +6,10 @@ footer  = require 'gulp-footer'
 uglify  = require 'gulp-uglify'
 rename  = require 'gulp-rename'
 
-comment = "/* Bobbograph v2.0.0 by Robert Messerle - http://github.com/robertmesserle/Bobbograph.git */\n"
+comment = """
+  /*! Bobbograph (Alpha) by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
+  /*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */
+  """
 head    = "(function ( root ) {\n"
 spec    = "\nroot.spec = function ( str ) { return eval( str ); };"
 foot    = "\nroot.Bobbograph = Bobbograph;\n})( this );"
