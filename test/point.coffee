@@ -13,5 +13,4 @@ describe 'Point', ->
     point = new Point 0, 0
     it 'should work for 45 degree angles', ->
       angle = point.getAngle x: 1, y: 1
-      console.log( angle )
-      expect( angle ).to.be Math.PI / 2
+      expect( angle ).to.be Math.PI / 4
