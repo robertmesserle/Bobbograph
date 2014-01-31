@@ -11,4 +11,8 @@ module.exports = class Point
   offsetPoint: ( prev = @, next = @, offset, angleOffset ) ->
     angle = Trig.getAngleFromPoints prev, next
     perp  = angle + angleOffset
-    point = Trig.getPointFromAngle @, perp, offset
+    point = @getPointFromAngle perp, offset
+
+  getPointFromAngle: ( angle, distance ) ->
+    point = Trig.getPointFromAngle @, angle, distance
+    new Point point.x, point.y

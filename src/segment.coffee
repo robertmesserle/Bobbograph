@@ -11,10 +11,10 @@ module.exports = class Segment
     @topAngle     = @angle + Trig.rad 90
     @bottomAngle  = @angle - Trig.rad 90
 
-    @corner1      = Trig.getPointFromAngle @p1, @topAngle, @offset
-    @corner2      = Trig.getPointFromAngle @p2, @topAngle, @offset
-    @corner3      = Trig.getPointFromAngle @p2, @bottomAngle, @offset
-    @corner4      = Trig.getPointFromAngle @p1, @bottomAngle, @offset
+    @corner1      = @p1.getPointFromAngle @topAngle, @offset
+    @corner2      = @p2.getPointFromAngle @topAngle, @offset
+    @corner3      = @p2.getPointFromAngle @bottomAngle, @offset
+    @corner4      = @p1.getPointFromAngle @bottomAngle, @offset
 
   reduceAngle: ( angle ) ->
     while angle > Math.PI
