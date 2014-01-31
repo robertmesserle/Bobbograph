@@ -221,7 +221,7 @@ module.exports = Data = (function() {
         }
         return _results1;
       })();
-      return points.sort(sortMethod);
+      return points.sort(this.sortMethod);
     } else if (data[0] && (data[0].x != null) && (data[0].y != null)) {
       points = (function() {
         var _j, _len1, _results1;
@@ -232,7 +232,7 @@ module.exports = Data = (function() {
         }
         return _results1;
       })();
-      return points.sort(sortMethod);
+      return points.sort(this.sortMethod);
     }
   };
 
@@ -474,11 +474,11 @@ module.exports = PaddingOptions = (function() {
     }
     this.size = padding.size || lineWidth;
     this.x = padding.x || this.size;
-    this.top = padding.top || this.x;
-    this.bottom = padding.top || this.x;
+    this.left = padding.left || this.x;
+    this.right = padding.right || this.x;
     this.y = padding.y || this.size;
-    this.left = padding.left || this.y;
-    this.right = padding.right || this.y;
+    this.top = padding.top || this.y;
+    this.bottom = padding.top || this.y;
   }
 
   return PaddingOptions;
