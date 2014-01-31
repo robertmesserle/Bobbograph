@@ -16,7 +16,6 @@ gulp.task 'coffee', ->
     .pipe( rename 'bobbograph.js' )
     .pipe( gulp.dest '.' )
 
-
 gulp.task 'min', [ 'coffee' ], ->
   gulp.src( 'bobbograph.js' )
     .pipe( uglify() )
