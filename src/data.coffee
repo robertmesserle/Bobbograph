@@ -33,11 +33,11 @@ module.exports = class Data
     else if data[ 0 ] instanceof Array
       points = for val, index in data
         new Point val[ 0 ], val[ 1 ]
-      points.sort sortMethod
+      points.sort @sortMethod
     else if data[ 0 ] and data[ 0 ].x? and data[ 0 ].y?
       points = for val, index in data
         new Point val.x, val.y
-      points.sort sortMethod
+      points.sort @sortMethod
 
   getPixels: ( points, width, curve ) ->
     method = if curve then Easing.curve else Easing.linear
