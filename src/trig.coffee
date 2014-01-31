@@ -1,4 +1,4 @@
-class Trig
+module.exports = class Trig
 
   @rad: ( deg ) ->
     deg * Math.PI / 180
@@ -37,12 +37,12 @@ class Trig
   @getPointFromAngle: ( origin, angle, distance ) ->
     { x, y } = origin
     if angle is Math.PI
-      new Point x - distance, y
+      x: x - distance, y: y
     else if angle is Math.PI / 2
-      new Point x, y + distance
+      x: x, y: y + distance
     else if angle is Math.PI * 1.5
-      new Point x, y - distance
+      x: x, y: y - distance
     else if angle is 0
-      new Point x + distance, y
+      x: x + distance, y: y
     else
-      new Point Math.cos( angle ) * distance + x, Math.sin( angle ) * distance + y
+      x: Math.cos( angle ) * distance + x, y: Math.sin( angle ) * distance + y

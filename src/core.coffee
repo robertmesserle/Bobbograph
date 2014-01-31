@@ -1,4 +1,10 @@
-class Bobbograph
+Options      = require './options.coffee'
+Data         = require './data.coffee'
+CurvedRender = require './curved-render.coffee'
+LinearRender = require './linear-render.coffee'
+XAxis        = require './x-axis.coffee'
+
+class window.Bobbograph
 
   constructor: ( id, data, options ) ->
     @element = document.getElementById id

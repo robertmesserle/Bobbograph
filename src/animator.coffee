@@ -1,1 +1,1 @@
-class Animator
+module.exports = class Animator

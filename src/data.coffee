@@ -1,4 +1,8 @@
-class Data
+Stats  = require './stats.coffee'
+Point  = require './point.coffee'
+Easing = require './easing.coffee'
+
+module.exports = class Data
 
   constructor: ( data, @options ) ->
     @data   = @formatData data

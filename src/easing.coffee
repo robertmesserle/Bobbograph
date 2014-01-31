@@ -1,4 +1,4 @@
-class Easing
+module.exports = class Easing
 
   @curve: ( t, b, c, d ) ->
     if ( t /= d / 2 ) < 1 then c / 2 * Math.pow( t, 2 ) + b

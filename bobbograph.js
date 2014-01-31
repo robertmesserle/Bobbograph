@@ -1,9 +1,8 @@
 /*! Bobbograph (Alpha) by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
-/*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */
-(function ( root ) {
+/*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Canvas;
 
-Canvas = (function() {
+module.exports = Canvas = (function() {
   function Canvas() {}
 
   Canvas.prototype.scaleX = function(x) {
@@ -61,18 +60,21 @@ Canvas = (function() {
 
 })();
 
-var Animator;
 
-Animator = (function() {
-  function Animator() {}
+},{}],2:[function(require,module,exports){
+var CurvedRender, Data, LinearRender, Options, XAxis;
 
-  return Animator;
+Options = require('./options.coffee');
 
-})();
+Data = require('./data.coffee');
 
-var Bobbograph;
+CurvedRender = require('./curved-render.coffee');
 
-Bobbograph = (function() {
+LinearRender = require('./linear-render.coffee');
+
+XAxis = require('./x-axis.coffee');
+
+window.Bobbograph = (function() {
   function Bobbograph(id, data, options) {
     this.element = document.getElementById(id);
     this.options = new Options(options);
@@ -99,11 +101,15 @@ Bobbograph = (function() {
 
 })();
 
-var CurvedRender,
+
+},{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":15}],3:[function(require,module,exports){
+var Canvas, CurvedRender,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-CurvedRender = (function(_super) {
+Canvas = require('./canvas.coffee');
+
+module.exports = CurvedRender = (function(_super) {
   __extends(CurvedRender, _super);
 
   function CurvedRender(pixels, context, options) {
@@ -152,9 +158,17 @@ CurvedRender = (function(_super) {
 
 })(Canvas);
 
-var Data;
 
-Data = (function() {
+},{"./canvas.coffee":1}],4:[function(require,module,exports){
+var Data, Easing, Point, Stats;
+
+Stats = require('./stats.coffee');
+
+Point = require('./point.coffee');
+
+Easing = require('./easing.coffee');
+
+module.exports = Data = (function() {
   function Data(data, options) {
     this.options = options;
     this.data = this.formatData(data);
@@ -242,9 +256,11 @@ Data = (function() {
 
 })();
 
+
+},{"./easing.coffee":5,"./point.coffee":11,"./stats.coffee":13}],5:[function(require,module,exports){
 var Easing;
 
-Easing = (function() {
+module.exports = Easing = (function() {
   function Easing() {}
 
   Easing.curve = function(t, b, c, d) {
@@ -263,11 +279,17 @@ Easing = (function() {
 
 })();
 
-var LinearRender,
+
+},{}],6:[function(require,module,exports){
+var Canvas, LinearRender, Segment,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-LinearRender = (function(_super) {
+Canvas = require('./canvas.coffee');
+
+Segment = require('./segment.coffee');
+
+module.exports = LinearRender = (function(_super) {
   __extends(LinearRender, _super);
 
   function LinearRender(points, context, options) {
@@ -342,9 +364,17 @@ LinearRender = (function(_super) {
 
 })(Canvas);
 
-var Options;
 
-Options = (function() {
+},{"./canvas.coffee":1,"./segment.coffee":12}],7:[function(require,module,exports){
+var AxisLineOptions, LineOptions, Options, PaddingOptions;
+
+LineOptions = require('./options/line.coffee');
+
+PaddingOptions = require('./options/padding.coffee');
+
+AxisLineOptions = require('./options/axis-line.coffee');
+
+module.exports = Options = (function() {
   Options.prototype.height = 300;
 
   Options.prototype.width = 600;
@@ -370,9 +400,98 @@ Options = (function() {
 
 })();
 
-var Point;
 
-Point = (function() {
+},{"./options/axis-line.coffee":8,"./options/line.coffee":9,"./options/padding.coffee":10}],8:[function(require,module,exports){
+var AxisLineOptions;
+
+module.exports = AxisLineOptions = (function() {
+  AxisLineOptions.prototype.increment = 0;
+
+  function AxisLineOptions(axis) {
+    var key, value;
+    if (axis == null) {
+      axis = {};
+    }
+    for (key in axis) {
+      value = axis[key];
+      this[key] = value;
+    }
+  }
+
+  return AxisLineOptions;
+
+})();
+
+
+},{}],9:[function(require,module,exports){
+var LineOptions;
+
+module.exports = LineOptions = (function() {
+  LineOptions.prototype.width = 1;
+
+  LineOptions.prototype.color = '#000';
+
+  LineOptions.prototype.smooth = false;
+
+  function LineOptions(line) {
+    var key, value;
+    if (line == null) {
+      line = {};
+    }
+    for (key in line) {
+      value = line[key];
+      this[key] = value;
+    }
+  }
+
+  return LineOptions;
+
+})();
+
+
+},{}],10:[function(require,module,exports){
+var PaddingOptions;
+
+module.exports = PaddingOptions = (function() {
+  PaddingOptions.prototype.top = null;
+
+  PaddingOptions.prototype.bottom = null;
+
+  PaddingOptions.prototype.left = null;
+
+  PaddingOptions.prototype.right = null;
+
+  PaddingOptions.prototype.x = null;
+
+  PaddingOptions.prototype.y = null;
+
+  function PaddingOptions(padding, lineWidth) {
+    if (padding == null) {
+      padding = {};
+    }
+    if (lineWidth == null) {
+      lineWidth = 0;
+    }
+    this.size = padding.size || lineWidth;
+    this.x = padding.x || this.size;
+    this.top = padding.top || this.x;
+    this.bottom = padding.top || this.x;
+    this.y = padding.y || this.size;
+    this.left = padding.left || this.y;
+    this.right = padding.right || this.y;
+  }
+
+  return PaddingOptions;
+
+})();
+
+
+},{}],11:[function(require,module,exports){
+var Point, Trig;
+
+Trig = require('./trig.coffee');
+
+module.exports = Point = (function() {
   function Point(x, y) {
     this.x = x;
     this.y = y;
@@ -401,9 +520,15 @@ Point = (function() {
 
 })();
 
-var Segment;
 
-Segment = (function() {
+},{"./trig.coffee":14}],12:[function(require,module,exports){
+var Point, Segment, Trig;
+
+Trig = require('./trig.coffee');
+
+Point = require('./point.coffee');
+
+module.exports = Segment = (function() {
   function Segment(p1, p2, offset) {
     this.p1 = p1;
     this.p2 = p2;
@@ -437,9 +562,11 @@ Segment = (function() {
 
 })();
 
+
+},{"./point.coffee":11,"./trig.coffee":14}],13:[function(require,module,exports){
 var Stats;
 
-Stats = (function() {
+module.exports = Stats = (function() {
   function Stats(data) {
     this.getRangeData(data);
   }
@@ -476,9 +603,11 @@ Stats = (function() {
 
 })();
 
+
+},{}],14:[function(require,module,exports){
 var Trig;
 
-Trig = (function() {
+module.exports = Trig = (function() {
   function Trig() {}
 
   Trig.rad = function(deg) {
@@ -539,15 +668,30 @@ Trig = (function() {
     var x, y;
     x = origin.x, y = origin.y;
     if (angle === Math.PI) {
-      return new Point(x - distance, y);
+      return {
+        x: x - distance,
+        y: y
+      };
     } else if (angle === Math.PI / 2) {
-      return new Point(x, y + distance);
+      return {
+        x: x,
+        y: y + distance
+      };
     } else if (angle === Math.PI * 1.5) {
-      return new Point(x, y - distance);
+      return {
+        x: x,
+        y: y - distance
+      };
     } else if (angle === 0) {
-      return new Point(x + distance, y);
+      return {
+        x: x + distance,
+        y: y
+      };
     } else {
-      return new Point(Math.cos(angle) * distance + x, Math.sin(angle) * distance + y);
+      return {
+        x: Math.cos(angle) * distance + x,
+        y: Math.sin(angle) * distance + y
+      };
     }
   };
 
@@ -555,46 +699,11 @@ Trig = (function() {
 
 })();
 
-var Util;
 
-Util = (function() {
-  function Util() {}
-
-  Util.excanvas = typeof G_vmlCanvasManager !== 'undefined';
-
-  Util.getProperty = function(obj, namespace, notFoundValue) {
-    var part, _i, _len, _ref;
-    if (obj == null) {
-      return notFoundValue;
-    }
-    _ref = namespace.split('.');
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      part = _ref[_i];
-      obj = obj[part];
-      if (obj == null) {
-        return notFoundValue;
-      }
-    }
-    return obj;
-  };
-
-  Util.minMax = function(num, min, max) {
-    if (num > max) {
-      return max;
-    } else if (num < min) {
-      return min;
-    } else {
-      return num;
-    }
-  };
-
-  return Util;
-
-})();
-
+},{}],15:[function(require,module,exports){
 var XAxis;
 
-XAxis = (function() {
+module.exports = XAxis = (function() {
   function XAxis(axis, wrapper, options) {
     this.axis = axis;
     this.wrapper = wrapper;
@@ -605,84 +714,5 @@ XAxis = (function() {
 
 })();
 
-var AxisLineOptions;
 
-AxisLineOptions = (function() {
-  AxisLineOptions.prototype.increment = 0;
-
-  function AxisLineOptions(axis) {
-    var key, value;
-    if (axis == null) {
-      axis = {};
-    }
-    for (key in axis) {
-      value = axis[key];
-      this[key] = value;
-    }
-  }
-
-  return AxisLineOptions;
-
-})();
-
-var LineOptions;
-
-LineOptions = (function() {
-  LineOptions.prototype.width = 1;
-
-  LineOptions.prototype.color = '#000';
-
-  LineOptions.prototype.smooth = false;
-
-  function LineOptions(line) {
-    var key, value;
-    if (line == null) {
-      line = {};
-    }
-    for (key in line) {
-      value = line[key];
-      this[key] = value;
-    }
-  }
-
-  return LineOptions;
-
-})();
-
-var PaddingOptions;
-
-PaddingOptions = (function() {
-  PaddingOptions.prototype.top = null;
-
-  PaddingOptions.prototype.bottom = null;
-
-  PaddingOptions.prototype.left = null;
-
-  PaddingOptions.prototype.right = null;
-
-  PaddingOptions.prototype.x = null;
-
-  PaddingOptions.prototype.y = null;
-
-  function PaddingOptions(padding, lineWidth) {
-    if (padding == null) {
-      padding = {};
-    }
-    if (lineWidth == null) {
-      lineWidth = 0;
-    }
-    this.size = padding.size || lineWidth;
-    this.x = padding.x || this.size;
-    this.top = padding.top || this.x;
-    this.bottom = padding.top || this.x;
-    this.y = padding.y || this.size;
-    this.left = padding.left || this.y;
-    this.right = padding.right || this.y;
-  }
-
-  return PaddingOptions;
-
-})();
-
-root.Bobbograph = Bobbograph;
-})( this );
+},{}]},{},[2])

@@ -1,4 +1,4 @@
-class LineOptions
+module.exports = class LineOptions
 
   width  : 1
   color  : '#000'

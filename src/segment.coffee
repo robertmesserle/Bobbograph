@@ -1,4 +1,7 @@
-class Segment
+Trig = require './trig.coffee'
+Point = require './point.coffee'
+
+module.exports = class Segment
 
   constructor: ( @p1, @p2, @offset ) ->
     @angle        = @reduceAngle Trig.getAngleFromPoints @p1, @p2

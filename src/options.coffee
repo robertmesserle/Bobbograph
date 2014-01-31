@@ -1,4 +1,8 @@
-class Options
+LineOptions     = require './options/line.coffee'
+PaddingOptions  = require './options/padding.coffee'
+AxisLineOptions = require './options/axis-line.coffee'
+
+module.exports = class Options
 
   # Size info
   height  : 300

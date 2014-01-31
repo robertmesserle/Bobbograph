@@ -1,4 +1,4 @@
-class Canvas
+module.exports = class Canvas
 
   scaleX: ( x ) ->
     @options.padding.left + x

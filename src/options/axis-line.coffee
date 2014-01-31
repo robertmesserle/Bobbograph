@@ -1,4 +1,4 @@
-class AxisLineOptions
+module.exports = class AxisLineOptions
 
   increment : 0
 

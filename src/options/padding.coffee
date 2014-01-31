@@ -1,4 +1,4 @@
-class PaddingOptions
+module.exports = class PaddingOptions
 
   top    : null
   bottom : null

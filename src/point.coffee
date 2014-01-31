@@ -1,4 +1,6 @@
-class Point
+Trig = require './trig.coffee'
+
+module.exports = class Point
 
   constructor: ( @x, @y ) ->
 

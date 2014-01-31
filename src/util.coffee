@@ -1,4 +1,4 @@
-class Util
+module.exports = class Util
 
   @excanvas: typeof G_vmlCanvasManager isnt 'undefined'
 

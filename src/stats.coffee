@@ -1,4 +1,4 @@
-class Stats
+module.exports = class Stats
 
   constructor: ( data ) ->
     @getRangeData data

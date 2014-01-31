@@ -1,4 +1,7 @@
-class LinearRender extends Canvas
+Canvas  = require './canvas.coffee'
+Segment = require './segment.coffee'
+
+module.exports = class LinearRender extends Canvas
 
   constructor: ( @points, @context, @options ) ->
     @renderSolid @points, @options.line.width, @options.line.color
