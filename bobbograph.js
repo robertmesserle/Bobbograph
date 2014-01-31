@@ -513,7 +513,13 @@ module.exports = Point = (function() {
     }
     angle = Trig.getAngleFromPoints(prev, next);
     perp = angle + angleOffset;
-    return point = Trig.getPointFromAngle(this, perp, offset);
+    return point = this.getPointFromAngle(perp, offset);
+  };
+
+  Point.prototype.getPointFromAngle = function(angle, distance) {
+    var point;
+    point = Trig.getPointFromAngle(this, angle, distance);
+    return new Point(point.x, point.y);
   };
 
   return Point;
@@ -538,10 +544,10 @@ module.exports = Segment = (function() {
     this.yint = this.p1.y - this.slope * this.p1.x;
     this.topAngle = this.angle + Trig.rad(90);
     this.bottomAngle = this.angle - Trig.rad(90);
-    this.corner1 = Trig.getPointFromAngle(this.p1, this.topAngle, this.offset);
-    this.corner2 = Trig.getPointFromAngle(this.p2, this.topAngle, this.offset);
-    this.corner3 = Trig.getPointFromAngle(this.p2, this.bottomAngle, this.offset);
-    this.corner4 = Trig.getPointFromAngle(this.p1, this.bottomAngle, this.offset);
+    this.corner1 = this.p1.getPointFromAngle(this.topAngle, this.offset);
+    this.corner2 = this.p2.getPointFromAngle(this.topAngle, this.offset);
+    this.corner3 = this.p2.getPointFromAngle(this.bottomAngle, this.offset);
+    this.corner4 = this.p1.getPointFromAngle(this.bottomAngle, this.offset);
   }
 
   Segment.prototype.reduceAngle = function(angle) {
