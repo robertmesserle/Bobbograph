@@ -1,1 +1,1 @@
-mocha --recursive --compilers coffee:coffee-script
+mocha --recursive --compilers coffee:coffee-script --bail

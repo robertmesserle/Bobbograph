@@ -32,7 +32,7 @@ module.exports = class Trig
   @getDistanceBetweenPoints: ( p1, p2 ) ->
     dx = p2.x - p1.x
     dy = p2.y - p1.y
-    distance = Math.sqrtdx * dx + dy * dy
+    distance = Math.sqrt dx * dx + dy * dy
 
   @getPointFromAngle: ( origin, angle, distance ) ->
     { x, y } = origin
