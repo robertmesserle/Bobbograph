@@ -13,6 +13,7 @@
     "gulp-uglify": "~0.2.0",
     "expect.js": "~0.2.0",
     "coffeeify": "~0.6.0",
-    "coffee-script": "~1.7.1"
+    "coffee-script": "~1.7.1",
+    "expect.js": "robertmesserle/expect.js"
   }
 }
