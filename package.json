@@ -15,7 +15,6 @@
     "coffee-script": "~1.7.1",
     "expect.js": "robertmesserle/expect.js",
     "gulp-mocha": "~0.4.1",
-    "gulp-coffee": "~1.4.0",
-    "gulp-spawn-mocha": "~0.1.1"
+    "gulp-coffee": "~1.4.0"
   }
 }
