@@ -11,7 +11,6 @@
     "gulp-header": "~1.0.2",
     "gulp-rename": "~0.2.2",
     "gulp-uglify": "~0.2.0",
-    "expect.js": "~0.2.0",
     "coffeeify": "~0.6.0",
     "coffee-script": "~1.7.1",
     "expect.js": "robertmesserle/expect.js"
