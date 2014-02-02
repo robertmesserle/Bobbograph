@@ -1,20 +1,20 @@
 {
-  "name": "Bobbograph",
+  "name":    "Bobbograph",
   "version": "2.0.0",
-  "main": "www/server.coffee",
+  "main":    "www/server.coffee",
   "engines": {
     "node": "0.10.9"
   },
   "dependencies": {
-    "gulp": "~3.5.0",
+    "coffeeify":       "~0.6.0",
+    "coffee-script":   "~1.7.1",
+    "expect.js":       "robertmesserle/expect.js",
+    "gulp":            "~3.5.0",
     "gulp-browserify": "~0.4.0",
-    "gulp-header": "~1.0.2",
-    "gulp-rename": "~0.2.2",
-    "gulp-uglify": "~0.2.0",
-    "coffeeify": "~0.6.0",
-    "coffee-script": "~1.7.1",
-    "expect.js": "robertmesserle/expect.js",
-    "gulp-mocha": "~0.4.1",
-    "gulp-coffee": "~1.4.0"
+    "gulp-coffee":     "~1.4.0",
+    "gulp-header":     "~1.0.2",
+    "gulp-mocha":      "~0.4.1",
+    "gulp-rename":     "~0.2.2",
+    "gulp-uglify":     "~0.2.0"
   }
 }
