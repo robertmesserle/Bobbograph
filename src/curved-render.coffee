@@ -3,7 +3,7 @@ Canvas = require './canvas.coffee'
 module.exports = class CurvedRender extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
-    @renderSolid @pixels, @options.line.width, @options.line.color
+    @renderSolid @pixels, @options.line.width, @options.line.fill
 
   renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels
@@ -18,7 +18,7 @@ module.exports = class CurvedRender extends Canvas
     else
       @arc point, offset, -angle, angle
 
-  renderSolid: ( pixels, lineWidth, color ) ->
+  renderSolid: ( pixels, lineWidth, fill ) ->
     offset = lineWidth / 2
     angle  = Math.PI / 2
     @begin()
@@ -29,4 +29,4 @@ module.exports = class CurvedRender extends Canvas
     @renderCap  pixels[ 0 ], false, offset
     
     @close()
-    @fill color
+    @fill fill

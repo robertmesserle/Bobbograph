@@ -1,8 +1,11 @@
+FillOptions = require './fill.coffee'
+
 module.exports = class LineOptions
 
   width  : 1
-  color  : '#000'
+  fill  : '#000'
   smooth : false
 
-  constructor: ( line = {} ) ->
+  constructor: ( line = {}, @options ) ->
     for key, value of line then @[ key ] = value
+    @fill = new FillOptions @fill, @options

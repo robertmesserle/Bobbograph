@@ -33,6 +33,8 @@ gulp.task 'min', [ 'coffee' ], ->
     .pipe( rename 'bobbograph.min.js' )
     .pipe( gulp.dest '.' )
 
+gulp.task 'default', [ 'min' ]
+
 gulp.task 'watch', [ 'min' ], ->
   gulp.watch paths.tests, [ 'test' ]
   gulp.watch paths.coffee, [ 'min' ]

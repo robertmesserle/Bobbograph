@@ -42,16 +42,16 @@ module.exports = Canvas = (function() {
     return this.context.arc(left, top, radius, -angle1, -angle2, ccw);
   };
 
-  Canvas.prototype.stroke = function(color) {
-    if (color) {
-      this.context.strokeStyle = color;
+  Canvas.prototype.stroke = function(fill) {
+    if (fill) {
+      this.context.strokeStyle = fill;
     }
     return this.context.stroke();
   };
 
-  Canvas.prototype.fill = function(color) {
-    if (color) {
-      this.context.fillStyle = color;
+  Canvas.prototype.fill = function(fill) {
+    if (fill) {
+      this.context.fillStyle = (typeof fill.get === "function" ? fill.get(this.context) : void 0) || fill;
     }
     return this.context.fill();
   };
@@ -102,7 +102,7 @@ window.Bobbograph = (function() {
 })();
 
 
-},{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":15}],3:[function(require,module,exports){
+},{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":16}],3:[function(require,module,exports){
 var Canvas, CurvedRender,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -116,7 +116,7 @@ module.exports = CurvedRender = (function(_super) {
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    this.renderSolid(this.pixels, this.options.line.width, this.options.line.color);
+    this.renderSolid(this.pixels, this.options.line.width, this.options.line.fill);
   }
 
   CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
@@ -141,7 +141,7 @@ module.exports = CurvedRender = (function(_super) {
     }
   };
 
-  CurvedRender.prototype.renderSolid = function(pixels, lineWidth, color) {
+  CurvedRender.prototype.renderSolid = function(pixels, lineWidth, fill) {
     var angle, offset;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
@@ -151,7 +151,7 @@ module.exports = CurvedRender = (function(_super) {
     this.renderLine(pixels.slice().reverse(), offset, angle);
     this.renderCap(pixels[0], false, offset);
     this.close();
-    return this.fill(color);
+    return this.fill(fill);
   };
 
   return CurvedRender;
@@ -257,7 +257,7 @@ module.exports = Data = (function() {
 })();
 
 
-},{"./easing.coffee":5,"./point.coffee":11,"./stats.coffee":13}],5:[function(require,module,exports){
+},{"./easing.coffee":5,"./point.coffee":12,"./stats.coffee":14}],5:[function(require,module,exports){
 var Easing;
 
 module.exports = Easing = (function() {
@@ -365,7 +365,7 @@ module.exports = LinearRender = (function(_super) {
 })(Canvas);
 
 
-},{"./canvas.coffee":1,"./segment.coffee":12}],7:[function(require,module,exports){
+},{"./canvas.coffee":1,"./segment.coffee":13}],7:[function(require,module,exports){
 var AxisLineOptions, LineOptions, Options, PaddingOptions;
 
 LineOptions = require('./options/line.coffee');
@@ -388,7 +388,7 @@ module.exports = Options = (function() {
       value = options[key];
       this[key] = value;
     }
-    this.line = new LineOptions(this.line);
+    this.line = new LineOptions(this.line, this);
     this.padding = new PaddingOptions(this.padding, this.line.width);
     this.xAxis = new AxisLineOptions(this.xAxis);
     this.yAxis = new AxisLineOptions(this.yAxis);
@@ -401,7 +401,7 @@ module.exports = Options = (function() {
 })();
 
 
-},{"./options/axis-line.coffee":8,"./options/line.coffee":9,"./options/padding.coffee":10}],8:[function(require,module,exports){
+},{"./options/axis-line.coffee":8,"./options/line.coffee":10,"./options/padding.coffee":11}],8:[function(require,module,exports){
 var AxisLineOptions;
 
 module.exports = AxisLineOptions = (function() {
@@ -424,24 +424,100 @@ module.exports = AxisLineOptions = (function() {
 
 
 },{}],9:[function(require,module,exports){
-var LineOptions;
+var FillOptions;
+
+module.exports = FillOptions = (function() {
+  function FillOptions(fill, options) {
+    this.options = options;
+    this.type = this.getType(fill);
+    this.fill = (function() {
+      switch (this.type) {
+        case 'gradient':
+          return this.parseGradient(fill);
+        case 'color':
+          return fill;
+      }
+    }).call(this);
+  }
+
+  FillOptions.prototype.getType = function(fill) {
+    if (fill instanceof Array) {
+      return 'gradient';
+    } else {
+      return 'color';
+    }
+  };
+
+  FillOptions.prototype.parseGradient = function(fill) {
+    var count, index, stop, _i, _len, _results;
+    count = fill.length - 1;
+    _results = [];
+    for (index = _i = 0, _len = fill.length; _i < _len; index = ++_i) {
+      stop = fill[index];
+      if (typeof stop === 'string') {
+        _results.push({
+          color: stop,
+          position: index / count
+        });
+      } else {
+        _results.push(stop);
+      }
+    }
+    return _results;
+  };
+
+  FillOptions.prototype.get = function(context, type, fill, options) {
+    var gradient, stop, _i, _len;
+    if (type == null) {
+      type = this.type;
+    }
+    if (fill == null) {
+      fill = this.fill;
+    }
+    if (options == null) {
+      options = this.options;
+    }
+    switch (type) {
+      case 'color':
+        return fill;
+      case 'gradient':
+        gradient = context.createLinearGradient(0, 0, options.width, 0);
+        for (_i = 0, _len = fill.length; _i < _len; _i++) {
+          stop = fill[_i];
+          gradient.addColorStop(stop.position, stop.color);
+        }
+        return gradient;
+    }
+  };
+
+  return FillOptions;
+
+})();
+
+
+},{}],10:[function(require,module,exports){
+var FillOptions, LineOptions;
+
+FillOptions = require('./fill.coffee');
 
 module.exports = LineOptions = (function() {
   LineOptions.prototype.width = 1;
 
-  LineOptions.prototype.color = '#000';
+  LineOptions.prototype.fill = '#000';
 
   LineOptions.prototype.smooth = false;
 
-  function LineOptions(line) {
+  function LineOptions(line, options) {
     var key, value;
     if (line == null) {
       line = {};
     }
+    this.options = options;
     for (key in line) {
       value = line[key];
       this[key] = value;
     }
+    this.fill = new FillOptions(this.fill, this.options);
   }
 
   return LineOptions;
@@ -449,7 +525,7 @@ module.exports = LineOptions = (function() {
 })();
 
 
-},{}],10:[function(require,module,exports){
+},{"./fill.coffee":9}],11:[function(require,module,exports){
 var PaddingOptions;
 
 module.exports = PaddingOptions = (function() {
@@ -486,7 +562,7 @@ module.exports = PaddingOptions = (function() {
 })();
 
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
@@ -527,7 +603,7 @@ module.exports = Point = (function() {
 })();
 
 
-},{"./trig.coffee":14}],12:[function(require,module,exports){
+},{"./trig.coffee":15}],13:[function(require,module,exports){
 var Point, Segment, Trig;
 
 Trig = require('./trig.coffee');
@@ -569,7 +645,7 @@ module.exports = Segment = (function() {
 })();
 
 
-},{"./point.coffee":11,"./trig.coffee":14}],13:[function(require,module,exports){
+},{"./point.coffee":12,"./trig.coffee":15}],14:[function(require,module,exports){
 var Stats;
 
 module.exports = Stats = (function() {
@@ -610,7 +686,7 @@ module.exports = Stats = (function() {
 })();
 
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var Trig;
 
 module.exports = Trig = (function() {
@@ -706,7 +782,7 @@ module.exports = Trig = (function() {
 })();
 
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var XAxis;
 
 module.exports = XAxis = (function() {

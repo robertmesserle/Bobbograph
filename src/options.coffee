@@ -10,7 +10,7 @@ module.exports = class Options
 
   constructor: ( options = {} ) ->
     for key, value of options then @[ key ] = value
-    @line         = new LineOptions     @line
+    @line         = new LineOptions     @line, @
     @padding      = new PaddingOptions  @padding, @line.width
     @xAxis        = new AxisLineOptions @xAxis
     @yAxis        = new AxisLineOptions @yAxis

@@ -28,10 +28,10 @@ module.exports = class Canvas
     top  = @scaleY point.y
     @context.arc left, top, radius, -angle1, -angle2, ccw
 
-  stroke: ( color ) ->
-    if color then @context.strokeStyle = color
+  stroke: ( fill ) ->
+    if fill then @context.strokeStyle = fill
     @context.stroke()
 
-  fill: ( color ) ->
-    if color then @context.fillStyle = color
+  fill: ( fill ) ->
+    if fill then @context.fillStyle = fill.get?( @context ) or fill
     @context.fill()
