@@ -126,12 +126,16 @@ CurvedRender = (function(_super) {
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    this.renderSolid(this.pixels, this.options.line.width, this.options.line.fill);
-    if (this.options.bevel) {
-      this.renderHighlight(this.pixels, this.options.line.width, this.options.bevel);
-      this.renderShadow(this.pixels, this.options.line.width, this.options.bevel);
-    }
+    this.render(this.pixels, this.options.line.width, this.options.line.fill, this.options.bevel);
   }
+
+  CurvedRender.prototype.render = function(pixels, lineWidth, fill, bevel) {
+    this.renderSolid(pixels, lineWidth, fill);
+    if (bevel) {
+      this.renderHighlight(pixels, lineWidth, bevel);
+      return this.renderShadow(pixels, lineWidth, bevel);
+    }
+  };
 
   CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
     var index, next, pixel, prev, _i, _len, _results;

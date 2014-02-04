@@ -3,10 +3,13 @@ Canvas = require './canvas.coffee'
 class CurvedRender extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
-    @renderSolid @pixels, @options.line.width, @options.line.fill
-    if @options.bevel
-      @renderHighlight @pixels, @options.line.width, @options.bevel
-      @renderShadow @pixels, @options.line.width, @options.bevel
+    @render @pixels, @options.line.width, @options.line.fill, @options.bevel
+
+  render: ( pixels, lineWidth, fill, bevel ) ->
+    @renderSolid pixels, lineWidth, fill
+    if bevel
+      @renderHighlight pixels, lineWidth, bevel
+      @renderShadow    pixels, lineWidth, bevel
 
   renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels
