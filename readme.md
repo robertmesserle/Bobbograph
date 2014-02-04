@@ -9,7 +9,7 @@ Here is a basic overview of the available options:
 
 - **width** *[Number]*
 - **height** *[Number]*
-- **beveo**
+- **bevel**
   - **shine** *[Number]* (0-1)
   - **shadow** *[Number]* (0-1)
   - **opacity** *[Number]* (0-1)
