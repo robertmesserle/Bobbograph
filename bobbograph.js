@@ -185,17 +185,46 @@ module.exports = Data = (function() {
   };
 
   Data.prototype.getPoints = function(data, options, stats) {
-    var dx, dy, point, usableHeight, usableWidth, x, xmin, y, ymin, _i, _len, _results;
+    var dx, dy, index, point, usableHeight, usableWidth, x, xmin, y, ymin, _i, _len, _results;
     usableWidth = options.usableWidth, usableHeight = options.usableHeight;
     xmin = stats.xmin, ymin = stats.ymin, dx = stats.dx, dy = stats.dy;
     _results = [];
-    for (_i = 0, _len = data.length; _i < _len; _i++) {
-      point = data[_i];
+    for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
+      point = data[index];
+      if (!(this.isVertex(data, index, options.line.vertex))) {
+        continue;
+      }
       x = this.scalePoint(point.x, xmin, dx, usableWidth);
       y = this.scalePoint(point.y, ymin, dy, usableHeight);
       _results.push(new Point(x, y));
     }
     return _results;
+  };
+
+  Data.prototype.isVertex = function(data, index, vertex) {
+    var next, point, prev, _ref, _ref1;
+    if (!vertex) {
+      return true;
+    }
+    point = data[index].y;
+    prev = (_ref = data[index - 1]) != null ? _ref.y : void 0;
+    next = (_ref1 = data[index + 1]) != null ? _ref1.y : void 0;
+    if (!((prev != null) && (next != null))) {
+      return true;
+    }
+    if (prev > point && next > point) {
+      return true;
+    }
+    if (prev < point && next < point) {
+      return true;
+    }
+    if (prev === point && next !== point) {
+      return true;
+    }
+    if (prev !== point && next === point) {
+      return true;
+    }
+    return false;
   };
 
   Data.prototype.sortMethod = function(a, b) {
@@ -506,6 +535,8 @@ module.exports = LineOptions = (function() {
   LineOptions.prototype.fill = '#000';
 
   LineOptions.prototype.smooth = false;
+
+  LineOptions.prototype.vertex = false;
 
   function LineOptions(line, options) {
     var key, value;

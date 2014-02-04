@@ -21,6 +21,7 @@ Here is a basic overview of the available options:
   - **fill** *[Array/String]*
   - **width** *[Number]*
   - **smooth** *[Boolean]*
+  - **vertex** *[Boolean]*
 - **xAxis**
   - **increment** *[Number]*
 - **yAxis**

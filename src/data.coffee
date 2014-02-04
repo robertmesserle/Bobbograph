@@ -18,10 +18,22 @@ module.exports = class Data
   getPoints: ( data, options, stats ) ->
     { usableWidth, usableHeight } = options
     { xmin, ymin, dx, dy }        = stats
-    for point in data
+    for point, index in data when @isVertex data, index, options.line.vertex
       x = @scalePoint point.x, xmin, dx, usableWidth
       y = @scalePoint point.y, ymin, dy, usableHeight
       new Point x, y
+
+  isVertex: ( data, index, vertex ) ->
+    return true unless vertex
+    point = data[ index ].y
+    prev  = data[ index - 1 ]?.y
+    next  = data[ index + 1 ]?.y
+    return true unless prev? and next?
+    return true if prev > point and next > point
+    return true if prev < point and next < point
+    return true if prev is point and next isnt point
+    return true if prev isnt point and next is point
+    return false
 
   sortMethod: ( a, b ) ->
     a.x - b.x
