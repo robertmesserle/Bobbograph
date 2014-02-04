@@ -1,6 +1,7 @@
 LineOptions     = require './options/line.coffee'
 PaddingOptions  = require './options/padding.coffee'
 AxisLineOptions = require './options/axis-line.coffee'
+BevelOptions    = require './options/bevel.coffee'
 
 module.exports = class Options
 
@@ -16,3 +17,4 @@ module.exports = class Options
     @yAxis        = new AxisLineOptions @yAxis
     @usableWidth  = @width  - @padding.left - @padding.right
     @usableHeight = @height - @padding.top  - @padding.bottom
+    @bevel        = new BevelOptions( @bevel ) if @bevel?

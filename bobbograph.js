@@ -102,7 +102,7 @@ window.Bobbograph = (function() {
 })();
 
 
-},{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":16}],3:[function(require,module,exports){
+},{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":17}],3:[function(require,module,exports){
 var Canvas, CurvedRender,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -286,7 +286,7 @@ module.exports = Data = (function() {
 })();
 
 
-},{"./easing.coffee":5,"./point.coffee":12,"./stats.coffee":14}],5:[function(require,module,exports){
+},{"./easing.coffee":5,"./point.coffee":13,"./stats.coffee":15}],5:[function(require,module,exports){
 var Easing;
 
 module.exports = Easing = (function() {
@@ -394,14 +394,16 @@ module.exports = LinearRender = (function(_super) {
 })(Canvas);
 
 
-},{"./canvas.coffee":1,"./segment.coffee":13}],7:[function(require,module,exports){
-var AxisLineOptions, LineOptions, Options, PaddingOptions;
+},{"./canvas.coffee":1,"./segment.coffee":14}],7:[function(require,module,exports){
+var AxisLineOptions, BevelOptions, LineOptions, Options, PaddingOptions;
 
 LineOptions = require('./options/line.coffee');
 
 PaddingOptions = require('./options/padding.coffee');
 
 AxisLineOptions = require('./options/axis-line.coffee');
+
+BevelOptions = require('./options/bevel.coffee');
 
 module.exports = Options = (function() {
   Options.prototype.height = 300;
@@ -423,6 +425,9 @@ module.exports = Options = (function() {
     this.yAxis = new AxisLineOptions(this.yAxis);
     this.usableWidth = this.width - this.padding.left - this.padding.right;
     this.usableHeight = this.height - this.padding.top - this.padding.bottom;
+    if (this.bevel != null) {
+      this.bevel = new BevelOptions(this.bevel);
+    }
   }
 
   return Options;
@@ -430,7 +435,7 @@ module.exports = Options = (function() {
 })();
 
 
-},{"./options/axis-line.coffee":8,"./options/line.coffee":10,"./options/padding.coffee":11}],8:[function(require,module,exports){
+},{"./options/axis-line.coffee":8,"./options/bevel.coffee":9,"./options/line.coffee":11,"./options/padding.coffee":12}],8:[function(require,module,exports){
 var AxisLineOptions;
 
 module.exports = AxisLineOptions = (function() {
@@ -453,6 +458,33 @@ module.exports = AxisLineOptions = (function() {
 
 
 },{}],9:[function(require,module,exports){
+var BevelOptions;
+
+module.exports = BevelOptions = (function() {
+  BevelOptions.prototype.intensity = 1;
+
+  BevelOptions.prototype.shine = 0.65;
+
+  BevelOptions.prototype.shadow = 0.3;
+
+  BevelOptions.prototype.smooth = false;
+
+  function BevelOptions(options) {
+    var key, value;
+    if (typeof options === 'object') {
+      for (key in options) {
+        value = options[key];
+        this[key] = value;
+      }
+    }
+  }
+
+  return BevelOptions;
+
+})();
+
+
+},{}],10:[function(require,module,exports){
 var FillOptions;
 
 module.exports = FillOptions = (function() {
@@ -524,7 +556,7 @@ module.exports = FillOptions = (function() {
 })();
 
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var FillOptions, LineOptions;
 
 FillOptions = require('./fill.coffee');
@@ -556,7 +588,7 @@ module.exports = LineOptions = (function() {
 })();
 
 
-},{"./fill.coffee":9}],11:[function(require,module,exports){
+},{"./fill.coffee":10}],12:[function(require,module,exports){
 var PaddingOptions;
 
 module.exports = PaddingOptions = (function() {
@@ -593,7 +625,7 @@ module.exports = PaddingOptions = (function() {
 })();
 
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
@@ -634,7 +666,7 @@ module.exports = Point = (function() {
 })();
 
 
-},{"./trig.coffee":15}],13:[function(require,module,exports){
+},{"./trig.coffee":16}],14:[function(require,module,exports){
 var Point, Segment, Trig;
 
 Trig = require('./trig.coffee');
@@ -676,7 +708,7 @@ module.exports = Segment = (function() {
 })();
 
 
-},{"./point.coffee":12,"./trig.coffee":15}],14:[function(require,module,exports){
+},{"./point.coffee":13,"./trig.coffee":16}],15:[function(require,module,exports){
 var Stats;
 
 module.exports = Stats = (function() {
@@ -717,7 +749,7 @@ module.exports = Stats = (function() {
 })();
 
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var Trig;
 
 module.exports = Trig = (function() {
@@ -813,7 +845,7 @@ module.exports = Trig = (function() {
 })();
 
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var XAxis;
 
 module.exports = XAxis = (function() {
