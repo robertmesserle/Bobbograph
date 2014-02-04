@@ -32,7 +32,7 @@ module.exports = class CurvedRender extends Canvas
     @arc pixels[ 0 ], offset, -angle, Math.PI
 
     @close()
-    @fill "rgba( 0, 0, 0, #{bevel.shadow} )"
+    @fill "rgba( 0, 0, 0, #{bevel.shadow * bevel.opacity} )"
 
   renderHighlight: ( pixels, lineWidth, bevel ) ->
     offset = lineWidth / 2
@@ -45,7 +45,7 @@ module.exports = class CurvedRender extends Canvas
     @arc pixels[ 0 ], offset, Math.PI, angle
 
     @close()
-    @fill "rgba( 255, 255, 255, #{bevel.shine} )"
+    @fill "rgba( 255, 255, 255, #{bevel.shine * bevel.opacity} )"
 
   renderSolid: ( pixels, lineWidth, fill ) ->
     offset = lineWidth / 2

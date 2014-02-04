@@ -158,7 +158,7 @@ module.exports = CurvedRender = (function(_super) {
     this.renderLine(pixels.slice().reverse(), offset, angle);
     this.arc(pixels[0], offset, -angle, Math.PI);
     this.close();
-    return this.fill("rgba( 0, 0, 0, " + bevel.shadow + " )");
+    return this.fill("rgba( 0, 0, 0, " + (bevel.shadow * bevel.opacity) + " )");
   };
 
   CurvedRender.prototype.renderHighlight = function(pixels, lineWidth, bevel) {
@@ -175,7 +175,7 @@ module.exports = CurvedRender = (function(_super) {
     }
     this.arc(pixels[0], offset, Math.PI, angle);
     this.close();
-    return this.fill("rgba( 255, 255, 255, " + bevel.shine + " )");
+    return this.fill("rgba( 255, 255, 255, " + (bevel.shine * bevel.opacity) + " )");
   };
 
   CurvedRender.prototype.renderSolid = function(pixels, lineWidth, fill) {
@@ -498,13 +498,13 @@ module.exports = AxisLineOptions = (function() {
 var BevelOptions;
 
 module.exports = BevelOptions = (function() {
-  BevelOptions.prototype.intensity = 1;
-
   BevelOptions.prototype.shine = 0.35;
 
   BevelOptions.prototype.shadow = 0.15;
 
   BevelOptions.prototype.smooth = false;
+
+  BevelOptions.prototype.opacity = 1;
 
   function BevelOptions(options) {
     var key, value;

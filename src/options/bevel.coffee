@@ -1,9 +1,9 @@
 module.exports = class BevelOptions
 
-  intensity: 1
   shine:     0.35
   shadow:    0.15
   smooth:    false
+  opacity:   1
 
   constructor: ( options ) ->
     if typeof options is 'object'

@@ -9,6 +9,11 @@ Here is a basic overview of the available options:
 
 - **width** *[Number]*
 - **height** *[Number]*
+- **beveo**
+  - **shine** *[Number]* (0-1)
+  - **shadow** *[Number]* (0-1)
+  - **opacity** *[Number]* (0-1)
+  - **smooth** *[Boolean]*
 - **padding**
   - **size** *[Number]*
   - **x** *[Number]*
