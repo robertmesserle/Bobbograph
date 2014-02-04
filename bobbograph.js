@@ -123,10 +123,18 @@ CurvedRender = (function(_super) {
   __extends(CurvedRender, _super);
 
   function CurvedRender(pixels, context, options) {
+    var lineWidth, _i, _ref, _ref1;
     this.pixels = pixels;
     this.context = context;
     this.options = options;
     this.render(this.pixels, this.options.line.width, this.options.line.fill, this.options.bevel);
+    if ((_ref = this.options.bevel) != null ? _ref.smooth : void 0) {
+      for (lineWidth = _i = _ref1 = this.options.line.width - 2; _i >= 2; lineWidth = _i += -2) {
+        this.options.bevel.shine /= 2;
+        this.options.bevel.shadow /= 2;
+        this.render(this.pixels, lineWidth, this.options.line.fill, this.options.bevel);
+      }
+    }
   }
 
   CurvedRender.prototype.render = function(pixels, lineWidth, fill, bevel) {
