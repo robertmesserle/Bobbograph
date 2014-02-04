@@ -9,7 +9,6 @@ class CurvedRender extends Canvas
       for lineWidth in [ @options.line.width - 2 .. 2 ] by -2
         bevel.opacity /= 2
         @render @pixels, lineWidth, @options.line.fill, bevel
-      console.log( @options.bevel, bevel )
 
   render: ( pixels, lineWidth, fill, bevel ) ->
     @renderSolid pixels, lineWidth, fill
