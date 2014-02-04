@@ -117,6 +117,10 @@ module.exports = CurvedRender = (function(_super) {
     this.context = context;
     this.options = options;
     this.renderSolid(this.pixels, this.options.line.width, this.options.line.fill);
+    if (this.options.bevel) {
+      this.renderHighlight(this.pixels, this.options.line.width, this.options.bevel);
+      this.renderShadow(this.pixels, this.options.line.width, this.options.bevel);
+    }
   }
 
   CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
@@ -139,6 +143,39 @@ module.exports = CurvedRender = (function(_super) {
     } else {
       return this.arc(point, offset, -angle, angle);
     }
+  };
+
+  CurvedRender.prototype.renderShadow = function(pixels, lineWidth, bevel) {
+    var angle, offset, pixel, _i, _len;
+    offset = lineWidth / 2;
+    angle = Math.PI / 2;
+    this.begin();
+    for (_i = 0, _len = pixels.length; _i < _len; _i++) {
+      pixel = pixels[_i];
+      this.line(pixel);
+    }
+    this.arc(pixels[pixels.length - 1], offset, 0, -angle);
+    this.renderLine(pixels.slice().reverse(), offset, angle);
+    this.arc(pixels[0], offset, -angle, Math.PI);
+    this.close();
+    return this.fill("rgba( 0, 0, 0, " + bevel.shadow + " )");
+  };
+
+  CurvedRender.prototype.renderHighlight = function(pixels, lineWidth, bevel) {
+    var angle, offset, pixel, _i, _len, _ref;
+    offset = lineWidth / 2;
+    angle = Math.PI / 2;
+    this.begin();
+    this.renderLine(pixels, offset, angle);
+    this.arc(pixels[pixels.length - 1], offset, angle, 0);
+    _ref = pixels.slice().reverse();
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      pixel = _ref[_i];
+      this.line(pixel);
+    }
+    this.arc(pixels[0], offset, Math.PI, angle);
+    this.close();
+    return this.fill("rgba( 255, 255, 255, " + bevel.shine + " )");
   };
 
   CurvedRender.prototype.renderSolid = function(pixels, lineWidth, fill) {
@@ -463,9 +500,9 @@ var BevelOptions;
 module.exports = BevelOptions = (function() {
   BevelOptions.prototype.intensity = 1;
 
-  BevelOptions.prototype.shine = 0.65;
+  BevelOptions.prototype.shine = 0.35;
 
-  BevelOptions.prototype.shadow = 0.3;
+  BevelOptions.prototype.shadow = 0.15;
 
   BevelOptions.prototype.smooth = false;
 

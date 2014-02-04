@@ -4,6 +4,9 @@ module.exports = class CurvedRender extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
     @renderSolid @pixels, @options.line.width, @options.line.fill
+    if @options.bevel
+      @renderHighlight @pixels, @options.line.width, @options.bevel
+      @renderShadow @pixels, @options.line.width, @options.bevel
 
   renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels
@@ -17,6 +20,32 @@ module.exports = class CurvedRender extends Canvas
       @arc point, offset, angle, -angle
     else
       @arc point, offset, -angle, angle
+
+  renderShadow: ( pixels, lineWidth, bevel) ->
+    offset = lineWidth / 2
+    angle = Math.PI / 2
+    @begin()
+
+    for pixel in pixels then @line pixel
+    @arc pixels[ pixels.length - 1 ], offset, 0, -angle
+    @renderLine pixels.slice().reverse(), offset, angle
+    @arc pixels[ 0 ], offset, -angle, Math.PI
+
+    @close()
+    @fill "rgba( 0, 0, 0, #{bevel.shadow} )"
+
+  renderHighlight: ( pixels, lineWidth, bevel ) ->
+    offset = lineWidth / 2
+    angle = Math.PI / 2
+    @begin()
+
+    @renderLine pixels, offset, angle
+    @arc pixels[ pixels.length - 1 ], offset, angle, 0
+    for pixel in pixels.slice().reverse() then @line pixel
+    @arc pixels[ 0 ], offset, Math.PI, angle
+
+    @close()
+    @fill "rgba( 255, 255, 255, #{bevel.shine} )"
 
   renderSolid: ( pixels, lineWidth, fill ) ->
     offset = lineWidth / 2
