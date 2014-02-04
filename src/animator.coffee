@@ -1,1 +1,3 @@
-module.exports = class Animator
+class Animator
+
+module.exports = Animator

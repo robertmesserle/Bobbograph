@@ -4,7 +4,7 @@ CurvedRender = require './curved-render.coffee'
 LinearRender = require './linear-render.coffee'
 XAxis        = require './x-axis.coffee'
 
-class window.Bobbograph
+class Bobbograph
 
   constructor: ( id, data, options ) ->
     @element = document.getElementById id
@@ -25,3 +25,6 @@ class window.Bobbograph
     canvas.setAttribute 'width',  @options.width
     element.appendChild canvas
     context = canvas.getContext '2d'
+
+window?.Bobbograph = Bobbograph
+global?.Bobbograph = Bobbograph

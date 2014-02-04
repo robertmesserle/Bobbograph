@@ -2,7 +2,7 @@ Stats  = require './stats.coffee'
 Point  = require './point.coffee'
 Easing = require './easing.coffee'
 
-module.exports = class Data
+class Data
 
   constructor: ( data, @options ) ->
     @data   = @formatData data
@@ -60,3 +60,5 @@ module.exports = class Data
           pixels[ index ] = new Point index, method index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x
       lastPoint = point
     pixels
+
+module.exports = Data

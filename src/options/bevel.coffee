@@ -1,4 +1,4 @@
-module.exports = class BevelOptions
+class BevelOptions
 
   shine:     0.35
   shadow:    0.15
@@ -9,3 +9,5 @@ module.exports = class BevelOptions
     if typeof options is 'object'
       for key, value of options
         @[ key ] = value
+
+module.exports = BevelOptions

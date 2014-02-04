@@ -1,6 +1,6 @@
 Trig = require './trig.coffee'
 
-module.exports = class Point
+class Point
 
   constructor: ( @x, @y ) ->
 
@@ -16,3 +16,5 @@ module.exports = class Point
   getPointFromAngle: ( angle, distance ) ->
     point = Trig.getPointFromAngle @, angle, distance
     new Point point.x, point.y
+
+module.exports = Point

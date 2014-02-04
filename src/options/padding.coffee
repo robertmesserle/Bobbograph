@@ -1,4 +1,4 @@
-module.exports = class PaddingOptions
+class PaddingOptions
 
   top    : null
   bottom : null
@@ -15,3 +15,5 @@ module.exports = class PaddingOptions
     @y      = padding.y     or @size
     @top    = padding.top   or @y
     @bottom = padding.top   or @y
+
+module.exports = PaddingOptions

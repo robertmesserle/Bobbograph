@@ -1,7 +1,7 @@
 Trig = require './trig.coffee'
 Point = require './point.coffee'
 
-module.exports = class Segment
+class Segment
 
   constructor: ( @p1, @p2, @offset ) ->
     @angle        = @reduceAngle Trig.getAngleFromPoints @p1, @p2
@@ -25,3 +25,5 @@ module.exports = class Segment
     x = ( segment.yint - @yint ) / ( @slope - segment.slope )
     y = @slope * x + @yint
     new Point x, y
+
+module.exports = Segment

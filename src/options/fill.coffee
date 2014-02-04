@@ -1,4 +1,4 @@
-module.exports = class FillOptions
+class FillOptions
 
   constructor: ( fill, @options ) ->
     @type = @getType fill
@@ -23,3 +23,5 @@ module.exports = class FillOptions
         gradient = context.createLinearGradient 0, 0, options.width, 0
         for stop in fill then gradient.addColorStop stop.position, stop.color
         gradient
+
+module.exports = FillOptions

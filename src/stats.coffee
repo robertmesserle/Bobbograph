@@ -1,4 +1,4 @@
-module.exports = class Stats
+class Stats
 
   constructor: ( data ) ->
     @getRangeData data
@@ -14,3 +14,5 @@ module.exports = class Stats
 
     @dx     = @xmax - @xmin
     @dy     = @ymax - @ymin
+
+module.exports = Stats

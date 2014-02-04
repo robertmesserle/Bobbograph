@@ -2,7 +2,7 @@
 /*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Canvas;
 
-module.exports = Canvas = (function() {
+Canvas = (function() {
   function Canvas() {}
 
   Canvas.prototype.scaleX = function(x) {
@@ -60,9 +60,11 @@ module.exports = Canvas = (function() {
 
 })();
 
+module.exports = Canvas;
+
 
 },{}],2:[function(require,module,exports){
-var CurvedRender, Data, LinearRender, Options, XAxis;
+var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Bobbograph, CurvedRender, Data, LinearRender, Options, XAxis;
 
 Options = require('./options.coffee');
 
@@ -74,7 +76,7 @@ LinearRender = require('./linear-render.coffee');
 
 XAxis = require('./x-axis.coffee');
 
-window.Bobbograph = (function() {
+Bobbograph = (function() {
   function Bobbograph(id, data, options) {
     this.element = document.getElementById(id);
     this.options = new Options(options);
@@ -101,6 +103,14 @@ window.Bobbograph = (function() {
 
 })();
 
+if (typeof window !== "undefined" && window !== null) {
+  window.Bobbograph = Bobbograph;
+}
+
+if (typeof global !== "undefined" && global !== null) {
+  global.Bobbograph = Bobbograph;
+}
+
 
 },{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":17}],3:[function(require,module,exports){
 var Canvas, CurvedRender,
@@ -109,7 +119,7 @@ var Canvas, CurvedRender,
 
 Canvas = require('./canvas.coffee');
 
-module.exports = CurvedRender = (function(_super) {
+CurvedRender = (function(_super) {
   __extends(CurvedRender, _super);
 
   function CurvedRender(pixels, context, options) {
@@ -195,6 +205,8 @@ module.exports = CurvedRender = (function(_super) {
 
 })(Canvas);
 
+module.exports = CurvedRender;
+
 
 },{"./canvas.coffee":1}],4:[function(require,module,exports){
 var Data, Easing, Point, Stats;
@@ -205,7 +217,7 @@ Point = require('./point.coffee');
 
 Easing = require('./easing.coffee');
 
-module.exports = Data = (function() {
+Data = (function() {
   function Data(data, options) {
     this.options = options;
     this.data = this.formatData(data);
@@ -322,11 +334,13 @@ module.exports = Data = (function() {
 
 })();
 
+module.exports = Data;
+
 
 },{"./easing.coffee":5,"./point.coffee":13,"./stats.coffee":15}],5:[function(require,module,exports){
 var Easing;
 
-module.exports = Easing = (function() {
+Easing = (function() {
   function Easing() {}
 
   Easing.curve = function(t, b, c, d) {
@@ -345,6 +359,8 @@ module.exports = Easing = (function() {
 
 })();
 
+module.exports = Easing;
+
 
 },{}],6:[function(require,module,exports){
 var Canvas, LinearRender, Segment,
@@ -355,7 +371,7 @@ Canvas = require('./canvas.coffee');
 
 Segment = require('./segment.coffee');
 
-module.exports = LinearRender = (function(_super) {
+LinearRender = (function(_super) {
   __extends(LinearRender, _super);
 
   function LinearRender(points, context, options) {
@@ -430,6 +446,8 @@ module.exports = LinearRender = (function(_super) {
 
 })(Canvas);
 
+module.exports = LinearRender;
+
 
 },{"./canvas.coffee":1,"./segment.coffee":14}],7:[function(require,module,exports){
 var AxisLineOptions, BevelOptions, LineOptions, Options, PaddingOptions;
@@ -442,7 +460,7 @@ AxisLineOptions = require('./options/axis-line.coffee');
 
 BevelOptions = require('./options/bevel.coffee');
 
-module.exports = Options = (function() {
+Options = (function() {
   Options.prototype.height = 300;
 
   Options.prototype.width = 600;
@@ -471,11 +489,13 @@ module.exports = Options = (function() {
 
 })();
 
+module.exports = Options;
+
 
 },{"./options/axis-line.coffee":8,"./options/bevel.coffee":9,"./options/line.coffee":11,"./options/padding.coffee":12}],8:[function(require,module,exports){
 var AxisLineOptions;
 
-module.exports = AxisLineOptions = (function() {
+AxisLineOptions = (function() {
   AxisLineOptions.prototype.increment = 0;
 
   function AxisLineOptions(axis) {
@@ -493,11 +513,13 @@ module.exports = AxisLineOptions = (function() {
 
 })();
 
+module.exports = AxisLineOptions;
+
 
 },{}],9:[function(require,module,exports){
 var BevelOptions;
 
-module.exports = BevelOptions = (function() {
+BevelOptions = (function() {
   BevelOptions.prototype.shine = 0.35;
 
   BevelOptions.prototype.shadow = 0.15;
@@ -520,11 +542,13 @@ module.exports = BevelOptions = (function() {
 
 })();
 
+module.exports = BevelOptions;
+
 
 },{}],10:[function(require,module,exports){
 var FillOptions;
 
-module.exports = FillOptions = (function() {
+FillOptions = (function() {
   function FillOptions(fill, options) {
     this.options = options;
     this.type = this.getType(fill);
@@ -592,13 +616,15 @@ module.exports = FillOptions = (function() {
 
 })();
 
+module.exports = FillOptions;
+
 
 },{}],11:[function(require,module,exports){
 var FillOptions, LineOptions;
 
 FillOptions = require('./fill.coffee');
 
-module.exports = LineOptions = (function() {
+LineOptions = (function() {
   LineOptions.prototype.width = 1;
 
   LineOptions.prototype.fill = '#000';
@@ -624,11 +650,13 @@ module.exports = LineOptions = (function() {
 
 })();
 
+module.exports = LineOptions;
+
 
 },{"./fill.coffee":10}],12:[function(require,module,exports){
 var PaddingOptions;
 
-module.exports = PaddingOptions = (function() {
+PaddingOptions = (function() {
   PaddingOptions.prototype.top = null;
 
   PaddingOptions.prototype.bottom = null;
@@ -661,13 +689,15 @@ module.exports = PaddingOptions = (function() {
 
 })();
 
+module.exports = PaddingOptions;
+
 
 },{}],13:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
 
-module.exports = Point = (function() {
+Point = (function() {
   function Point(x, y) {
     this.x = x;
     this.y = y;
@@ -702,6 +732,8 @@ module.exports = Point = (function() {
 
 })();
 
+module.exports = Point;
+
 
 },{"./trig.coffee":16}],14:[function(require,module,exports){
 var Point, Segment, Trig;
@@ -710,7 +742,7 @@ Trig = require('./trig.coffee');
 
 Point = require('./point.coffee');
 
-module.exports = Segment = (function() {
+Segment = (function() {
   function Segment(p1, p2, offset) {
     this.p1 = p1;
     this.p2 = p2;
@@ -744,11 +776,13 @@ module.exports = Segment = (function() {
 
 })();
 
+module.exports = Segment;
+
 
 },{"./point.coffee":13,"./trig.coffee":16}],15:[function(require,module,exports){
 var Stats;
 
-module.exports = Stats = (function() {
+Stats = (function() {
   function Stats(data) {
     this.getRangeData(data);
   }
@@ -785,11 +819,13 @@ module.exports = Stats = (function() {
 
 })();
 
+module.exports = Stats;
+
 
 },{}],16:[function(require,module,exports){
 var Trig;
 
-module.exports = Trig = (function() {
+Trig = (function() {
   function Trig() {}
 
   Trig.rad = function(deg) {
@@ -881,11 +917,13 @@ module.exports = Trig = (function() {
 
 })();
 
+module.exports = Trig;
+
 
 },{}],17:[function(require,module,exports){
 var XAxis;
 
-module.exports = XAxis = (function() {
+XAxis = (function() {
   function XAxis(axis, wrapper, options) {
     this.axis = axis;
     this.wrapper = wrapper;
@@ -895,6 +933,8 @@ module.exports = XAxis = (function() {
   return XAxis;
 
 })();
+
+module.exports = XAxis;
 
 
 },{}]},{},[2])

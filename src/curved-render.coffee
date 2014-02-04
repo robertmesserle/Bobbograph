@@ -1,6 +1,6 @@
 Canvas = require './canvas.coffee'
 
-module.exports = class CurvedRender extends Canvas
+class CurvedRender extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
     @renderSolid @pixels, @options.line.width, @options.line.fill
@@ -59,3 +59,5 @@ module.exports = class CurvedRender extends Canvas
     
     @close()
     @fill fill
+
+module.exports = CurvedRender

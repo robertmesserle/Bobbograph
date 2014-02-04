@@ -1,4 +1,4 @@
-module.exports = class Easing
+class Easing
 
   @curve: ( t, b, c, d ) ->
     if ( t /= d / 2 ) < 1 then c / 2 * Math.pow( t, 2 ) + b
@@ -6,3 +6,5 @@ module.exports = class Easing
   
   @linear: ( t, b, c, d ) ->
     c * t / d + b
+
+module.exports = Easing

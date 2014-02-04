@@ -1,4 +1,4 @@
-module.exports = class Trig
+class Trig
 
   @rad: ( deg ) ->
     deg * Math.PI / 180
@@ -46,3 +46,5 @@ module.exports = class Trig
       x: x + distance, y: y
     else
       x: Math.cos( angle ) * distance + x, y: Math.sin( angle ) * distance + y
+
+module.exports = Trig

@@ -1,3 +1,5 @@
-module.exports = class XAxis
+class XAxis
 
   constructor: ( @axis, @wrapper, @options ) ->
+
+module.exports = XAxis

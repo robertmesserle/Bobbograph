@@ -1,4 +1,4 @@
-module.exports = class Canvas
+class Canvas
 
   scaleX: ( x ) ->
     @options.padding.left + x
@@ -35,3 +35,5 @@ module.exports = class Canvas
   fill: ( fill ) ->
     if fill then @context.fillStyle = fill.get?( @context ) or fill
     @context.fill()
+
+module.exports = Canvas
