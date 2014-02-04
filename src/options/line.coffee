@@ -5,7 +5,6 @@ class LineOptions
   width:  1
   fill:   '#000'
   smooth: false
-  vertex: false
 
   constructor: ( line = {}, @options ) ->
     for key, value of line then @[ key ] = value

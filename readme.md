@@ -9,6 +9,10 @@ Here is a basic overview of the available options:
 
 - **width** *[Number]*
 - **height** *[Number]*
+- **data**
+  - **vertex** *[Boolean]*
+  - **maxPoints** *[Number]*
+  - **normalize** *[Number]*
 - **bevel**
   - **shine** *[Number]* (0-1)
   - **shadow** *[Number]* (0-1)
@@ -26,7 +30,6 @@ Here is a basic overview of the available options:
   - **fill** *[Array/String]*
   - **width** *[Number]*
   - **smooth** *[Boolean]*
-  - **vertex** *[Boolean]*
 - **xAxis**
   - **increment** *[Number]*
 - **yAxis**

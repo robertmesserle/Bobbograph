@@ -2,10 +2,10 @@ LineOptions     = require './options/line.coffee'
 PaddingOptions  = require './options/padding.coffee'
 AxisLineOptions = require './options/axis-line.coffee'
 BevelOptions    = require './options/bevel.coffee'
+DataOptions     = require './options/data.coffee'
 
 class Options
 
-  # Size info
   height  : 300
   width   : 600
 
@@ -18,5 +18,6 @@ class Options
     @usableWidth  = @width  - @padding.left - @padding.right
     @usableHeight = @height - @padding.top  - @padding.bottom
     @bevel        = new BevelOptions( @bevel ) if @bevel?
+    @data         = new DataOptions @data, @
 
 module.exports = Options

@@ -32,6 +32,7 @@ gulp.task 'min', [ 'coffee' ], ->
     .pipe( header comment )
     .pipe( rename 'bobbograph.min.js' )
     .pipe( gulp.dest '.' )
+    .pipe( gulp.dest 'www/pub/js' )
 
 gulp.task 'default', [ 'min' ]
 

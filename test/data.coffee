@@ -34,7 +34,7 @@ describe 'Data', ->
       expect( points[ 4 ] ).to.eql new Point 4, 5
   describe '#getPoints()', ->
     it 'should scale data to graph dimensions', ->
-      options = usableWidth: 600, usableHeight: 300, line: {}
+      options = usableWidth: 600, usableHeight: 300, data: {}
       do ->
         raw = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 } ]
         stats = xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2
@@ -53,14 +53,14 @@ describe 'Data', ->
         expect( points[ 2 ] ).to.eql new Point 600, 150
     
     it 'should remove non-vertex points when vertex-mode is enabled', ->
-      options = usableWidth: 600, usableHeight: 300, line: { vertex: true }
+      options = usableWidth: 600, usableHeight: 300, data: { vertex: true }
       raw = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 2 }, { x: 5, y: 1 } ]
       stats = xmin: 0, xmax: 5, dx: 5, ymin: 1, ymax: 3, dy: 2
       points = Data.prototype.getPoints raw, options, stats
       expect( points ).to.be.an 'array'
       expect( points.length ).to.be 3
   describe '#getPixels()', ->
-    options = usableWidth: 600, usableHeight: 300, line: {}
+    options = usableWidth: 600, usableHeight: 300, data: {}
     raw     = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 } ]
     stats   = xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2
     points  = Data.prototype.getPoints raw, options, stats

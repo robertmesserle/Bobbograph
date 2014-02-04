@@ -18,7 +18,7 @@ class Data
   getPoints: ( data, options, stats ) ->
     { usableWidth, usableHeight } = options
     { xmin, ymin, dx, dy }        = stats
-    for point, index in data when @isVertex data, index, options.line.vertex
+    for point, index in data when @isVertex data, index, options.data.vertex
       x = @scalePoint point.x, xmin, dx, usableWidth
       y = @scalePoint point.y, ymin, dy, usableHeight
       new Point x, y

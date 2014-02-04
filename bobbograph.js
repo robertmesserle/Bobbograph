@@ -112,7 +112,7 @@ if (typeof global !== "undefined" && global !== null) {
 }
 
 
-},{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":17}],3:[function(require,module,exports){
+},{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":18}],3:[function(require,module,exports){
 var Canvas, CurvedRender,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -134,7 +134,6 @@ CurvedRender = (function(_super) {
         bevel.opacity /= 2;
         this.render(this.pixels, lineWidth, this.options.line.fill, bevel);
       }
-      console.log(this.options.bevel, bevel);
     }
   }
 
@@ -253,7 +252,7 @@ Data = (function() {
     _results = [];
     for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
       point = data[index];
-      if (!(this.isVertex(data, index, options.line.vertex))) {
+      if (!(this.isVertex(data, index, options.data.vertex))) {
         continue;
       }
       x = this.scalePoint(point.x, xmin, dx, usableWidth);
@@ -350,7 +349,7 @@ Data = (function() {
 module.exports = Data;
 
 
-},{"./easing.coffee":5,"./point.coffee":13,"./stats.coffee":15}],5:[function(require,module,exports){
+},{"./easing.coffee":5,"./point.coffee":14,"./stats.coffee":16}],5:[function(require,module,exports){
 var Easing;
 
 Easing = (function() {
@@ -462,8 +461,8 @@ LinearRender = (function(_super) {
 module.exports = LinearRender;
 
 
-},{"./canvas.coffee":1,"./segment.coffee":14}],7:[function(require,module,exports){
-var AxisLineOptions, BevelOptions, LineOptions, Options, PaddingOptions;
+},{"./canvas.coffee":1,"./segment.coffee":15}],7:[function(require,module,exports){
+var AxisLineOptions, BevelOptions, DataOptions, LineOptions, Options, PaddingOptions;
 
 LineOptions = require('./options/line.coffee');
 
@@ -472,6 +471,8 @@ PaddingOptions = require('./options/padding.coffee');
 AxisLineOptions = require('./options/axis-line.coffee');
 
 BevelOptions = require('./options/bevel.coffee');
+
+DataOptions = require('./options/data.coffee');
 
 Options = (function() {
   Options.prototype.height = 300;
@@ -496,6 +497,7 @@ Options = (function() {
     if (this.bevel != null) {
       this.bevel = new BevelOptions(this.bevel);
     }
+    this.data = new DataOptions(this.data, this);
   }
 
   return Options;
@@ -505,7 +507,7 @@ Options = (function() {
 module.exports = Options;
 
 
-},{"./options/axis-line.coffee":8,"./options/bevel.coffee":9,"./options/line.coffee":11,"./options/padding.coffee":12}],8:[function(require,module,exports){
+},{"./options/axis-line.coffee":8,"./options/bevel.coffee":9,"./options/data.coffee":10,"./options/line.coffee":12,"./options/padding.coffee":13}],8:[function(require,module,exports){
 var AxisLineOptions;
 
 AxisLineOptions = (function() {
@@ -564,6 +566,35 @@ module.exports = BevelOptions;
 
 
 },{}],10:[function(require,module,exports){
+var DataOptions;
+
+DataOptions = (function() {
+  DataOptions.prototype.vertex = null;
+
+  DataOptions.prototype.maxPoints = null;
+
+  DataOptions.prototype.normalize = null;
+
+  function DataOptions(props, options) {
+    var key, value;
+    if (props == null) {
+      props = {};
+    }
+    this.vertex = options.line.smooth;
+    for (key in options) {
+      value = options[key];
+      this[key] = value;
+    }
+  }
+
+  return DataOptions;
+
+})();
+
+module.exports = DataOptions;
+
+
+},{}],11:[function(require,module,exports){
 var FillOptions;
 
 FillOptions = (function() {
@@ -637,7 +668,7 @@ FillOptions = (function() {
 module.exports = FillOptions;
 
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var FillOptions, LineOptions;
 
 FillOptions = require('./fill.coffee');
@@ -648,8 +679,6 @@ LineOptions = (function() {
   LineOptions.prototype.fill = '#000';
 
   LineOptions.prototype.smooth = false;
-
-  LineOptions.prototype.vertex = false;
 
   function LineOptions(line, options) {
     var key, value;
@@ -671,7 +700,7 @@ LineOptions = (function() {
 module.exports = LineOptions;
 
 
-},{"./fill.coffee":10}],12:[function(require,module,exports){
+},{"./fill.coffee":11}],13:[function(require,module,exports){
 var PaddingOptions;
 
 PaddingOptions = (function() {
@@ -710,7 +739,7 @@ PaddingOptions = (function() {
 module.exports = PaddingOptions;
 
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
@@ -753,7 +782,7 @@ Point = (function() {
 module.exports = Point;
 
 
-},{"./trig.coffee":16}],14:[function(require,module,exports){
+},{"./trig.coffee":17}],15:[function(require,module,exports){
 var Point, Segment, Trig;
 
 Trig = require('./trig.coffee');
@@ -797,7 +826,7 @@ Segment = (function() {
 module.exports = Segment;
 
 
-},{"./point.coffee":13,"./trig.coffee":16}],15:[function(require,module,exports){
+},{"./point.coffee":14,"./trig.coffee":17}],16:[function(require,module,exports){
 var Stats;
 
 Stats = (function() {
@@ -840,7 +869,7 @@ Stats = (function() {
 module.exports = Stats;
 
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var Trig;
 
 Trig = (function() {
@@ -938,7 +967,7 @@ Trig = (function() {
 module.exports = Trig;
 
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var XAxis;
 
 XAxis = (function() {
