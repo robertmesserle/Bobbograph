@@ -1,0 +1,14 @@
+this.max_num_points    = obj.max_num_points           || false;                             // number:      an optional maximum number of points for the graph (will change data values)
+this.vert_line_fill    = obj.vert_line_fill           || false;                             // boolean:     if the color is a gradient, this will force it to be a vertical gradient
+this.shadow            = obj.shadow                   || false;                             // boolean:     do you want a shadow to be applied?
+this.anim_duration     = obj.duration                 || 0;                                 // number:      duration of the animation (animation will be skipped if set to 0)
+this.dividers          = obj.dividers                 || false;                             // array:       array of objects specifying division sets
+this.fill              = obj.fill                     || false;                             // mixed:       color or gradient to fill the space beneath the line
+this.vertical_fill     = obj.vertical_fill            || false;                             // boolean:     if a fill gradient is provided, do you want it to be vertical?
+this.callback          = obj.callback                 || false;                             // function:    function to be called after the animation completes
+this.normal_range      = max_min( obj.normal_range    || 0, 0, raw_data.length - 2 );       // number:      range to be used for moving average (0 means no normalization will occur)
+this.max_x             = if_defined( obj.max_x,          false );                           // number:      manually specify the maximum x value for the graph (applies to graph scaling)
+this.max_y             = if_defined( obj.max_y,          false );                           // number:      manually specify the maximum y value for the graph (applies to graph scaling)
+this.min_x             = if_defined( obj.min_x,          false );                           // number:      manually specify the minimum x value for the graph (applies to graph scaling)
+this.min_y             = if_defined( obj.min_y,          false );                           // number:      manually specify the minimum y value for the graph (applies to graph scaling)
+this.percent           = if_defined( obj.percent,        1 );                               // number:      a number between 0 and 1 to determine what percentage of the graph you would like to show
