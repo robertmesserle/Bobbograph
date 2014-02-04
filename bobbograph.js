@@ -123,17 +123,18 @@ CurvedRender = (function(_super) {
   __extends(CurvedRender, _super);
 
   function CurvedRender(pixels, context, options) {
-    var lineWidth, _i, _ref, _ref1;
+    var bevel, lineWidth, _i, _ref, _ref1;
     this.pixels = pixels;
     this.context = context;
     this.options = options;
     this.render(this.pixels, this.options.line.width, this.options.line.fill, this.options.bevel);
     if ((_ref = this.options.bevel) != null ? _ref.smooth : void 0) {
+      bevel = this.options.bevel.clone();
       for (lineWidth = _i = _ref1 = this.options.line.width - 2; _i >= 2; lineWidth = _i += -2) {
-        this.options.bevel.shine /= 2;
-        this.options.bevel.shadow /= 2;
-        this.render(this.pixels, lineWidth, this.options.line.fill, this.options.bevel);
+        bevel.opacity /= 2;
+        this.render(this.pixels, lineWidth, this.options.line.fill, bevel);
       }
+      console.log(this.options.bevel, bevel);
     }
   }
 
@@ -542,6 +543,7 @@ BevelOptions = (function() {
 
   function BevelOptions(options) {
     var key, value;
+    this.options = options;
     if (typeof options === 'object') {
       for (key in options) {
         value = options[key];
@@ -549,6 +551,10 @@ BevelOptions = (function() {
       }
     }
   }
+
+  BevelOptions.prototype.clone = function() {
+    return new BevelOptions(this.options);
+  };
 
   return BevelOptions;
 

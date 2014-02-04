@@ -5,10 +5,11 @@ class CurvedRender extends Canvas
   constructor: ( @pixels, @context, @options ) ->
     @render @pixels, @options.line.width, @options.line.fill, @options.bevel
     if @options.bevel?.smooth
+      bevel = @options.bevel.clone()
       for lineWidth in [ @options.line.width - 2 .. 2 ] by -2
-        @options.bevel.shine /= 2
-        @options.bevel.shadow /= 2
-        @render @pixels, lineWidth, @options.line.fill, @options.bevel
+        bevel.opacity /= 2
+        @render @pixels, lineWidth, @options.line.fill, bevel
+      console.log( @options.bevel, bevel )
 
   render: ( pixels, lineWidth, fill, bevel ) ->
     @renderSolid pixels, lineWidth, fill

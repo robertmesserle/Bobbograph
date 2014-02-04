@@ -5,9 +5,12 @@ class BevelOptions
   smooth:    false
   opacity:   1
 
-  constructor: ( options ) ->
+  constructor: ( @options ) ->
     if typeof options is 'object'
       for key, value of options
         @[ key ] = value
+
+  clone: ->
+    new BevelOptions @options
 
 module.exports = BevelOptions
