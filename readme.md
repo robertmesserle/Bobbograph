@@ -11,7 +11,7 @@ Property | Type | Function
 ---|---|---
 **width** | Number | This number will set the width of the generated graph.
 **height** | Number | This number will set the height of the generated graph.
-**data**   | Object | [Data][Data]
+**data**   | [Data Object](#data) | This allows some mild modification of the data.
 
 ### Data
 Property | Type | Description
