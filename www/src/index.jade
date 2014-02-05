@@ -15,10 +15,23 @@ html
             li: a( href="#" ) Documentation
             li: a( href="#" ) Download
     div.container
+      h1.heading Sample
       div.jumbotron#wrapper
 
-    script( src="js/bobbograph.js" )
+    script( src="//code.jquery.com/jquery-2.1.0.js" )
+    script( src="/js/bobbograph.js" )
     script.
       var data = [ 1, 5, 2, 4, 3 ],
-          options = { height: 300, width: 600 };
+          $elem = $('#wrapper'),
+          options = {
+            line: {
+              width:  10,
+              smooth: true,
+              fill:   [ '#c3c', '#3cc' ]
+            },
+            bevel: {
+              smooth: true
+            },
+            width: $elem.width()
+          };
       new Bobbograph( 'wrapper', data, options )
