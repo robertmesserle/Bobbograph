@@ -7,32 +7,27 @@ the developer to decide what the graph will look like.
 
 Here is a basic overview of the available options:
 
-Property | Type | Function
----|---|---
-**width** | Number | This number will set the width of the generated graph.
-**height** | Number | This number will set the height of the generated graph.
-**data**   | [Data Object](#data) | This allows some mild modification of the data.
+**width**   | Number                     | This number will set the width of the generated graph.
+**height**  | Number                     | This number will set the height of the generated graph.
+**data**    | [Data Object](#data)       | This allows some mild modification of the data.
+**padding** | [Padding Object](#padding) | This allows customization of padding options.
+**line**    | [Line Object](#line)       | This allows customization of the line style.
 
 ### Data
-Property | Type | Description
----|---|---
-**vertex** | Boolean | This will eliminate unnecessary points in the graph, resulting in a smoother graph.  By default, this is only enabled with line smoothing is enabled.
-**maxPoints** | Number | This is the maximum number of points you want to display.  This can improve performance, and may be necessary with larger data sets.
-**normalize** | Number | You can specify how many standard deviations you want to allow.  Points that are too extreme will be removed.
+**vertex**    | Boolean | This will eliminate unnecessary points in the graph, resulting in a smoother graph.  By default, this is only enabled with line smoothing is enabled.
+**maxPoints** | Number  | This is the maximum number of points you want to display.  This can improve performance, and may be necessary with larger data sets.
+**normalize** | Number  | You can specify how many standard deviations you want to allow.  Points that are too extreme will be removed.
 
-- **padding**
-  - **size** *[Number]*
-  - **x** *[Number]*
-  - **y** *[Number]*
-  - **left** *[Number]*
-  - **right** *[Number]*
-  - **top** *[Number]*
-  - **bottom** *[Number]*
-- **line**
-  - **fill** *[Array/String]*
-  - **width** *[Number]*
-  - **smooth** *[Boolean]*
-- **xAxis**
-  - **increment** *[Number]*
-- **yAxis**
-  - **increment** *[Number]*
+### Padding
+**size**   | Number | This size will be applied to all 4 sides, unless overridden.
+**x**      | Number | This will specify left and right padding.
+**left**   | Number | This will set the left padding.
+**right**  | Number | This will set the right padding.
+**y**      | Number | This will set the top and bottom padding, unless overridden.
+**top**    | Number | This will set the top padding.
+**bottom** | Number | This will set the bottom padding.
+
+### Line
+**fill**   | Array/String | This specifies the line fill.  It can be an array of colors or a single string.
+**width**  | Number       | This sets the thickness of the line.
+**smooth** | Boolean      | When enabled, the graph will be smoothed for a better visual presentation.
