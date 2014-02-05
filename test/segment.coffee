@@ -5,8 +5,8 @@ expect  = require( 'expect.js' )
 describe( 'Segment', ->
   describe( '#reduceAngle()', ->
     it( 'should reduce angles so that they are within 360 degrees', ->
-      expect( Segment.prototype.reduceAngle( Math.PI * 3 ) ).to.be( Math.PI )
-      expect( Segment.prototype.reduceAngle( Math.PI * 2.25 ) ).to.be( Math.PI / 4 )
+      expect( Segment::reduceAngle( Math.PI * 3 ) ).to.be( Math.PI )
+      expect( Segment::reduceAngle( Math.PI * 2.25 ) ).to.be( Math.PI / 4 )
     )
   )
   describe( '#intersects()', ->

@@ -6,7 +6,7 @@ describe( 'Data', ->
   describe( '#formatData()', ->
     it( 'should support plain numbers', ->
       data   = [ 1, 2, 3, 4, 5 ]
-      points = Data.prototype.formatData( data )
+      points = Data::formatData( data )
 
       expect( points[ 0 ] ).to.eql( new Point( 0, 1 ) )
       expect( points[ 1 ] ).to.eql( new Point( 1, 2 ) )
@@ -16,7 +16,7 @@ describe( 'Data', ->
     )
     it( 'should support arrays', ->
       data   = [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 4, 5 ] ]
-      points = Data.prototype.formatData( data )
+      points = Data::formatData( data )
 
       expect( points[ 0 ] ).to.eql( new Point( 0, 1 ) )
       expect( points[ 1 ] ).to.eql( new Point( 1, 2 ) )
@@ -26,7 +26,7 @@ describe( 'Data', ->
     )
     it( 'should support arrays', ->
       data   = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 }, { x: 3, y: 4 }, { x: 4, y: 5 } ]
-      points = Data.prototype.formatData( data )
+      points = Data::formatData( data )
 
       expect( points[ 0 ] ).to.eql( new Point( 0, 1 ) )
       expect( points[ 1 ] ).to.eql( new Point( 1, 2 ) )
@@ -41,7 +41,7 @@ describe( 'Data', ->
       do ->
         raw = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 } ]
         stats = { xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2 }
-        points = Data.prototype.getPoints( raw, options, stats )
+        points = Data::getPoints( raw, options, stats )
 
         expect( points[ 0 ] ).to.eql( new Point(   0,   0 ) )
         expect( points[ 1 ] ).to.eql( new Point( 300, 150 ) )
@@ -49,7 +49,7 @@ describe( 'Data', ->
       do ->
         raw = [ { x: 0, y: 1 }, { x: 1, y: 3 }, { x: 2, y: 2 } ]
         stats = { xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2 }
-        points = Data.prototype.getPoints( raw, options, stats )
+        points = Data::getPoints( raw, options, stats )
 
         expect( points[ 0 ] ).to.eql( new Point(   0,   0 ) )
         expect( points[ 1 ] ).to.eql( new Point( 300, 300 ) )
@@ -59,7 +59,7 @@ describe( 'Data', ->
       options = { usableWidth: 600, usableHeight: 300, data: { vertex: true } }
       raw = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 2 }, { x: 5, y: 1 } ]
       stats = { xmin: 0, xmax: 5, dx: 5, ymin: 1, ymax: 3, dy: 2 }
-      points = Data.prototype.getPoints( raw, options, stats )
+      points = Data::getPoints( raw, options, stats )
       expect( points ).to.be.an( 'array' )
       expect( points.length ).to.be( 3 )
     )
@@ -68,10 +68,10 @@ describe( 'Data', ->
     options = { usableWidth: 600, usableHeight: 300, data: {} }
     raw     = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 } ]
     stats   = { xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2 }
-    points  = Data.prototype.getPoints( raw, options, stats )
+    points  = Data::getPoints( raw, options, stats )
 
     describe( 'curve = false', ->
-      pixels = Data.prototype.getPixels( points, options.width, false )
+      pixels = Data::getPixels( points, options.width, false )
 
       it( 'should have correct values for original points', ->
         expect( pixels[   0 ] ).to.eql( new Point(   0,   0 ) )
@@ -84,7 +84,7 @@ describe( 'Data', ->
       )
     )
     describe( 'curve = true', ->
-      pixels = Data.prototype.getPixels( points, options.width, true )
+      pixels = Data::getPixels( points, options.width, true )
 
       it( 'should have correct values for original points', ->
         expect( pixels[   0 ] ).to.eql( new Point(   0,   0 ) )

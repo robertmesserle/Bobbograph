@@ -11,16 +11,16 @@ describe( 'FillOptions', ->
   )
   describe( '#getType()', ->
     it( 'should return the correct type for a gradient', ->
-      type = FillOptions.prototype.getType( [] )
+      type = FillOptions::getType( [] )
       expect( type ).to.be( 'gradient' )
     )
     it( 'should return the correct type for a color', ->
-      type = FillOptions.prototype.getType( '#f00' )
+      type = FillOptions::getType( '#f00' )
       expect( type ).to.be( 'color' )
     )
   )
   describe( '#parseGradient()', ->
-    gradient = FillOptions.prototype.parseGradient( [ '#f00', '#00f' ] )
+    gradient = FillOptions::parseGradient( [ '#f00', '#00f' ] )
     expect( gradient ).to.be.an( 'array' )
     expect( gradient ).not.to.be.empty()
     expect( gradient[0] ).to.eql( { color: '#f00', position: 0 } )
