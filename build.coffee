@@ -37,7 +37,7 @@ gulp.task 'coffee', [ 'test', 'lint' ], ->
     .pipe( gulp.dest '.' )
 
 gulp.task 'lint', ->
-  gulp.src( paths.coffee )
+  gulp.src( paths.coffee.concat( paths.tests ) )
     .pipe( lint 'coffeelint.json' )
     .pipe( lint.reporter() )
 
