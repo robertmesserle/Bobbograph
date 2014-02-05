@@ -15,18 +15,18 @@ class Canvas
     @continue = false
 
   line: ( point ) ->
-    left = @scaleX point.x
-    top  = @scaleY point.y
+    left = @scaleX( point.x )
+    top  = @scaleY( point.y )
     if @continue
-      @context.lineTo left, top
+      @context.lineTo( left, top )
     else
-      @context.moveTo left, top
+      @context.moveTo( left, top )
       @continue = true
 
   arc: ( point, radius, angle1, angle2, ccw ) ->
-    left = @scaleX point.x
-    top  = @scaleY point.y
-    @context.arc left, top, radius, -angle1, -angle2, ccw
+    left = @scaleX( point.x )
+    top  = @scaleY( point.y )
+    @context.arc( left, top, radius, -angle1, -angle2, ccw )
 
   stroke: ( fill ) ->
     if fill then @context.strokeStyle = fill

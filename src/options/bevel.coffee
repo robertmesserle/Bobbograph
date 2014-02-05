@@ -11,6 +11,6 @@ class BevelOptions
         @[ key ] = value
 
   clone: ->
-    new BevelOptions @options
+    new BevelOptions( @options )
 
 module.exports = BevelOptions

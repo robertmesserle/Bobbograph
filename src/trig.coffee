@@ -7,8 +7,8 @@ class Trig
     rad * 180 / Math.PI
 
   @getBaseAngleFromPoints: ( dx, dy ) ->
-    angle = Math.atan dy / dx
-    return Math.abs angle
+    angle = Math.atan( dy / dx )
+    return Math.abs( angle )
 
   @getQuadrant: ( dx, dy ) ->
     if dy >= 0
@@ -21,9 +21,9 @@ class Trig
   @getAngleFromPoints: ( p1, p2 ) ->
     dx          = p2.x - p1.x
     dy          = p2.y - p1.y
-    baseAngle   = @getBaseAngleFromPoints dx, dy
+    baseAngle   = @getBaseAngleFromPoints( dx, dy )
 
-    switch @getQuadrant dx, dy
+    switch @getQuadrant( dx, dy )
       when 1 then baseAngle
       when 2 then Math.PI - baseAngle
       when 3 then Math.PI + baseAngle
@@ -32,7 +32,7 @@ class Trig
   @getDistanceBetweenPoints: ( p1, p2 ) ->
     dx = p2.x - p1.x
     dy = p2.y - p1.y
-    distance = Math.sqrt dx * dx + dy * dy
+    distance = Math.sqrt( dx * dx + dy * dy )
 
   @getPointFromAngle: ( origin, angle, distance ) ->
     { x, y } = origin

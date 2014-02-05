@@ -1,46 +1,47 @@
-Canvas = require './canvas.coffee'
+Canvas = require( './canvas.coffee' )
 
 class CurvedRender extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
-    @render @pixels, @options.line.width, @options.line.fill, @options.bevel
+    @render( @pixels, @options.line.width, @options.line.fill, @options.bevel )
     if @options.bevel?.smooth
       bevel = @options.bevel.clone()
       for lineWidth in [ @options.line.width - 2 .. 2 ] by -2
         bevel.opacity /= 2
-        @render @pixels, lineWidth, @options.line.fill, bevel
+        @render( @pixels, lineWidth, @options.line.fill, bevel )
 
   render: ( pixels, lineWidth, fill, bevel ) ->
-    @renderSolid pixels, lineWidth, fill
+    @renderSolid( pixels, lineWidth, fill )
     if bevel
-      @renderHighlight pixels, lineWidth, bevel
-      @renderShadow    pixels, lineWidth, bevel
+      @renderHighlight( pixels, lineWidth, bevel )
+      @renderShadow(    pixels, lineWidth, bevel )
 
   renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels
       prev    = pixels[ index - 1 ]
       next    = pixels[ index + 1 ]
-      @line pixel.offsetPoint prev, next, offset, angleOffset
+      point = pixel.offsetPoint( prev, next, offset, angleOffset )
+      @line( point )
 
   renderCap: ( point, right, offset ) ->
     angle = Math.PI / 2
     if right
-      @arc point, offset, angle, -angle
+      @arc( point, offset, angle, -angle )
     else
-      @arc point, offset, -angle, angle
+      @arc( point, offset, -angle, angle )
 
   renderShadow: ( pixels, lineWidth, bevel) ->
     offset = lineWidth / 2
     angle = Math.PI / 2
     @begin()
 
-    for pixel in pixels then @line pixel
-    @arc pixels[ pixels.length - 1 ], offset, 0, -angle
-    @renderLine pixels.slice().reverse(), offset, angle
-    @arc pixels[ 0 ], offset, -angle, Math.PI
+    for pixel in pixels then @line( pixel )
+    @arc( pixels[ pixels.length - 1 ], offset, 0, -angle )
+    @renderLine( pixels.slice().reverse(), offset, angle )
+    @arc( pixels[ 0 ], offset, -angle, Math.PI )
 
     @close()
-    @fill "rgba( 0, 0, 0, #{bevel.shadow * bevel.opacity} )"
+    @fill( "rgba( 0, 0, 0, #{bevel.shadow * bevel.opacity} )" )
 
   renderHighlight: ( pixels, lineWidth, bevel ) ->
     offset = lineWidth / 2

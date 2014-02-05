@@ -1,9 +1,9 @@
 class FillOptions
 
   constructor: ( fill, @options ) ->
-    @type = @getType fill
+    @type = @getType( fill )
     @fill = switch @type
-      when 'gradient' then @parseGradient fill
+      when 'gradient' then @parseGradient( fill )
       when 'color'    then fill
 
   getType: ( fill ) ->
@@ -20,8 +20,8 @@ class FillOptions
     switch type
       when 'color' then fill
       when 'gradient'
-        gradient = context.createLinearGradient 0, 0, options.width, 0
-        for stop in fill then gradient.addColorStop stop.position, stop.color
+        gradient = context.createLinearGradient( 0, 0, options.width, 0 )
+        for stop in fill then gradient.addColorStop( stop.position, stop.color )
         gradient
 
 module.exports = FillOptions

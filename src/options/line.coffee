@@ -1,4 +1,4 @@
-FillOptions = require './fill.coffee'
+FillOptions = require( './fill.coffee' )
 
 class LineOptions
 
@@ -8,6 +8,6 @@ class LineOptions
 
   constructor: ( line = {}, @options ) ->
     for key, value of line then @[ key ] = value
-    @fill = new FillOptions @fill, @options
+    @fill = new FillOptions( @fill, @options )
 
 module.exports = LineOptions
