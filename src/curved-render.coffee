@@ -48,25 +48,25 @@ class CurvedRender extends Canvas
     angle = Math.PI / 2
     @begin()
 
-    @renderLine pixels, offset, angle
-    @arc pixels[ pixels.length - 1 ], offset, angle, 0
-    for pixel in pixels.slice().reverse() then @line pixel
-    @arc pixels[ 0 ], offset, Math.PI, angle
+    @renderLine( pixels, offset, angle )
+    @arc( pixels[ pixels.length - 1 ], offset, angle, 0 )
+    for pixel in pixels.slice().reverse() then @line( pixel )
+    @arc( pixels[ 0 ], offset, Math.PI, angle )
 
     @close()
-    @fill "rgba( 255, 255, 255, #{bevel.shine * bevel.opacity} )"
+    @fill( "rgba( 255, 255, 255, #{bevel.shine * bevel.opacity} )" )
 
   renderSolid: ( pixels, lineWidth, fill ) ->
     offset = lineWidth / 2
     angle  = Math.PI / 2
     @begin()
 
-    @renderLine pixels, offset, angle
-    @renderCap  pixels[ pixels.length - 1 ], true, offset
-    @renderLine pixels.slice().reverse(), offset, angle
-    @renderCap  pixels[ 0 ], false, offset
+    @renderLine( pixels, offset, angle )
+    @renderCap(  pixels[ pixels.length - 1 ], true, offset )
+    @renderLine( pixels.slice().reverse(), offset, angle )
+    @renderCap(  pixels[ 0 ], false, offset )
     
     @close()
-    @fill fill
+    @fill( fill )
 
 module.exports = CurvedRender

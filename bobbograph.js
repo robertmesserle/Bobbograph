@@ -146,13 +146,14 @@ CurvedRender = (function(_super) {
   };
 
   CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
-    var index, next, pixel, prev, _i, _len, _results;
+    var index, next, pixel, point, prev, _i, _len, _results;
     _results = [];
     for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
       pixel = pixels[index];
       prev = pixels[index - 1];
       next = pixels[index + 1];
-      _results.push(this.line(pixel.offsetPoint(prev, next, offset, angleOffset)));
+      point = pixel.offsetPoint(prev, next, offset, angleOffset);
+      _results.push(this.line(point));
     }
     return _results;
   };
@@ -409,9 +410,7 @@ LinearRender = (function(_super) {
     for (index = _i = 0, _len = segments.length; _i < _len; index = ++_i) {
       segment = segments[index];
       next = segments[index + 1];
-      if (!index) {
-        this.line(segment.corner1);
-      }
+      this.line(!index ? segment.corner1 : void 0);
       if (next) {
         if (segment.angle > next.angle) {
           this.line(segment.corner2);
