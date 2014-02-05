@@ -7,8 +7,11 @@ the developer to decide what the graph will look like.
 
 Here is a basic overview of the available options:
 
-- **width** *[Number]*
-- **height** *[Number]*
+Property | Type | Function
+---|---|---
+**width** | Number | This number will set the width of the generated graph.
+**height** | Number | This number will set the height of the generated graph.
+
 - **data**
   - **vertex** *[Boolean]*
   - **maxPoints** *[Number]*
