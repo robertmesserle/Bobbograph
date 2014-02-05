@@ -37,14 +37,17 @@ class Trig
   @getPointFromAngle: ( origin, angle, distance ) ->
     { x, y } = origin
     if angle is Math.PI
-      x: x - distance, y: y
+      { x: x - distance, y: y }
     else if angle is Math.PI / 2
-      x: x, y: y + distance
+      { x: x, y: y + distance }
     else if angle is Math.PI * 1.5
-      x: x, y: y - distance
+      { x: x, y: y - distance }
     else if angle is 0
-      x: x + distance, y: y
+      { x: x + distance, y: y }
     else
-      x: Math.cos( angle ) * distance + x, y: Math.sin( angle ) * distance + y
+      {
+        x: Math.cos( angle ) * distance + x,
+        y: Math.sin( angle ) * distance + y
+      }
 
 module.exports = Trig

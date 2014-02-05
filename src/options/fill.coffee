@@ -13,7 +13,7 @@ class FillOptions
   parseGradient: ( fill ) ->
     count = fill.length - 1
     for stop, index in fill
-      if typeof stop is 'string' then color: stop, position: index / count
+      if typeof stop is 'string' then { color: stop, position: index / count }
       else stop
 
   get: ( context, type = @type, fill = @fill, options = @options ) ->

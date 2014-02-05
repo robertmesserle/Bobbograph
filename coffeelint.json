@@ -50,7 +50,7 @@
     },
     "no_implicit_braces": {
         "name": "no_implicit_braces",
-        "level": "ignore",
+        "level": "error",
         "strict": true
     },
     "no_plusplus": {
