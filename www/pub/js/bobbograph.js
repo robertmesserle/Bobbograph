@@ -1,4 +1,4 @@
-/*! Bobbograph v2.0 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
+/*! Bobbograph v3.0 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
 /*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Canvas;
 
@@ -76,13 +76,21 @@ XAxis = require('./x-axis.coffee');
 
 Bobbograph = (function() {
   function Bobbograph(id, data, options) {
-    this.element = document.getElementById(id);
-    this.options = new Options(options);
+    this.element = this.getElement(id);
+    this.options = new Options(options, this.element);
     this.context = this.getContext(this.element);
     this.data = new Data(data, this.options);
     new Renderer(this.data.pixels, this.context, this.options, this.options.line.smooth);
     this.xAxis = new XAxis(this.options.xAxis, this.element, this.options);
   }
+
+  Bobbograph.prototype.getElement = function(id) {
+    if (typeof id === 'string') {
+      return document.getElementById(id) || document.querySelector(id);
+    } else {
+      return id[0] || id;
+    }
+  };
 
   Bobbograph.prototype.getContext = function(element) {
     var canvas, context;
@@ -279,11 +287,13 @@ Options = (function() {
 
   Options.prototype.width = 600;
 
-  function Options(options) {
+  function Options(options, element) {
     var key, value;
     if (options == null) {
       options = {};
     }
+    this.height = this.getStyle(element, 'height') || this.height;
+    this.width = this.getStyle(element, 'width') || this.width;
     for (key in options) {
       value = options[key];
       this[key] = value;
@@ -292,13 +302,39 @@ Options = (function() {
     this.padding = new PaddingOptions(this.padding, this.line.width);
     this.xAxis = new AxisLineOptions(this.xAxis);
     this.yAxis = new AxisLineOptions(this.yAxis);
-    this.usableWidth = this.width - this.padding.left - this.padding.right;
-    this.usableHeight = this.height - this.padding.top - this.padding.bottom;
     if (this.bevel != null) {
       this.bevel = new BevelOptions(this.bevel);
     }
+    this.usableWidth = this.width - this.padding.left - this.padding.right;
+    this.usableHeight = this.height - this.padding.top - this.padding.bottom;
     this.data = new DataOptions(this.data, this);
   }
+
+  Options.prototype.getPadding = function(styles, direction) {
+    return parseInt(styles.getPropertyValue("padding-" + direction), 10);
+  };
+
+  Options.prototype.getStyle = function(element, style) {
+    var size, styles;
+    if (!(styles = typeof getComputedStyle === "function" ? getComputedStyle(element) : void 0)) {
+      return;
+    }
+    size = parseInt(styles.getPropertyValue(style), 10);
+    switch (styles.getPropertyValue('box-sizing')) {
+      case 'border-box':
+        switch (style) {
+          case 'height':
+            return size - this.getPadding(styles, 'top') - this.getPadding(styles, 'bottom');
+          case 'width':
+            return size - this.getPadding(styles, 'left') - this.getPadding(styles, 'right');
+          default:
+            return size;
+        }
+        break;
+      default:
+        return size;
+    }
+  };
 
   return Options;
 

@@ -22,7 +22,6 @@ html
     script( src="/js/bobbograph.js" )
     script.
       var data = [ 1, 5, 2, 4, 3 ],
-          $elem = $('#wrapper'),
           options = {
             line: {
               width:  10,
@@ -31,7 +30,6 @@ html
             },
             bevel: {
               smooth: true
-            },
-            width: $elem.width()
+            }
           };
-      new Bobbograph( 'wrapper', data, options )
+      new Bobbograph( '#wrapper', data, options )
