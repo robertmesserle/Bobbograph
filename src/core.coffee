@@ -6,14 +6,18 @@ XAxis        = require( './x-axis.coffee' )
 class Bobbograph
 
   constructor: ( id, data, options ) ->
-    @element = document.getElementById( id )
-    @options = new Options( options )
+    @element = @getElement( id )
+    @options = new Options( options, @element )
     @context = @getContext( @element )
     @data    = new Data( data, @options )
 
     new Renderer( @data.pixels, @context, @options, @options.line.smooth )
 
     @xAxis = new XAxis( @options.xAxis, @element, @options )
+
+  getElement: ( id ) ->
+    if typeof id is 'string' then document.getElementById( id ) or document.querySelector( id )
+    else id[ 0 ] or id
 
   getContext: ( element ) ->
     canvas  = document.createElement( 'canvas' )
