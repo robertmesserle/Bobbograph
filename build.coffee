@@ -29,7 +29,7 @@ gulp.task 'stylus', ->
     .pipe( rename 'master.css' )
     .pipe( gulp.dest 'www/pub' )
 
-gulp.task 'coffee', [ 'test' ], ->
+gulp.task 'coffee', [ 'test', 'lint' ], ->
   gulp.src( 'src/core.coffee', read: false )
     .pipe( browserify( transform: [ 'coffeeify' ], extensions: [ '.coffee' ] ) )
     .pipe( header comment )
@@ -38,7 +38,7 @@ gulp.task 'coffee', [ 'test' ], ->
 
 gulp.task 'lint', ->
   gulp.src( paths.coffee )
-    .pipe( lint() )
+    .pipe( lint 'coffeelint.json' )
     .pipe( lint.reporter() )
 
 gulp.task 'test', ->
