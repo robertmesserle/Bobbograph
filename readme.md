@@ -11,16 +11,15 @@ Property | Type | Function
 ---|---|---
 **width** | Number | This number will set the width of the generated graph.
 **height** | Number | This number will set the height of the generated graph.
+**data**   | Object | [Data]
 
-- **data**
-  - **vertex** *[Boolean]*
-  - **maxPoints** *[Number]*
-  - **normalize** *[Number]*
-- **bevel**
-  - **shine** *[Number]* (0-1)
-  - **shadow** *[Number]* (0-1)
-  - **opacity** *[Number]* (0-1)
-  - **smooth** *[Boolean]*
+### Data
+Property | Type | Description
+---|---|---
+**vertex** | Boolean | This will eliminate unnecessary points in the graph, resulting in a smoother graph.  By default, this is only enabled with line smoothing is enabled.
+**maxPoints** | Number | This is the maximum number of points you want to display.  This can improve performance, and may be necessary with larger data sets.
+**normalize** | Number | You can specify how many standard deviations you want to allow.  Points that are too extreme will be removed.
+
 - **padding**
   - **size** *[Number]*
   - **x** *[Number]*
