@@ -64,13 +64,13 @@ module.exports = Canvas;
 
 
 },{}],2:[function(require,module,exports){
-var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Bobbograph, CurvedRender, Data, LinearRender, Options, XAxis;
+var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Bobbograph, Data, LinearRender, Options, Renderer, XAxis;
 
 Options = require('./options.coffee');
 
 Data = require('./data.coffee');
 
-CurvedRender = require('./curved-render.coffee');
+Renderer = require('./curved-render.coffee');
 
 LinearRender = require('./linear-render.coffee');
 
@@ -82,11 +82,7 @@ Bobbograph = (function() {
     this.options = new Options(options);
     this.context = this.getContext(this.element);
     this.data = new Data(data, this.options);
-    if (this.options.line.smooth) {
-      new CurvedRender(this.data.pixels, this.context, this.options);
-    } else {
-      new LinearRender(this.data.points, this.context, this.options);
-    }
+    new Renderer(this.data.pixels, this.context, this.options, this.options.line.smooth);
     this.xAxis = new XAxis(this.options.xAxis, this.element, this.options);
   }
 
@@ -113,16 +109,16 @@ if (typeof global !== "undefined" && global !== null) {
 
 
 },{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":18}],3:[function(require,module,exports){
-var Canvas, CurvedRender,
+var Canvas, Renderer,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 Canvas = require('./canvas.coffee');
 
-CurvedRender = (function(_super) {
-  __extends(CurvedRender, _super);
+Renderer = (function(_super) {
+  __extends(Renderer, _super);
 
-  function CurvedRender(pixels, context, options) {
+  function Renderer(pixels, context, options) {
     var bevel, lineWidth, _i, _ref, _ref1;
     this.pixels = pixels;
     this.context = context;
@@ -137,7 +133,7 @@ CurvedRender = (function(_super) {
     }
   }
 
-  CurvedRender.prototype.render = function(pixels, lineWidth, fill, bevel) {
+  Renderer.prototype.render = function(pixels, lineWidth, fill, bevel) {
     this.renderSolid(pixels, lineWidth, fill);
     if (bevel) {
       this.renderHighlight(pixels, lineWidth, bevel);
@@ -145,7 +141,7 @@ CurvedRender = (function(_super) {
     }
   };
 
-  CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
+  Renderer.prototype.renderLine = function(pixels, offset, angleOffset) {
     var index, next, pixel, point, prev, _i, _len, _results;
     _results = [];
     for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
@@ -158,7 +154,7 @@ CurvedRender = (function(_super) {
     return _results;
   };
 
-  CurvedRender.prototype.renderCap = function(point, right, offset) {
+  Renderer.prototype.renderCap = function(point, right, offset) {
     var angle;
     angle = Math.PI / 2;
     if (right) {
@@ -168,7 +164,7 @@ CurvedRender = (function(_super) {
     }
   };
 
-  CurvedRender.prototype.renderShadow = function(pixels, lineWidth, bevel) {
+  Renderer.prototype.renderShadow = function(pixels, lineWidth, bevel) {
     var angle, offset, pixel, _i, _len;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
@@ -184,7 +180,7 @@ CurvedRender = (function(_super) {
     return this.fill("rgba( 0, 0, 0, " + (bevel.shadow * bevel.opacity) + " )");
   };
 
-  CurvedRender.prototype.renderHighlight = function(pixels, lineWidth, bevel) {
+  Renderer.prototype.renderHighlight = function(pixels, lineWidth, bevel) {
     var angle, offset, pixel, _i, _len, _ref;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
@@ -201,7 +197,7 @@ CurvedRender = (function(_super) {
     return this.fill("rgba( 255, 255, 255, " + (bevel.shine * bevel.opacity) + " )");
   };
 
-  CurvedRender.prototype.renderSolid = function(pixels, lineWidth, fill) {
+  Renderer.prototype.renderSolid = function(pixels, lineWidth, fill) {
     var angle, offset;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
@@ -214,11 +210,11 @@ CurvedRender = (function(_super) {
     return this.fill(fill);
   };
 
-  return CurvedRender;
+  return Renderer;
 
 })(Canvas);
 
-module.exports = CurvedRender;
+module.exports = Renderer;
 
 
 },{"./canvas.coffee":1}],4:[function(require,module,exports){

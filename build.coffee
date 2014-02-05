@@ -8,6 +8,7 @@ coffee     = require( 'gulp-coffee' )
 jade       = require( 'gulp-jade' )
 stylus     = require( 'gulp-stylus' )
 lint       = require( 'gulp-coffeelint' )
+connect    = require( 'gulp-connect' )
 
 comment = """
   /*! Bobbograph v2.0 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
@@ -23,13 +24,15 @@ gulp.task( 'jade', ->
     .pipe( jade() )
     .pipe( rename( 'index.html' ) )
     .pipe( gulp.dest( 'www/pub' ) )
+    .pipe( connect.reload() )
 )
 
 gulp.task( 'stylus', ->
   gulp.src( "www/src/styl/master.styl" )
-    .pipe( stylus( { use: 'nib' } ) )
+    .pipe( stylus( { use: [ 'nib' ], import: [ 'nib' ] } ) )
     .pipe( rename( 'master.css' ) )
     .pipe( gulp.dest( 'www/pub' ) )
+    .pipe( connect.reload() )
 )
 
 gulp.task( 'coffee', [ 'test', 'lint' ], ->
@@ -38,6 +41,8 @@ gulp.task( 'coffee', [ 'test', 'lint' ], ->
     .pipe( header( comment ) )
     .pipe( rename( 'bobbograph.js' ) )
     .pipe( gulp.dest( '.' ) )
+    .pipe( gulp.dest( 'www/pub/js' ) )
+    .pipe( connect.reload() )
 )
 
 gulp.task( 'lint', ->
@@ -58,12 +63,20 @@ gulp.task( 'min', [ 'coffee' ], ->
     .pipe( header( comment ) )
     .pipe( rename( 'bobbograph.min.js' ) )
     .pipe( gulp.dest( '.' ) )
-    .pipe( gulp.dest( 'www/pub/js' ) )
 )
+
+gulp.task( 'connect', connect.server( {
+  root: "#{__dirname}/www/pub"
+  port: 1337
+  livereload: true
+  open: {
+    browser: 'chrome'
+  }
+} ) )
 
 gulp.task( 'default', [ 'min', 'jade', 'stylus' ] )
 
-gulp.task( 'watch', [ 'min' ], ->
+gulp.task( 'watch', [ 'min', 'connect' ], ->
   gulp.watch( paths.tests, [ 'test' ] )
   gulp.watch( paths.coffee, [ 'min' ] )
   gulp.watch( 'www/src/index.jade', [ 'jade' ] )

@@ -18,6 +18,8 @@
     "gulp-uglify": "~0.2.0",
     "gulp-jade": "~0.4.1",
     "gulp-stylus": "0.0.11",
-    "gulp-coffeelint": "~0.2.0"
+    "gulp-coffeelint": "~0.2.0",
+    "gulp-connect": "~0.3.0",
+    "nib": "~1.0.2"
   }
 }

@@ -3,6 +3,22 @@ html
   head
     title Bobbograph
     link( href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css", rel="stylesheet" )
-    link( href="master.css", rel="stylesheet" )
+    link( href="/master.css", rel="stylesheet" )
   body
-    h1 Bobbograph
+    nav.navbar.navbar-fixed-top.navbar-inverse
+      div.container
+        div.navbar-header
+          a.navbar-brand( href="#" ) Bobbograph
+          ul.nav.navbar-nav
+            li.active: a( href="#" ) Home
+            li: a( href="#" ) Getting Started
+            li: a( href="#" ) Documentation
+            li: a( href="#" ) Download
+    div.container
+      div.jumbotron#wrapper
+
+    script( src="js/bobbograph.js" )
+    script.
+      var data = [ 1, 5, 2, 4, 3 ],
+          options = { height: 300, width: 600 };
+      new Bobbograph( 'wrapper', data, options )

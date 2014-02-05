@@ -1,6 +1,6 @@
 Options      = require( './options.coffee' )
 Data         = require( './data.coffee' )
-CurvedRender = require( './curved-render.coffee' )
+Renderer     = require( './curved-render.coffee' )
 LinearRender = require( './linear-render.coffee' )
 XAxis        = require( './x-axis.coffee' )
 
@@ -12,10 +12,7 @@ class Bobbograph
     @context = @getContext( @element )
     @data    = new Data( data, @options )
 
-    if @options.line.smooth
-      new CurvedRender( @data.pixels, @context, @options )
-    else
-      new LinearRender( @data.points, @context, @options )
+    new Renderer( @data.pixels, @context, @options, @options.line.smooth )
 
     @xAxis = new XAxis( @options.xAxis, @element, @options )
 
