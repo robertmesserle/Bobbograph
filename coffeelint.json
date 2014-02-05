@@ -18,8 +18,8 @@
     },
     "max_line_length": {
         "name": "max_line_length",
-        "value": 80,
-        "level": "error",
+        "value": 100,
+        "level": "ignore",
         "limitComments": true
     },
     "line_endings": {
