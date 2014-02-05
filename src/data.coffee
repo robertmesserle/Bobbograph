@@ -57,7 +57,8 @@ class Data
     for point in points
       if lastPoint?
         for index in [ Math.round( lastPoint.x ) .. Math.round( point.x ) ]
-          pixels[ index ] = new Point index, method index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x
+          y = method index - lastPoint.x, lastPoint.y, point.y - lastPoint.y, point.x - lastPoint.x
+          pixels[ index ] = new Point index, y
       lastPoint = point
     pixels
 

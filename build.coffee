@@ -5,14 +5,29 @@ browserify = require 'gulp-browserify'
 rename     = require 'gulp-rename'
 mocha      = require 'gulp-mocha'
 coffee     = require 'gulp-coffee'
+jade       = require 'gulp-jade'
+stylus     = require 'gulp-stylus'
+lint       = require 'gulp-coffeelint'
 
 comment = """
   /*! Bobbograph v2.0 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
   /*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */
   """
 paths =
-  tests: [ 'test/**.coffee', 'test/**/*.coffee' ]
-  coffee: [ 'src/core.coffee' ]
+  tests:  [ 'test/*.coffee', 'test/**/*.coffee' ]
+  coffee: [ 'src/*.coffee',  'src/**/*.coffee'  ]
+
+gulp.task 'jade', ->
+  gulp.src( "www/src/index.jade" )
+    .pipe( jade() )
+    .pipe( rename 'index.html' )
+    .pipe( gulp.dest 'www/pub' )
+
+gulp.task 'stylus', ->
+  gulp.src( "www/src/styl/master.styl" )
+    .pipe( stylus() )
+    .pipe( rename 'master.css' )
+    .pipe( gulp.dest 'www/pub' )
 
 gulp.task 'coffee', [ 'test' ], ->
   gulp.src( 'src/core.coffee', read: false )
@@ -20,6 +35,11 @@ gulp.task 'coffee', [ 'test' ], ->
     .pipe( header comment )
     .pipe( rename 'bobbograph.js' )
     .pipe( gulp.dest '.' )
+
+gulp.task 'lint', ->
+  gulp.src( paths.coffee )
+    .pipe( lint() )
+    .pipe( lint.reporter() )
 
 gulp.task 'test', ->
   gulp.src( paths.tests, read: false )
@@ -34,8 +54,10 @@ gulp.task 'min', [ 'coffee' ], ->
     .pipe( gulp.dest '.' )
     .pipe( gulp.dest 'www/pub/js' )
 
-gulp.task 'default', [ 'min' ]
+gulp.task 'default', [ 'min', 'jade', 'stylus' ]
 
 gulp.task 'watch', [ 'min' ], ->
-  gulp.watch paths.tests, [ 'test' ]
-  gulp.watch paths.coffee, [ 'min' ]
+  gulp.watch paths.tests,           [ 'test' ]
+  gulp.watch paths.coffee,          [ 'min' ]
+  gulp.watch 'www/src/index.jade',  [ 'jade' ]
+  gulp.watch 'www/src/styl/*.styl', [ 'stylus' ]

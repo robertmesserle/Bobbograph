@@ -17,6 +17,7 @@
     "gulp-rename": "~0.2.2",
     "gulp-uglify": "~0.2.0",
     "gulp-jade": "~0.4.1",
-    "gulp-stylus": "0.0.11"
+    "gulp-stylus": "0.0.11",
+    "gulp-coffeelint": "~0.2.0"
   }
 }
