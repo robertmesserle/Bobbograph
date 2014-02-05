@@ -64,15 +64,13 @@ module.exports = Canvas;
 
 
 },{}],2:[function(require,module,exports){
-var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Bobbograph, Data, LinearRender, Options, Renderer, XAxis;
+var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Bobbograph, Data, Options, Renderer, XAxis;
 
 Options = require('./options.coffee');
 
 Data = require('./data.coffee');
 
-Renderer = require('./curved-render.coffee');
-
-LinearRender = require('./linear-render.coffee');
+Renderer = require('./renderer.coffee');
 
 XAxis = require('./x-axis.coffee');
 
@@ -108,116 +106,7 @@ if (typeof global !== "undefined" && global !== null) {
 }
 
 
-},{"./curved-render.coffee":3,"./data.coffee":4,"./linear-render.coffee":6,"./options.coffee":7,"./x-axis.coffee":18}],3:[function(require,module,exports){
-var Canvas, Renderer,
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-Canvas = require('./canvas.coffee');
-
-Renderer = (function(_super) {
-  __extends(Renderer, _super);
-
-  function Renderer(pixels, context, options) {
-    var bevel, lineWidth, _i, _ref, _ref1;
-    this.pixels = pixels;
-    this.context = context;
-    this.options = options;
-    this.render(this.pixels, this.options.line.width, this.options.line.fill, this.options.bevel);
-    if ((_ref = this.options.bevel) != null ? _ref.smooth : void 0) {
-      bevel = this.options.bevel.clone();
-      for (lineWidth = _i = _ref1 = this.options.line.width - 2; _i >= 2; lineWidth = _i += -2) {
-        bevel.opacity /= 2;
-        this.render(this.pixels, lineWidth, this.options.line.fill, bevel);
-      }
-    }
-  }
-
-  Renderer.prototype.render = function(pixels, lineWidth, fill, bevel) {
-    this.renderSolid(pixels, lineWidth, fill);
-    if (bevel) {
-      this.renderHighlight(pixels, lineWidth, bevel);
-      return this.renderShadow(pixels, lineWidth, bevel);
-    }
-  };
-
-  Renderer.prototype.renderLine = function(pixels, offset, angleOffset) {
-    var index, next, pixel, point, prev, _i, _len, _results;
-    _results = [];
-    for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
-      pixel = pixels[index];
-      prev = pixels[index - 1];
-      next = pixels[index + 1];
-      point = pixel.offsetPoint(prev, next, offset, angleOffset);
-      _results.push(this.line(point));
-    }
-    return _results;
-  };
-
-  Renderer.prototype.renderCap = function(point, right, offset) {
-    var angle;
-    angle = Math.PI / 2;
-    if (right) {
-      return this.arc(point, offset, angle, -angle);
-    } else {
-      return this.arc(point, offset, -angle, angle);
-    }
-  };
-
-  Renderer.prototype.renderShadow = function(pixels, lineWidth, bevel) {
-    var angle, offset, pixel, _i, _len;
-    offset = lineWidth / 2;
-    angle = Math.PI / 2;
-    this.begin();
-    for (_i = 0, _len = pixels.length; _i < _len; _i++) {
-      pixel = pixels[_i];
-      this.line(pixel);
-    }
-    this.arc(pixels[pixels.length - 1], offset, 0, -angle);
-    this.renderLine(pixels.slice().reverse(), offset, angle);
-    this.arc(pixels[0], offset, -angle, Math.PI);
-    this.close();
-    return this.fill("rgba( 0, 0, 0, " + (bevel.shadow * bevel.opacity) + " )");
-  };
-
-  Renderer.prototype.renderHighlight = function(pixels, lineWidth, bevel) {
-    var angle, offset, pixel, _i, _len, _ref;
-    offset = lineWidth / 2;
-    angle = Math.PI / 2;
-    this.begin();
-    this.renderLine(pixels, offset, angle);
-    this.arc(pixels[pixels.length - 1], offset, angle, 0);
-    _ref = pixels.slice().reverse();
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      pixel = _ref[_i];
-      this.line(pixel);
-    }
-    this.arc(pixels[0], offset, Math.PI, angle);
-    this.close();
-    return this.fill("rgba( 255, 255, 255, " + (bevel.shine * bevel.opacity) + " )");
-  };
-
-  Renderer.prototype.renderSolid = function(pixels, lineWidth, fill) {
-    var angle, offset;
-    offset = lineWidth / 2;
-    angle = Math.PI / 2;
-    this.begin();
-    this.renderLine(pixels, offset, angle);
-    this.renderCap(pixels[pixels.length - 1], true, offset);
-    this.renderLine(pixels.slice().reverse(), offset, angle);
-    this.renderCap(pixels[0], false, offset);
-    this.close();
-    return this.fill(fill);
-  };
-
-  return Renderer;
-
-})(Canvas);
-
-module.exports = Renderer;
-
-
-},{"./canvas.coffee":1}],4:[function(require,module,exports){
+},{"./data.coffee":3,"./options.coffee":5,"./renderer.coffee":13,"./x-axis.coffee":16}],3:[function(require,module,exports){
 var Data, Easing, Point, Stats;
 
 Stats = require('./stats.coffee');
@@ -347,7 +236,7 @@ Data = (function() {
 module.exports = Data;
 
 
-},{"./easing.coffee":5,"./point.coffee":14,"./stats.coffee":16}],5:[function(require,module,exports){
+},{"./easing.coffee":4,"./point.coffee":12,"./stats.coffee":14}],4:[function(require,module,exports){
 var Easing;
 
 Easing = (function() {
@@ -372,92 +261,7 @@ Easing = (function() {
 module.exports = Easing;
 
 
-},{}],6:[function(require,module,exports){
-var Canvas, LinearRender, Segment,
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-Canvas = require('./canvas.coffee');
-
-Segment = require('./segment.coffee');
-
-LinearRender = (function(_super) {
-  __extends(LinearRender, _super);
-
-  function LinearRender(points, context, options) {
-    this.points = points;
-    this.context = context;
-    this.options = options;
-    this.renderSolid(this.points, this.options.line.width, this.options.line.color);
-  }
-
-  LinearRender.prototype.getSegments = function(points, offset) {
-    var index, _i, _ref, _results;
-    _results = [];
-    for (index = _i = 1, _ref = points.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; index = 1 <= _ref ? ++_i : --_i) {
-      _results.push(new Segment(points[index - 1], points[index], offset));
-    }
-    return _results;
-  };
-
-  LinearRender.prototype.renderLine = function(points, offset) {
-    var index, next, reverse, s1, s2, segment, segments, _i, _j, _len, _len1, _results;
-    segments = this.getSegments(points, offset);
-    for (index = _i = 0, _len = segments.length; _i < _len; index = ++_i) {
-      segment = segments[index];
-      next = segments[index + 1];
-      this.line(!index ? segment.corner1 : void 0);
-      if (next) {
-        if (segment.angle > next.angle) {
-          this.line(segment.corner2);
-          this.arc(next.p1, offset, segment.topAngle, next.topAngle);
-        } else {
-          s1 = new Segment(segment.corner1, segment.corner2, 0);
-          s2 = new Segment(next.corner1, next.corner2, 0);
-          this.line(s1.intersects(s2));
-        }
-      } else {
-        this.arc(segment.p2, offset, segment.topAngle, segment.bottomAngle);
-      }
-    }
-    reverse = segments.slice().reverse();
-    _results = [];
-    for (index = _j = 0, _len1 = reverse.length; _j < _len1; index = ++_j) {
-      segment = reverse[index];
-      next = reverse[index + 1];
-      if (next) {
-        if (segment.angle > next.angle) {
-          this.line(segment.corner4);
-          _results.push(this.arc(next.p2, offset, segment.bottomAngle, next.bottomAngle));
-        } else {
-          s1 = new Segment(segment.corner3, segment.corner4, 0);
-          s2 = new Segment(next.corner3, next.corner4, 0);
-          _results.push(this.line(s1.intersects(s2)));
-        }
-      } else {
-        _results.push(this.arc(segment.p1, offset, segment.bottomAngle, segment.topAngle));
-      }
-    }
-    return _results;
-  };
-
-  LinearRender.prototype.renderSolid = function(points, lineWidth, color) {
-    var offset;
-    offset = lineWidth / 2;
-    this.begin();
-    this.renderLine(points, offset, true);
-    this.close();
-    return this.fill(color);
-  };
-
-  return LinearRender;
-
-})(Canvas);
-
-module.exports = LinearRender;
-
-
-},{"./canvas.coffee":1,"./segment.coffee":15}],7:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var AxisLineOptions, BevelOptions, DataOptions, LineOptions, Options, PaddingOptions;
 
 LineOptions = require('./options/line.coffee');
@@ -503,7 +307,7 @@ Options = (function() {
 module.exports = Options;
 
 
-},{"./options/axis-line.coffee":8,"./options/bevel.coffee":9,"./options/data.coffee":10,"./options/line.coffee":12,"./options/padding.coffee":13}],8:[function(require,module,exports){
+},{"./options/axis-line.coffee":6,"./options/bevel.coffee":7,"./options/data.coffee":8,"./options/line.coffee":10,"./options/padding.coffee":11}],6:[function(require,module,exports){
 var AxisLineOptions;
 
 AxisLineOptions = (function() {
@@ -527,7 +331,7 @@ AxisLineOptions = (function() {
 module.exports = AxisLineOptions;
 
 
-},{}],9:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var BevelOptions;
 
 BevelOptions = (function() {
@@ -561,7 +365,7 @@ BevelOptions = (function() {
 module.exports = BevelOptions;
 
 
-},{}],10:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var DataOptions;
 
 DataOptions = (function() {
@@ -590,7 +394,7 @@ DataOptions = (function() {
 module.exports = DataOptions;
 
 
-},{}],11:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var FillOptions;
 
 FillOptions = (function() {
@@ -664,7 +468,7 @@ FillOptions = (function() {
 module.exports = FillOptions;
 
 
-},{}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var FillOptions, LineOptions;
 
 FillOptions = require('./fill.coffee');
@@ -696,7 +500,7 @@ LineOptions = (function() {
 module.exports = LineOptions;
 
 
-},{"./fill.coffee":11}],13:[function(require,module,exports){
+},{"./fill.coffee":9}],11:[function(require,module,exports){
 var PaddingOptions;
 
 PaddingOptions = (function() {
@@ -735,7 +539,7 @@ PaddingOptions = (function() {
 module.exports = PaddingOptions;
 
 
-},{}],14:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
@@ -778,51 +582,116 @@ Point = (function() {
 module.exports = Point;
 
 
-},{"./trig.coffee":17}],15:[function(require,module,exports){
-var Point, Segment, Trig;
+},{"./trig.coffee":15}],13:[function(require,module,exports){
+var Canvas, CurvedRender,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-Trig = require('./trig.coffee');
+Canvas = require('./canvas.coffee');
 
-Point = require('./point.coffee');
+CurvedRender = (function(_super) {
+  __extends(CurvedRender, _super);
 
-Segment = (function() {
-  function Segment(p1, p2, offset) {
-    this.p1 = p1;
-    this.p2 = p2;
-    this.offset = offset;
-    this.angle = this.reduceAngle(Trig.getAngleFromPoints(this.p1, this.p2));
-    this.slope = (this.p2.y - this.p1.y) / (this.p2.x - this.p1.x);
-    this.yint = this.p1.y - this.slope * this.p1.x;
-    this.topAngle = this.angle + Trig.rad(90);
-    this.bottomAngle = this.angle - Trig.rad(90);
-    this.corner1 = this.p1.getPointFromAngle(this.topAngle, this.offset);
-    this.corner2 = this.p2.getPointFromAngle(this.topAngle, this.offset);
-    this.corner3 = this.p2.getPointFromAngle(this.bottomAngle, this.offset);
-    this.corner4 = this.p1.getPointFromAngle(this.bottomAngle, this.offset);
+  function CurvedRender(pixels, context, options) {
+    var bevel, lineWidth, _i, _ref, _ref1;
+    this.pixels = pixels;
+    this.context = context;
+    this.options = options;
+    this.render(this.pixels, this.options.line.width, this.options.line.fill, this.options.bevel);
+    if ((_ref = this.options.bevel) != null ? _ref.smooth : void 0) {
+      bevel = this.options.bevel.clone();
+      for (lineWidth = _i = _ref1 = this.options.line.width - 2; _i >= 2; lineWidth = _i += -2) {
+        bevel.opacity /= 2;
+        this.render(this.pixels, lineWidth, this.options.line.fill, bevel);
+      }
+    }
   }
 
-  Segment.prototype.reduceAngle = function(angle) {
-    while (angle > Math.PI) {
-      angle -= 2 * Math.PI;
+  CurvedRender.prototype.render = function(pixels, lineWidth, fill, bevel) {
+    this.renderSolid(pixels, lineWidth, fill);
+    if (bevel) {
+      this.renderHighlight(pixels, lineWidth, bevel);
+      return this.renderShadow(pixels, lineWidth, bevel);
     }
-    return angle;
   };
 
-  Segment.prototype.intersects = function(segment) {
-    var x, y;
-    x = (segment.yint - this.yint) / (this.slope - segment.slope);
-    y = this.slope * x + this.yint;
-    return new Point(x, y);
+  CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
+    var index, next, pixel, point, prev, _i, _len, _results;
+    _results = [];
+    for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
+      pixel = pixels[index];
+      prev = pixels[index - 1];
+      next = pixels[index + 1];
+      point = pixel.offsetPoint(prev, next, offset, angleOffset);
+      _results.push(this.line(point));
+    }
+    return _results;
   };
 
-  return Segment;
+  CurvedRender.prototype.renderCap = function(point, right, offset) {
+    var angle;
+    angle = Math.PI / 2;
+    if (right) {
+      return this.arc(point, offset, angle, -angle);
+    } else {
+      return this.arc(point, offset, -angle, angle);
+    }
+  };
 
-})();
+  CurvedRender.prototype.renderShadow = function(pixels, lineWidth, bevel) {
+    var angle, offset, pixel, _i, _len;
+    offset = lineWidth / 2;
+    angle = Math.PI / 2;
+    this.begin();
+    for (_i = 0, _len = pixels.length; _i < _len; _i++) {
+      pixel = pixels[_i];
+      this.line(pixel);
+    }
+    this.arc(pixels[pixels.length - 1], offset, 0, -angle);
+    this.renderLine(pixels.slice().reverse(), offset, angle);
+    this.arc(pixels[0], offset, -angle, Math.PI);
+    this.close();
+    return this.fill("rgba( 0, 0, 0, " + (bevel.shadow * bevel.opacity) + " )");
+  };
 
-module.exports = Segment;
+  CurvedRender.prototype.renderHighlight = function(pixels, lineWidth, bevel) {
+    var angle, offset, pixel, _i, _len, _ref;
+    offset = lineWidth / 2;
+    angle = Math.PI / 2;
+    this.begin();
+    this.renderLine(pixels, offset, angle);
+    this.arc(pixels[pixels.length - 1], offset, angle, 0);
+    _ref = pixels.slice().reverse();
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      pixel = _ref[_i];
+      this.line(pixel);
+    }
+    this.arc(pixels[0], offset, Math.PI, angle);
+    this.close();
+    return this.fill("rgba( 255, 255, 255, " + (bevel.shine * bevel.opacity) + " )");
+  };
+
+  CurvedRender.prototype.renderSolid = function(pixels, lineWidth, fill) {
+    var angle, offset;
+    offset = lineWidth / 2;
+    angle = Math.PI / 2;
+    this.begin();
+    this.renderLine(pixels, offset, angle);
+    this.renderCap(pixels[pixels.length - 1], true, offset);
+    this.renderLine(pixels.slice().reverse(), offset, angle);
+    this.renderCap(pixels[0], false, offset);
+    this.close();
+    return this.fill(fill);
+  };
+
+  return CurvedRender;
+
+})(Canvas);
+
+module.exports = CurvedRender;
 
 
-},{"./point.coffee":14,"./trig.coffee":17}],16:[function(require,module,exports){
+},{"./canvas.coffee":1}],14:[function(require,module,exports){
 var Stats;
 
 Stats = (function() {
@@ -865,7 +734,7 @@ Stats = (function() {
 module.exports = Stats;
 
 
-},{}],17:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var Trig;
 
 Trig = (function() {
@@ -963,7 +832,7 @@ Trig = (function() {
 module.exports = Trig;
 
 
-},{}],18:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var XAxis;
 
 XAxis = (function() {

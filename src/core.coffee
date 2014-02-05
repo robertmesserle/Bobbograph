@@ -1,7 +1,6 @@
 Options      = require( './options.coffee' )
 Data         = require( './data.coffee' )
-Renderer     = require( './curved-render.coffee' )
-LinearRender = require( './linear-render.coffee' )
+Renderer     = require( './renderer.coffee' )
 XAxis        = require( './x-axis.coffee' )
 
 class Bobbograph
