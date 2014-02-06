@@ -10,10 +10,9 @@ class Bobbograph
     @options = new Options( options, @element )
     @context = @getContext( @element )
     @data    = new Data( data, @options )
+    @xAxis = new XAxis( @options.xAxis, @element, @options )
 
     new Renderer( @data.pixels, @context, @options, @options.line.smooth )
-
-    @xAxis = new XAxis( @options.xAxis, @element, @options )
 
   getElement: ( id ) ->
     if typeof id is 'string' then document.getElementById( id ) or document.querySelector( id )

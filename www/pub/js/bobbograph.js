@@ -80,8 +80,8 @@ Bobbograph = (function() {
     this.options = new Options(options, this.element);
     this.context = this.getContext(this.element);
     this.data = new Data(data, this.options);
-    new Renderer(this.data.pixels, this.context, this.options, this.options.line.smooth);
     this.xAxis = new XAxis(this.options.xAxis, this.element, this.options);
+    new Renderer(this.data.pixels, this.context, this.options, this.options.line.smooth);
   }
 
   Bobbograph.prototype.getElement = function(id) {
