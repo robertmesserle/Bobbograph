@@ -39,17 +39,15 @@ describe( 'Data', ->
     it( 'should scale data to graph dimensions', ->
       options = { usableWidth: 600, usableHeight: 300, data: {} }
       do ->
-        raw = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 } ]
-        stats = { xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2 }
-        points = Data::getPoints( raw, options, stats )
+        data = new Data( [ 1, 2, 3 ], options )
+        points = data.getPoints()
 
         expect( points[ 0 ] ).to.eql( new Point(   0,   0 ) )
         expect( points[ 1 ] ).to.eql( new Point( 300, 150 ) )
         expect( points[ 2 ] ).to.eql( new Point( 600, 300 ) )
       do ->
-        raw = [ { x: 0, y: 1 }, { x: 1, y: 3 }, { x: 2, y: 2 } ]
-        stats = { xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2 }
-        points = Data::getPoints( raw, options, stats )
+        data = new Data( [ 1, 3, 2 ], options )
+        points = data.getPoints()
 
         expect( points[ 0 ] ).to.eql( new Point(   0,   0 ) )
         expect( points[ 1 ] ).to.eql( new Point( 300, 300 ) )
@@ -57,18 +55,17 @@ describe( 'Data', ->
     )
     it( 'should remove non-vertex points when vertex-mode is enabled', ->
       options = { usableWidth: 600, usableHeight: 300, data: { vertex: true } }
-      raw = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 2 }, { x: 5, y: 1 } ]
-      stats = { xmin: 0, xmax: 5, dx: 5, ymin: 1, ymax: 3, dy: 2 }
-      points = Data::getPoints( raw, options, stats )
+      data = new Data( [ 1, 2, 3, 2, 1 ], options )
+      points = data.getPoints()
+      
       expect( points ).to.be.an( 'array' )
       expect( points.length ).to.be( 3 )
     )
   )
   describe( '#getPixels()', ->
     options = { usableWidth: 600, usableHeight: 300, data: {} }
-    raw     = [ { x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 } ]
-    stats   = { xmin: 0, xmax: 2, dx: 2, ymin: 1, ymax: 3, dy: 2 }
-    points  = Data::getPoints( raw, options, stats )
+    data    = new Data( [ 1, 2, 3 ], options )
+    points  = data.getPoints()
 
     describe( 'curve = false', ->
       pixels = Data::getPixels( points, options.width, false )

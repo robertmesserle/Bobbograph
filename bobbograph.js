@@ -14,9 +14,11 @@ Axis = (function() {
     this.wrapper.appendChild(this.renderLines());
   }
 
-  Axis.prototype.getLineData = function() {
-    var i, increment, _i, _ref, _ref1, _results;
-    increment = this.axis.increment;
+  Axis.prototype.getLineData = function(increment) {
+    var i, _i, _ref, _ref1, _results;
+    if (increment == null) {
+      increment = this.axis.increment;
+    }
     _results = [];
     for (i = _i = _ref = this.getFirstLine(this.min, increment), _ref1 = this.max; increment > 0 ? _i <= _ref1 : _i >= _ref1; i = _i += increment) {
       _results.push({
@@ -31,7 +33,7 @@ Axis = (function() {
     var axis, elem, line, text, _i, _len, _ref;
     axis = document.createElement('ul');
     axis.className = "" + this.clss + " bbg-axis";
-    _ref = this.lines.reverse();
+    _ref = this.lines.slice().reverse();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       line = _ref[_i];
       elem = document.createElement('li');
@@ -46,6 +48,12 @@ Axis = (function() {
 
   Axis.prototype.getFirstLine = function(min, increment) {
     var rem;
+    if (min == null) {
+      min = this.min;
+    }
+    if (increment == null) {
+      increment = this.axis.increment;
+    }
     if (min > 0) {
       rem = min % increment;
       return increment - rem + min;
@@ -133,7 +141,7 @@ module.exports = Canvas;
 
 
 },{}],3:[function(require,module,exports){
-var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Bobbograph, Data, Options, Renderer, XAxis, YAxis;
+var Bobbograph, Data, Options, Renderer, XAxis, YAxis;
 
 Options = require('./options.coffee');
 
@@ -151,19 +159,21 @@ Bobbograph = (function() {
   function Bobbograph(id, data, options) {
     this.element = this.getElement(id);
     this.options = new Options(options, this.element);
-    this.container = this.getContainer(this.element, this.options);
-    this.context = this.getContext(this.container);
+    this.container = this.getContainer();
+    this.element.appendChild(this.container);
+    this.canvas = this.getCanvas();
+    this.container.appendChild(this.canvas);
+    this.context = this.getContext();
     this.data = new Data(data, this.options);
     this.xAxis = new XAxis(this.options.xAxis, this.container, this.options, this.data);
     this.yAxis = new YAxis(this.options.yAxis, this.container, this.options, this.data);
     new Renderer(this.data.pixels, this.context, this.options, this.options.line.smooth);
   }
 
-  Bobbograph.prototype.getContainer = function(element, options) {
+  Bobbograph.prototype.getContainer = function() {
     var container;
     container = document.createElement('div');
     container.className = this.clss;
-    element.appendChild(container);
     return container;
   };
 
@@ -175,13 +185,17 @@ Bobbograph = (function() {
     }
   };
 
-  Bobbograph.prototype.getContext = function(element) {
-    var canvas, context;
+  Bobbograph.prototype.getCanvas = function() {
+    var canvas;
     canvas = document.createElement('canvas');
     canvas.setAttribute('height', this.options.height);
     canvas.setAttribute('width', this.options.width);
-    element.appendChild(canvas);
-    return context = canvas.getContext('2d');
+    return canvas;
+  };
+
+  Bobbograph.prototype.getContext = function() {
+    var context;
+    return context = this.canvas.getContext('2d');
   };
 
   return Bobbograph;
@@ -192,8 +206,8 @@ if (typeof window !== "undefined" && window !== null) {
   window.Bobbograph = Bobbograph;
 }
 
-if (typeof global !== "undefined" && global !== null) {
-  global.Bobbograph = Bobbograph;
+if (typeof module !== "undefined" && module !== null) {
+  module.exports = Bobbograph;
 }
 
 
@@ -556,24 +570,16 @@ FillOptions = (function() {
     return _results;
   };
 
-  FillOptions.prototype.get = function(context, type, fill, options) {
-    var gradient, stop, _i, _len;
-    if (type == null) {
-      type = this.type;
-    }
-    if (fill == null) {
-      fill = this.fill;
-    }
-    if (options == null) {
-      options = this.options;
-    }
-    switch (type) {
+  FillOptions.prototype.get = function(context) {
+    var gradient, stop, _i, _len, _ref;
+    switch (this.type) {
       case 'color':
-        return fill;
+        return this.fill;
       case 'gradient':
-        gradient = context.createLinearGradient(0, 0, options.width, 0);
-        for (_i = 0, _len = fill.length; _i < _len; _i++) {
-          stop = fill[_i];
+        gradient = context.createLinearGradient(0, 0, this.options.width, 0);
+        _ref = this.fill;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          stop = _ref[_i];
           gradient.addColorStop(stop.position, stop.color);
         }
         return gradient;

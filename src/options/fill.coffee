@@ -16,12 +16,12 @@ class FillOptions
       if typeof stop is 'string' then { color: stop, position: index / count }
       else stop
 
-  get: ( context, type = @type, fill = @fill, options = @options ) ->
-    switch type
-      when 'color' then fill
+  get: ( context ) ->
+    switch @type
+      when 'color' then @fill
       when 'gradient'
-        gradient = context.createLinearGradient( 0, 0, options.width, 0 )
-        for stop in fill then gradient.addColorStop( stop.position, stop.color )
+        gradient = context.createLinearGradient( 0, 0, @options.width, 0 )
+        for stop in @fill then gradient.addColorStop( stop.position, stop.color )
         gradient
 
 module.exports = FillOptions

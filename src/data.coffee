@@ -7,18 +7,18 @@ class Data
   constructor: ( data, @options ) ->
     @data   = @formatData( data )
     @stats  = new Stats( @data )
-    @points = @getPoints( @data, @options, @stats )
-    @pixels = @getPixels( @points, @options.usableWidth, @options.line.smooth )
+    @points = @getPoints()
+    @pixels = @getPixels( @points, @options.usableWidth, @options.line?.smooth )
 
   scalePoint: ( val, min, delta, scale ) ->
     scoped    = val - min
     percent   = scoped / delta
     scaled    = percent * scale
 
-  getPoints: ( data, options, stats ) ->
-    { usableWidth, usableHeight } = options
-    { xmin, ymin, dx, dy }        = stats
-    for point, index in data when @isVertex( data, index, options.data.vertex )
+  getPoints: ->
+    { usableWidth, usableHeight } = @options
+    { xmin, ymin, dx, dy }        = @stats
+    for point, index in @data when @isVertex( @data, index, @options.data.vertex )
       x = @scalePoint( point.x, xmin, dx, usableWidth )
       y = @scalePoint( point.y, ymin, dy, usableHeight )
       new Point( x, y )
