@@ -391,8 +391,10 @@ Options = (function() {
     if (options == null) {
       options = {};
     }
-    this.height = this.getStyle(element, 'height') || this.height;
-    this.width = this.getStyle(element, 'width') || this.width;
+    if (element) {
+      this.height = this.getSize('height', element);
+      this.width = this.getSize('width', element);
+    }
     for (key in options) {
       value = options[key];
       this[key] = value;
@@ -409,30 +411,29 @@ Options = (function() {
     this.data = new DataOptions(this.data, this);
   }
 
-  Options.prototype.getPadding = function(styles, direction) {
-    return parseInt(styles.getPropertyValue("padding-" + direction), 10);
+  Options.prototype.adjustSize = function(elem, name, extra, styles) {
+    var cssExpand, i, index, side, value, _i;
+    cssExpand = ['top', 'right', 'bottom', 'left'];
+    index = extra === 'border' ? 4 : name === 'width' ? 1 : 0;
+    value = 0;
+    for (i = _i = index; _i <= 3; i = _i += 2) {
+      side = cssExpand[i];
+      if (extra === 'content') {
+        value -= parseInt(styles.getPropertyValue("padding-" + side), 10) || 0;
+      }
+      value -= parseInt(styles.getPropertyValue("border-" + side + "-width"), 10) || 0;
+    }
+    console.log('adjustedValue', value);
+    return value;
   };
 
-  Options.prototype.getStyle = function(element, style) {
-    var size, styles;
-    if (!(styles = typeof getComputedStyle === "function" ? getComputedStyle(element) : void 0)) {
-      return;
-    }
-    size = parseInt(styles.getPropertyValue(style), 10);
-    switch (styles.getPropertyValue('box-sizing')) {
-      case 'border-box':
-        switch (style) {
-          case 'height':
-            return size - this.getPadding(styles, 'top') - this.getPadding(styles, 'bottom');
-          case 'width':
-            return size - this.getPadding(styles, 'left') - this.getPadding(styles, 'right');
-          default:
-            return size;
-        }
-        break;
-      default:
-        return size;
-    }
+  Options.prototype.getSize = function(name, elem) {
+    var extra, str, styles, value;
+    str = name.charAt(0).toUpperCase() + name.substr(1);
+    value = elem["offset" + str];
+    styles = getComputedStyle(elem);
+    extra = elem.style.boxSizing === 'border-box' ? 'border' : 'content';
+    return value + this.adjustSize(elem, name, extra, styles);
   };
 
   return Options;
