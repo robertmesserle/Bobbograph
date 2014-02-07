@@ -8,10 +8,7 @@ class Axis
   getLineData: ->
     increment = @axis.increment
     for i in [ @getFirstLine( @min, increment ) .. @max ] by increment
-      {
-        number: i
-        pos:    @scalePoint( i ) + 'px'
-      }
+      { number: i, pos: @scalePoint( i ) + 'px' }
 
   renderLines: ->
     axis = document.createElement( 'ul' )
