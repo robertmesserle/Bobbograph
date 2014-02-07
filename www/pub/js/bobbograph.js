@@ -48,16 +48,16 @@ Axis = (function() {
     var rem;
     if (min > 0) {
       rem = min % increment;
-      if (rem) {
-        return increment - rem + min;
-      } else {
-        return min;
-      }
+      return increment - rem + min;
     } else if (min < 0) {
       rem = min % increment;
-      return min - rem;
+      if (rem) {
+        return min - rem;
+      } else {
+        return min + increment - rem;
+      }
     } else {
-      return min;
+      return increment;
     }
   };
 

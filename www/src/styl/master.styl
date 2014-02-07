@@ -6,6 +6,9 @@ body
 
 .bbg-container
   position relative
+  canvas
+    z-index 1
+    position relative
   .bbg-axis
     position absolute
     top 0
@@ -19,9 +22,10 @@ body
       position absolute
       div
         position absolute
+        color #999
   .bbg-y-axis
     li
-      border-bottom 1px solid red
+      border-bottom 1px solid #ccc
       left 0
       right 0
       div
@@ -29,9 +33,10 @@ body
         right 100%
         padding-right 10px
         text-align right
+        line-height 10px
   .bbg-x-axis
     li
-      border-left 1px solid red
+      border-left 1px solid #ccc
       bottom 0
       top 0
       div
@@ -39,3 +44,4 @@ body
         top 100%
         text-align center
         width 100px
+        padding-top 10px

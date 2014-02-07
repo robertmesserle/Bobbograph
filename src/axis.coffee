@@ -28,10 +28,10 @@ class Axis
   getFirstLine: ( min, increment ) ->
     if min > 0
       rem = min % increment
-      if rem then increment - rem + min else min
+      increment - rem + min
     else if min < 0
       rem = min % increment
-      min - rem
-    else min
+      if rem then min - rem else min + increment - rem
+    else increment
 
 module.exports = Axis
