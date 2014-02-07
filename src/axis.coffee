@@ -1,11 +1,18 @@
 class Axis
 
-  getFirstLine: ( min, inc ) ->
+  constructor: ( @axis, @wrapper, @options, @data ) ->
+    [ @min, @max ] = @getLimits( @data.stats )
+    @lines = @renderLines( @min, @max, @axis.increment )
+
+  renderLines: ( min, max, increment ) ->
+    for i in [ @getFirstLine( min, increment ) .. max ] then i
+
+  getFirstLine: ( min, increment ) ->
     if min > 0
-      rem = min % inc
-      if rem then inc - rem + min else min
+      rem = min % increment
+      if rem then increment - rem + min else min
     else if min < 0
-      rem = min % inc
+      rem = min % increment
       min - rem
     else min
 

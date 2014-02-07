@@ -2,6 +2,7 @@ Options      = require( './options.coffee' )
 Data         = require( './data.coffee' )
 Renderer     = require( './renderer.coffee' )
 XAxis        = require( './x-axis.coffee' )
+YAxis        = require( './y-axis.coffee' )
 
 class Bobbograph
 
@@ -10,7 +11,8 @@ class Bobbograph
     @options = new Options( options, @element )
     @context = @getContext( @element )
     @data    = new Data( data, @options )
-    @xAxis   = new XAxis( @options.xAxis, @element, @options )
+    @xAxis   = new XAxis( @options.xAxis, @element, @options, @data )
+    @yAxis   = new YAxis( @options.yAxis, @element, @options, @data )
 
     new Renderer( @data.pixels, @context, @options, @options.line.smooth )
 

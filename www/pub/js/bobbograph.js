@@ -1,5 +1,52 @@
 /*! Bobbograph v3.0 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
 /*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var Axis;
+
+Axis = (function() {
+  function Axis(axis, wrapper, options, data) {
+    var _ref;
+    this.axis = axis;
+    this.wrapper = wrapper;
+    this.options = options;
+    this.data = data;
+    _ref = this.getLimits(this.data.stats), this.min = _ref[0], this.max = _ref[1];
+    this.lines = this.renderLines(this.min, this.max, this.axis.increment);
+  }
+
+  Axis.prototype.renderLines = function(min, max, increment) {
+    var i, _i, _ref, _results;
+    _results = [];
+    for (i = _i = _ref = this.getFirstLine(min, increment); _ref <= max ? _i <= max : _i >= max; i = _ref <= max ? ++_i : --_i) {
+      _results.push(i);
+    }
+    return _results;
+  };
+
+  Axis.prototype.getFirstLine = function(min, increment) {
+    var rem;
+    if (min > 0) {
+      rem = min % increment;
+      if (rem) {
+        return increment - rem + min;
+      } else {
+        return min;
+      }
+    } else if (min < 0) {
+      rem = min % increment;
+      return min - rem;
+    } else {
+      return min;
+    }
+  };
+
+  return Axis;
+
+})();
+
+module.exports = Axis;
+
+
+},{}],2:[function(require,module,exports){
 var Canvas;
 
 Canvas = (function() {
@@ -63,8 +110,8 @@ Canvas = (function() {
 module.exports = Canvas;
 
 
-},{}],2:[function(require,module,exports){
-var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Bobbograph, Data, Options, Renderer, XAxis;
+},{}],3:[function(require,module,exports){
+var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};var Bobbograph, Data, Options, Renderer, XAxis, YAxis;
 
 Options = require('./options.coffee');
 
@@ -74,13 +121,16 @@ Renderer = require('./renderer.coffee');
 
 XAxis = require('./x-axis.coffee');
 
+YAxis = require('./y-axis.coffee');
+
 Bobbograph = (function() {
   function Bobbograph(id, data, options) {
     this.element = this.getElement(id);
     this.options = new Options(options, this.element);
     this.context = this.getContext(this.element);
     this.data = new Data(data, this.options);
-    this.xAxis = new XAxis(this.options.xAxis, this.element, this.options);
+    this.xAxis = new XAxis(this.options.xAxis, this.element, this.options, this.data);
+    this.yAxis = new YAxis(this.options.yAxis, this.element, this.options, this.data);
     new Renderer(this.data.pixels, this.context, this.options, this.options.line.smooth);
   }
 
@@ -114,7 +164,7 @@ if (typeof global !== "undefined" && global !== null) {
 }
 
 
-},{"./data.coffee":3,"./options.coffee":5,"./renderer.coffee":13,"./x-axis.coffee":16}],3:[function(require,module,exports){
+},{"./data.coffee":4,"./options.coffee":6,"./renderer.coffee":14,"./x-axis.coffee":17,"./y-axis.coffee":18}],4:[function(require,module,exports){
 var Data, Easing, Point, Stats;
 
 Stats = require('./stats.coffee');
@@ -244,7 +294,7 @@ Data = (function() {
 module.exports = Data;
 
 
-},{"./easing.coffee":4,"./point.coffee":12,"./stats.coffee":14}],4:[function(require,module,exports){
+},{"./easing.coffee":5,"./point.coffee":13,"./stats.coffee":15}],5:[function(require,module,exports){
 var Easing;
 
 Easing = (function() {
@@ -269,7 +319,7 @@ Easing = (function() {
 module.exports = Easing;
 
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var AxisLineOptions, BevelOptions, DataOptions, LineOptions, Options, PaddingOptions;
 
 LineOptions = require('./options/line.coffee');
@@ -343,7 +393,7 @@ Options = (function() {
 module.exports = Options;
 
 
-},{"./options/axis-line.coffee":6,"./options/bevel.coffee":7,"./options/data.coffee":8,"./options/line.coffee":10,"./options/padding.coffee":11}],6:[function(require,module,exports){
+},{"./options/axis-line.coffee":7,"./options/bevel.coffee":8,"./options/data.coffee":9,"./options/line.coffee":11,"./options/padding.coffee":12}],7:[function(require,module,exports){
 var AxisLineOptions;
 
 AxisLineOptions = (function() {
@@ -367,7 +417,7 @@ AxisLineOptions = (function() {
 module.exports = AxisLineOptions;
 
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var BevelOptions;
 
 BevelOptions = (function() {
@@ -401,7 +451,7 @@ BevelOptions = (function() {
 module.exports = BevelOptions;
 
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var DataOptions;
 
 DataOptions = (function() {
@@ -430,7 +480,7 @@ DataOptions = (function() {
 module.exports = DataOptions;
 
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var FillOptions;
 
 FillOptions = (function() {
@@ -504,7 +554,7 @@ FillOptions = (function() {
 module.exports = FillOptions;
 
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var FillOptions, LineOptions;
 
 FillOptions = require('./fill.coffee');
@@ -536,7 +586,7 @@ LineOptions = (function() {
 module.exports = LineOptions;
 
 
-},{"./fill.coffee":9}],11:[function(require,module,exports){
+},{"./fill.coffee":10}],12:[function(require,module,exports){
 var PaddingOptions;
 
 PaddingOptions = (function() {
@@ -575,7 +625,7 @@ PaddingOptions = (function() {
 module.exports = PaddingOptions;
 
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
@@ -618,7 +668,7 @@ Point = (function() {
 module.exports = Point;
 
 
-},{"./trig.coffee":15}],13:[function(require,module,exports){
+},{"./trig.coffee":16}],14:[function(require,module,exports){
 var Canvas, CurvedRender,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -727,7 +777,7 @@ CurvedRender = (function(_super) {
 module.exports = CurvedRender;
 
 
-},{"./canvas.coffee":1}],14:[function(require,module,exports){
+},{"./canvas.coffee":2}],15:[function(require,module,exports){
 var Stats;
 
 Stats = (function() {
@@ -770,7 +820,7 @@ Stats = (function() {
 module.exports = Stats;
 
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var Trig;
 
 Trig = (function() {
@@ -868,21 +918,54 @@ Trig = (function() {
 module.exports = Trig;
 
 
-},{}],16:[function(require,module,exports){
-var XAxis;
+},{}],17:[function(require,module,exports){
+var Axis, XAxis,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-XAxis = (function() {
-  function XAxis(axis, wrapper, options) {
-    this.axis = axis;
-    this.wrapper = wrapper;
-    this.options = options;
+Axis = require('./axis.coffee');
+
+XAxis = (function(_super) {
+  __extends(XAxis, _super);
+
+  function XAxis() {
+    return XAxis.__super__.constructor.apply(this, arguments);
   }
+
+  XAxis.prototype.getLimits = function(stats) {
+    return [stats.xmin, stats.xmax];
+  };
 
   return XAxis;
 
-})();
+})(Axis);
 
 module.exports = XAxis;
 
 
-},{}]},{},[2])
+},{"./axis.coffee":1}],18:[function(require,module,exports){
+var Axis, YAxis,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Axis = require('./axis.coffee');
+
+YAxis = (function(_super) {
+  __extends(YAxis, _super);
+
+  function YAxis() {
+    return YAxis.__super__.constructor.apply(this, arguments);
+  }
+
+  YAxis.prototype.getLimits = function(stats) {
+    return [stats.ymin, stats.ymax];
+  };
+
+  return YAxis;
+
+})(Axis);
+
+module.exports = YAxis;
+
+
+},{"./axis.coffee":1}]},{},[3])

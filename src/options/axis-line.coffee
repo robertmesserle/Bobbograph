@@ -1,6 +1,6 @@
 class AxisLineOptions
 
-  increment : 0
+  increment: 0
 
   constructor: ( axis = {} ) ->
     for key, value of axis then @[ key ] = value

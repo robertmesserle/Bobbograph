@@ -2,6 +2,6 @@ Axis = require( './axis.coffee' )
 
 class XAxis extends Axis
 
-  constructor: ( @axis, @wrapper, @options ) ->
+  getLimits: ( stats ) -> [ stats.xmin, stats.xmax ]
 
 module.exports = XAxis
