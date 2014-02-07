@@ -10,7 +10,7 @@ class Bobbograph
     @options = new Options( options, @element )
     @context = @getContext( @element )
     @data    = new Data( data, @options )
-    @xAxis = new XAxis( @options.xAxis, @element, @options )
+    @xAxis   = new XAxis( @options.xAxis, @element, @options )
 
     new Renderer( @data.pixels, @context, @options, @options.line.smooth )
 
