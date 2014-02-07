@@ -222,11 +222,12 @@ Easing = require('./easing.coffee');
 
 Data = (function() {
   function Data(data, options) {
+    var _ref;
     this.options = options;
     this.data = this.formatData(data);
     this.stats = new Stats(this.data);
-    this.points = this.getPoints(this.data, this.options, this.stats);
-    this.pixels = this.getPixels(this.points, this.options.usableWidth, this.options.line.smooth);
+    this.points = this.getPoints();
+    this.pixels = this.getPixels(this.points, this.options.usableWidth, (_ref = this.options.line) != null ? _ref.smooth : void 0);
   }
 
   Data.prototype.scalePoint = function(val, min, delta, scale) {
@@ -236,14 +237,15 @@ Data = (function() {
     return scaled = percent * scale;
   };
 
-  Data.prototype.getPoints = function(data, options, stats) {
-    var dx, dy, index, point, usableHeight, usableWidth, x, xmin, y, ymin, _i, _len, _results;
-    usableWidth = options.usableWidth, usableHeight = options.usableHeight;
-    xmin = stats.xmin, ymin = stats.ymin, dx = stats.dx, dy = stats.dy;
+  Data.prototype.getPoints = function() {
+    var dx, dy, index, point, usableHeight, usableWidth, x, xmin, y, ymin, _i, _len, _ref, _ref1, _ref2, _results;
+    _ref = this.options, usableWidth = _ref.usableWidth, usableHeight = _ref.usableHeight;
+    _ref1 = this.stats, xmin = _ref1.xmin, ymin = _ref1.ymin, dx = _ref1.dx, dy = _ref1.dy;
+    _ref2 = this.data;
     _results = [];
-    for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
-      point = data[index];
-      if (!(this.isVertex(data, index, options.data.vertex))) {
+    for (index = _i = 0, _len = _ref2.length; _i < _len; index = ++_i) {
+      point = _ref2[index];
+      if (!(this.isVertex(this.data, index, this.options.data.vertex))) {
         continue;
       }
       x = this.scalePoint(point.x, xmin, dx, usableWidth);
@@ -722,21 +724,21 @@ CurvedRender = (function(_super) {
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    this.render(this.pixels, this.options.line.width, this.options.line.fill, this.options.bevel);
+    this.render(this.options.line.width, this.options.line.fill, this.options.bevel);
     if ((_ref = this.options.bevel) != null ? _ref.smooth : void 0) {
       bevel = this.options.bevel.clone();
       for (lineWidth = _i = _ref1 = this.options.line.width - 2; _i >= 2; lineWidth = _i += -2) {
         bevel.opacity /= 2;
-        this.render(this.pixels, lineWidth, this.options.line.fill, bevel);
+        this.render(lineWidth, this.options.line.fill, bevel);
       }
     }
   }
 
-  CurvedRender.prototype.render = function(pixels, lineWidth, fill, bevel) {
-    this.renderSolid(pixels, lineWidth, fill);
+  CurvedRender.prototype.render = function(lineWidth, fill, bevel) {
+    this.renderSolid(this.pixels, lineWidth, fill);
     if (bevel) {
-      this.renderHighlight(pixels, lineWidth, bevel);
-      return this.renderShadow(pixels, lineWidth, bevel);
+      this.renderHighlight(this.pixels, lineWidth, bevel);
+      return this.renderShadow(this.pixels, lineWidth, bevel);
     }
   };
 

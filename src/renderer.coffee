@@ -3,18 +3,18 @@ Canvas = require( './canvas.coffee' )
 class CurvedRender extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
-    @render( @pixels, @options.line.width, @options.line.fill, @options.bevel )
+    @render( @options.line.width, @options.line.fill, @options.bevel )
     if @options.bevel?.smooth
       bevel = @options.bevel.clone()
       for lineWidth in [ @options.line.width - 2 .. 2 ] by -2
         bevel.opacity /= 2
-        @render( @pixels, lineWidth, @options.line.fill, bevel )
+        @render( lineWidth, @options.line.fill, bevel )
 
-  render: ( pixels, lineWidth, fill, bevel ) ->
-    @renderSolid( pixels, lineWidth, fill )
+  render: ( lineWidth, fill, bevel ) ->
+    @renderSolid( @pixels, lineWidth, fill )
     if bevel
-      @renderHighlight( pixels, lineWidth, bevel )
-      @renderShadow(    pixels, lineWidth, bevel )
+      @renderHighlight( @pixels, lineWidth, bevel )
+      @renderShadow(    @pixels, lineWidth, bevel )
 
   renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels
