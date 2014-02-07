@@ -2,10 +2,28 @@ class Axis
 
   constructor: ( @axis, @wrapper, @options, @data ) ->
     [ @min, @max ] = @getLimits( @data.stats )
-    @lines = @renderLines( @min, @max, @axis.increment )
+    @lines = @getLineData()
+    @wrapper.appendChild( @renderLines() )
 
-  renderLines: ( min, max, increment ) ->
-    for i in [ @getFirstLine( min, increment ) .. max ] then i
+  getLineData: ->
+    increment = @axis.increment
+    for i in [ @getFirstLine( @min, increment ) .. @max ] by increment
+      {
+        number: i
+        pos:    @scalePoint( i ) + 'px'
+      }
+
+  renderLines: ->
+    axis = document.createElement( 'ul' )
+    axis.className = "#{ @clss } bbg-axis"
+    for line in @lines.reverse()
+      elem = document.createElement( 'li' )
+      elem.style[ @prop ] = line.pos
+      text = document.createElement( 'div' )
+      text.innerText = line.number
+      elem.appendChild( text )
+      axis.appendChild( elem )
+    axis
 
   getFirstLine: ( min, increment ) ->
     if min > 0

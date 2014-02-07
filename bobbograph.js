@@ -10,16 +10,38 @@ Axis = (function() {
     this.options = options;
     this.data = data;
     _ref = this.getLimits(this.data.stats), this.min = _ref[0], this.max = _ref[1];
-    this.lines = this.renderLines(this.min, this.max, this.axis.increment);
+    this.lines = this.getLineData();
+    this.wrapper.appendChild(this.renderLines());
   }
 
-  Axis.prototype.renderLines = function(min, max, increment) {
-    var i, _i, _ref, _results;
+  Axis.prototype.getLineData = function() {
+    var i, increment, _i, _ref, _ref1, _results;
+    increment = this.axis.increment;
     _results = [];
-    for (i = _i = _ref = this.getFirstLine(min, increment); _ref <= max ? _i <= max : _i >= max; i = _ref <= max ? ++_i : --_i) {
-      _results.push(i);
+    for (i = _i = _ref = this.getFirstLine(this.min, increment), _ref1 = this.max; increment > 0 ? _i <= _ref1 : _i >= _ref1; i = _i += increment) {
+      _results.push({
+        number: i,
+        pos: this.scalePoint(i) + 'px'
+      });
     }
     return _results;
+  };
+
+  Axis.prototype.renderLines = function() {
+    var axis, elem, line, text, _i, _len, _ref;
+    axis = document.createElement('ul');
+    axis.className = "" + this.clss + " bbg-axis";
+    _ref = this.lines.reverse();
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      line = _ref[_i];
+      elem = document.createElement('li');
+      elem.style[this.prop] = line.pos;
+      text = document.createElement('div');
+      text.innerText = line.number;
+      elem.appendChild(text);
+      axis.appendChild(elem);
+    }
+    return axis;
   };
 
   Axis.prototype.getFirstLine = function(min, increment) {
@@ -124,15 +146,26 @@ XAxis = require('./x-axis.coffee');
 YAxis = require('./y-axis.coffee');
 
 Bobbograph = (function() {
+  Bobbograph.prototype.clss = 'bbg-container';
+
   function Bobbograph(id, data, options) {
     this.element = this.getElement(id);
     this.options = new Options(options, this.element);
-    this.context = this.getContext(this.element);
+    this.container = this.getContainer(this.element, this.options);
+    this.context = this.getContext(this.container);
     this.data = new Data(data, this.options);
-    this.xAxis = new XAxis(this.options.xAxis, this.element, this.options, this.data);
-    this.yAxis = new YAxis(this.options.yAxis, this.element, this.options, this.data);
+    this.xAxis = new XAxis(this.options.xAxis, this.container, this.options, this.data);
+    this.yAxis = new YAxis(this.options.yAxis, this.container, this.options, this.data);
     new Renderer(this.data.pixels, this.context, this.options, this.options.line.smooth);
   }
+
+  Bobbograph.prototype.getContainer = function(element, options) {
+    var container;
+    container = document.createElement('div');
+    container.className = this.clss;
+    element.appendChild(container);
+    return container;
+  };
 
   Bobbograph.prototype.getElement = function(id) {
     if (typeof id === 'string') {
@@ -932,8 +965,16 @@ XAxis = (function(_super) {
     return XAxis.__super__.constructor.apply(this, arguments);
   }
 
+  XAxis.prototype.clss = 'bbg-x-axis';
+
+  XAxis.prototype.prop = 'left';
+
   XAxis.prototype.getLimits = function(stats) {
     return [stats.xmin, stats.xmax];
+  };
+
+  XAxis.prototype.scalePoint = function(value) {
+    return this.data.scalePoint(value, this.min, this.max - this.min, this.options.usableWidth);
   };
 
   return XAxis;
@@ -957,8 +998,16 @@ YAxis = (function(_super) {
     return YAxis.__super__.constructor.apply(this, arguments);
   }
 
+  YAxis.prototype.clss = 'bbg-y-axis';
+
+  YAxis.prototype.prop = 'bottom';
+
   YAxis.prototype.getLimits = function(stats) {
     return [stats.ymin, stats.ymax];
+  };
+
+  YAxis.prototype.scalePoint = function(value) {
+    return this.data.scalePoint(value, this.min, this.max - this.min, this.options.usableHeight);
   };
 
   return YAxis;

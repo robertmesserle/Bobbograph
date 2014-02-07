@@ -6,15 +6,24 @@ YAxis        = require( './y-axis.coffee' )
 
 class Bobbograph
 
+  clss: 'bbg-container'
+
   constructor: ( id, data, options ) ->
-    @element = @getElement( id )
-    @options = new Options( options, @element )
-    @context = @getContext( @element )
-    @data    = new Data( data, @options )
-    @xAxis   = new XAxis( @options.xAxis, @element, @options, @data )
-    @yAxis   = new YAxis( @options.yAxis, @element, @options, @data )
+    @element   = @getElement( id )
+    @options   = new Options( options, @element )
+    @container = @getContainer( @element, @options )
+    @context   = @getContext( @container )
+    @data      = new Data( data, @options )
+    @xAxis     = new XAxis( @options.xAxis, @container, @options, @data )
+    @yAxis     = new YAxis( @options.yAxis, @container, @options, @data )
 
     new Renderer( @data.pixels, @context, @options, @options.line.smooth )
+
+  getContainer: ( element, options ) ->
+    container = document.createElement( 'div' )
+    container.className = @clss
+    element.appendChild( container )
+    container
 
   getElement: ( id ) ->
     if typeof id is 'string' then document.getElementById( id ) or document.querySelector( id )
