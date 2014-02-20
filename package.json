@@ -9,7 +9,7 @@
     "coffeeify": "~0.6.0",
     "coffee-script": "~1.7.1",
     "expect.js": "robertmesserle/expect.js",
-    "gulp": "~3.5.0",
+    "gulp": "~3.5.2",
     "gulp-browserify": "~0.4.0",
     "gulp-coffee": "~1.4.0",
     "gulp-header": "~1.0.2",
