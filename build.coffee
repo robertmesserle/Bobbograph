@@ -1,9 +1,10 @@
+{ exec }   = require( 'child_process' )
 gulp       = require( 'gulp' )
+gutil      = require( 'gulp-util' )
 header     = require( 'gulp-header' )
 uglify     = require( 'gulp-uglify' )
 browserify = require( 'gulp-browserify' )
 rename     = require( 'gulp-rename' )
-mocha      = require( 'gulp-mocha' )
 coffee     = require( 'gulp-coffee' )
 jade       = require( 'gulp-jade' )
 stylus     = require( 'gulp-stylus' )
@@ -55,9 +56,9 @@ gulp.task( 'lint', ->
 )
 
 gulp.task( 'test', ->
-  gulp.src( paths.tests, { read: false } )
-    .pipe( coffee( { bare: true } ) )
-    .pipe( mocha() )
+  exec( './node_modules/mocha/bin/mocha --colors --recursive --compilers coffee:coffee-script/register --reporter spec', ( e, out, err ) ->
+    gutil.log( out, err )
+  )
 )
 
 gulp.task( 'connect', connect.server( {
@@ -73,6 +74,8 @@ gulp.task( 'default', [ 'coffee', 'jade', 'stylus' ] )
 
 gulp.task( 'watch', [ 'coffee', 'connect' ], ->
   gulp.watch( paths.tests, [ 'test' ] )
+    .on( 'error', console.log.bind( console ) )
+    .on( 'err',   console.log.bind( console ) )
   gulp.watch( paths.coffee, [ 'coffee' ] )
   gulp.watch( 'www/src/index.jade', [ 'jade' ] )
   gulp.watch( 'www/src/styl/**/*.styl', [ 'stylus' ] )
