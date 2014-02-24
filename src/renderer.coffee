@@ -1,20 +1,38 @@
 Canvas = require( './canvas.coffee' )
 
-class CurvedRender extends Canvas
+class Render extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
-    @render( @options.line.width, @options.line.fill, @options.bevel )
+    @render( @options.line.width, @options.bevel )
     if @options.bevel?.smooth
       bevel = @options.bevel.clone()
       for lineWidth in [ @options.line.width - 2 .. 2 ] by -2
         bevel.opacity /= 2
-        @render( lineWidth, @options.line.fill, bevel )
+        @render( lineWidth, bevel )
 
-  render: ( lineWidth, fill, bevel ) ->
-    @renderSolid( @pixels, lineWidth, fill )
+  render: ( lineWidth, bevel ) ->
+    @renderFill() if @options.fill
+    @renderSolid( lineWidth, @options.line.fill )
     if bevel
-      @renderHighlight( @pixels, lineWidth, bevel )
-      @renderShadow(    @pixels, lineWidth, bevel )
+      @renderHighlight( lineWidth, bevel )
+      @renderShadow(    lineWidth, bevel )
+
+  renderFill: ->
+    offset = @options.line.width / 2
+    bottom = -offset
+    first  = @pixels[ 0 ]
+    last   = @pixels[ @pixels.length - 1 ]
+    right  = last.x + offset
+    left   = first.x - offset
+
+    for pixel, index in @pixels then @line( pixel )
+    
+    @line( { x: right, y: last.y  } )
+    @line( { x: right, y: bottom  } )
+    @line( { x: left,  y: bottom  } )
+    @line( { x: left,  y: first.y } )
+    @close()
+    @fill( @options.fill )
 
   renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels
@@ -30,43 +48,43 @@ class CurvedRender extends Canvas
     else
       @arc( point, offset, -angle, angle )
 
-  renderShadow: ( pixels, lineWidth, bevel) ->
+  renderShadow: ( lineWidth, bevel) ->
     offset = lineWidth / 2
     angle = Math.PI / 2
     @begin()
 
-    for pixel in pixels then @line( pixel )
-    @arc( pixels[ pixels.length - 1 ], offset, 0, -angle )
-    @renderLine( pixels.slice().reverse(), offset, angle )
-    @arc( pixels[ 0 ], offset, -angle, Math.PI )
+    for pixel in @pixels then @line( pixel )
+    @arc( @pixels[ @pixels.length - 1 ], offset, 0, -angle )
+    @renderLine( @pixels.slice().reverse(), offset, angle )
+    @arc( @pixels[ 0 ], offset, -angle, Math.PI )
 
     @close()
     @fill( "rgba( 0, 0, 0, #{bevel.shadow * bevel.opacity} )" )
 
-  renderHighlight: ( pixels, lineWidth, bevel ) ->
+  renderHighlight: ( lineWidth, bevel ) ->
     offset = lineWidth / 2
     angle = Math.PI / 2
     @begin()
 
-    @renderLine( pixels, offset, angle )
-    @arc( pixels[ pixels.length - 1 ], offset, angle, 0 )
-    for pixel in pixels.slice().reverse() then @line( pixel )
-    @arc( pixels[ 0 ], offset, Math.PI, angle )
+    @renderLine( @pixels, offset, angle )
+    @arc( @pixels[ @pixels.length - 1 ], offset, angle, 0 )
+    for pixel in @pixels.slice().reverse() then @line( pixel )
+    @arc( @pixels[ 0 ], offset, Math.PI, angle )
 
     @close()
     @fill( "rgba( 255, 255, 255, #{bevel.shine * bevel.opacity} )" )
 
-  renderSolid: ( pixels, lineWidth, fill ) ->
+  renderSolid: ( lineWidth, fill ) ->
     offset = lineWidth / 2
     angle  = Math.PI / 2
     @begin()
 
-    @renderLine( pixels, offset, angle )
-    @renderCap(  pixels[ pixels.length - 1 ], true, offset )
-    @renderLine( pixels.slice().reverse(), offset, angle )
-    @renderCap(  pixels[ 0 ], false, offset )
+    @renderLine( @pixels, offset, angle )
+    @renderCap(  @pixels[ @pixels.length - 1 ], true, offset )
+    @renderLine( @pixels.slice().reverse(), offset, angle )
+    @renderCap(  @pixels[ 0 ], false, offset )
     
     @close()
     @fill( fill )
 
-module.exports = CurvedRender
+module.exports = Render

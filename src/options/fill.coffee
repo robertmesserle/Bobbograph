@@ -1,14 +1,23 @@
 class FillOptions
 
-  constructor: ( fill, @options ) ->
-    @type = @getType( fill )
-    @fill = switch @type
-      when 'gradient' then @parseGradient( fill )
-      when 'color'    then fill
+  vertical: false
+  gradient: false
+  color:    false
 
-  getType: ( fill ) ->
-    if fill instanceof Array then 'gradient'
-    else 'color'
+  constructor: ( fill, @options ) ->
+    @color    = @getColor( fill )
+    @gradient = @getGradient( fill )
+    @vertical = fill.vertical or @vertical
+
+  getColor: ( fill ) ->
+    switch typeof fill
+      when 'string' then fill
+      else fill.color or @gradient
+
+  getGradient: ( fill ) ->
+    if fill instanceof Array then @parseGradient( fill )
+    else if fill.gradient then @parseGradient( fill.gradient )
+    else @gradient
 
   parseGradient: ( fill ) ->
     count = fill.length - 1
@@ -17,11 +26,11 @@ class FillOptions
       else stop
 
   get: ( context ) ->
-    switch @type
-      when 'color' then @fill
-      when 'gradient'
-        gradient = context.createLinearGradient( 0, 0, @options.width, 0 )
-        for stop in @fill then gradient.addColorStop( stop.position, stop.color )
-        gradient
+    return @color if @color
+    gradient =
+      if @vertical then context.createLinearGradient( 0, 0, 0, @options.height )
+      else context.createLinearGradient( 0, 0, @options.width, 0 )
+    for stop in @gradient then gradient.addColorStop( stop.position, stop.color )
+    gradient
 
 module.exports = FillOptions

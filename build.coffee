@@ -56,7 +56,7 @@ gulp.task( 'lint', ->
 )
 
 gulp.task( 'test', ->
-  exec( './node_modules/mocha/bin/mocha --colors --recursive --compilers coffee:coffee-script/register --reporter spec', ( e, out, err ) ->
+  exec( './node_modules/mocha/bin/mocha --colors --recursive --compilers coffee:coffee-script/register', ( e, out, err ) ->
     gutil.log( out, err )
   )
 )

@@ -369,9 +369,11 @@ module.exports = Easing;
 
 
 },{}],6:[function(require,module,exports){
-var AxisLineOptions, BevelOptions, DataOptions, LineOptions, Options, PaddingOptions;
+var AxisLineOptions, BevelOptions, DataOptions, FillOptions, LineOptions, Options, PaddingOptions;
 
 LineOptions = require('./options/line.coffee');
+
+FillOptions = require('./options/fill.coffee');
 
 PaddingOptions = require('./options/padding.coffee');
 
@@ -400,6 +402,9 @@ Options = (function() {
       this[key] = value;
     }
     this.line = new LineOptions(this.line, this);
+    if (this.fill != null) {
+      this.fill = new FillOptions(this.fill, this);
+    }
     this.padding = new PaddingOptions(this.padding, this.line.width);
     this.xAxis = new AxisLineOptions(this.xAxis);
     this.yAxis = new AxisLineOptions(this.yAxis);
@@ -443,7 +448,7 @@ Options = (function() {
 module.exports = Options;
 
 
-},{"./options/axis-line.coffee":7,"./options/bevel.coffee":8,"./options/data.coffee":9,"./options/line.coffee":11,"./options/padding.coffee":12}],7:[function(require,module,exports){
+},{"./options/axis-line.coffee":7,"./options/bevel.coffee":8,"./options/data.coffee":9,"./options/fill.coffee":10,"./options/line.coffee":11,"./options/padding.coffee":12}],7:[function(require,module,exports){
 var AxisLineOptions;
 
 AxisLineOptions = (function() {
@@ -534,24 +539,35 @@ module.exports = DataOptions;
 var FillOptions;
 
 FillOptions = (function() {
+  FillOptions.prototype.vertical = false;
+
+  FillOptions.prototype.gradient = false;
+
+  FillOptions.prototype.color = false;
+
   function FillOptions(fill, options) {
     this.options = options;
-    this.type = this.getType(fill);
-    this.fill = (function() {
-      switch (this.type) {
-        case 'gradient':
-          return this.parseGradient(fill);
-        case 'color':
-          return fill;
-      }
-    }).call(this);
+    this.color = this.getColor(fill);
+    this.gradient = this.getGradient(fill);
+    this.vertical = fill.vertical || this.vertical;
   }
 
-  FillOptions.prototype.getType = function(fill) {
+  FillOptions.prototype.getColor = function(fill) {
+    switch (typeof fill) {
+      case 'string':
+        return fill;
+      default:
+        return fill.color || this.gradient;
+    }
+  };
+
+  FillOptions.prototype.getGradient = function(fill) {
     if (fill instanceof Array) {
-      return 'gradient';
+      return this.parseGradient(fill);
+    } else if (fill.gradient) {
+      return this.parseGradient(fill.gradient);
     } else {
-      return 'color';
+      return this.gradient;
     }
   };
 
@@ -575,18 +591,16 @@ FillOptions = (function() {
 
   FillOptions.prototype.get = function(context) {
     var gradient, stop, _i, _len, _ref;
-    switch (this.type) {
-      case 'color':
-        return this.fill;
-      case 'gradient':
-        gradient = context.createLinearGradient(0, 0, this.options.width, 0);
-        _ref = this.fill;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          stop = _ref[_i];
-          gradient.addColorStop(stop.position, stop.color);
-        }
-        return gradient;
+    if (this.color) {
+      return this.color;
     }
+    gradient = this.vertical ? context.createLinearGradient(0, 0, 0, this.options.height) : context.createLinearGradient(0, 0, this.options.width, 0);
+    _ref = this.gradient;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      stop = _ref[_i];
+      gradient.addColorStop(stop.position, stop.color);
+    }
+    return gradient;
   };
 
   return FillOptions;
@@ -711,39 +725,75 @@ module.exports = Point;
 
 
 },{"./trig.coffee":16}],14:[function(require,module,exports){
-var Canvas, CurvedRender,
+var Canvas, Render,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 Canvas = require('./canvas.coffee');
 
-CurvedRender = (function(_super) {
-  __extends(CurvedRender, _super);
+Render = (function(_super) {
+  __extends(Render, _super);
 
-  function CurvedRender(pixels, context, options) {
+  function Render(pixels, context, options) {
     var bevel, lineWidth, _i, _ref, _ref1;
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    this.render(this.options.line.width, this.options.line.fill, this.options.bevel);
+    this.render(this.options.line.width, this.options.bevel);
     if ((_ref = this.options.bevel) != null ? _ref.smooth : void 0) {
       bevel = this.options.bevel.clone();
       for (lineWidth = _i = _ref1 = this.options.line.width - 2; _i >= 2; lineWidth = _i += -2) {
         bevel.opacity /= 2;
-        this.render(lineWidth, this.options.line.fill, bevel);
+        this.render(lineWidth, bevel);
       }
     }
   }
 
-  CurvedRender.prototype.render = function(lineWidth, fill, bevel) {
-    this.renderSolid(this.pixels, lineWidth, fill);
+  Render.prototype.render = function(lineWidth, bevel) {
+    if (this.options.fill) {
+      this.renderFill();
+    }
+    this.renderSolid(lineWidth, this.options.line.fill);
     if (bevel) {
-      this.renderHighlight(this.pixels, lineWidth, bevel);
-      return this.renderShadow(this.pixels, lineWidth, bevel);
+      this.renderHighlight(lineWidth, bevel);
+      return this.renderShadow(lineWidth, bevel);
     }
   };
 
-  CurvedRender.prototype.renderLine = function(pixels, offset, angleOffset) {
+  Render.prototype.renderFill = function() {
+    var bottom, first, index, last, left, offset, pixel, right, _i, _len, _ref;
+    offset = this.options.line.width / 2;
+    bottom = -offset;
+    first = this.pixels[0];
+    last = this.pixels[this.pixels.length - 1];
+    right = last.x + offset;
+    left = first.x - offset;
+    _ref = this.pixels;
+    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+      pixel = _ref[index];
+      this.line(pixel);
+    }
+    this.line({
+      x: right,
+      y: last.y
+    });
+    this.line({
+      x: right,
+      y: bottom
+    });
+    this.line({
+      x: left,
+      y: bottom
+    });
+    this.line({
+      x: left,
+      y: first.y
+    });
+    this.close();
+    return this.fill(this.options.fill);
+  };
+
+  Render.prototype.renderLine = function(pixels, offset, angleOffset) {
     var index, next, pixel, point, prev, _i, _len, _results;
     _results = [];
     for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
@@ -756,7 +806,7 @@ CurvedRender = (function(_super) {
     return _results;
   };
 
-  CurvedRender.prototype.renderCap = function(point, right, offset) {
+  Render.prototype.renderCap = function(point, right, offset) {
     var angle;
     angle = Math.PI / 2;
     if (right) {
@@ -766,57 +816,58 @@ CurvedRender = (function(_super) {
     }
   };
 
-  CurvedRender.prototype.renderShadow = function(pixels, lineWidth, bevel) {
-    var angle, offset, pixel, _i, _len;
-    offset = lineWidth / 2;
-    angle = Math.PI / 2;
-    this.begin();
-    for (_i = 0, _len = pixels.length; _i < _len; _i++) {
-      pixel = pixels[_i];
-      this.line(pixel);
-    }
-    this.arc(pixels[pixels.length - 1], offset, 0, -angle);
-    this.renderLine(pixels.slice().reverse(), offset, angle);
-    this.arc(pixels[0], offset, -angle, Math.PI);
-    this.close();
-    return this.fill("rgba( 0, 0, 0, " + (bevel.shadow * bevel.opacity) + " )");
-  };
-
-  CurvedRender.prototype.renderHighlight = function(pixels, lineWidth, bevel) {
+  Render.prototype.renderShadow = function(lineWidth, bevel) {
     var angle, offset, pixel, _i, _len, _ref;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
     this.begin();
-    this.renderLine(pixels, offset, angle);
-    this.arc(pixels[pixels.length - 1], offset, angle, 0);
-    _ref = pixels.slice().reverse();
+    _ref = this.pixels;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       pixel = _ref[_i];
       this.line(pixel);
     }
-    this.arc(pixels[0], offset, Math.PI, angle);
+    this.arc(this.pixels[this.pixels.length - 1], offset, 0, -angle);
+    this.renderLine(this.pixels.slice().reverse(), offset, angle);
+    this.arc(this.pixels[0], offset, -angle, Math.PI);
+    this.close();
+    return this.fill("rgba( 0, 0, 0, " + (bevel.shadow * bevel.opacity) + " )");
+  };
+
+  Render.prototype.renderHighlight = function(lineWidth, bevel) {
+    var angle, offset, pixel, _i, _len, _ref;
+    offset = lineWidth / 2;
+    angle = Math.PI / 2;
+    this.begin();
+    this.renderLine(this.pixels, offset, angle);
+    this.arc(this.pixels[this.pixels.length - 1], offset, angle, 0);
+    _ref = this.pixels.slice().reverse();
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      pixel = _ref[_i];
+      this.line(pixel);
+    }
+    this.arc(this.pixels[0], offset, Math.PI, angle);
     this.close();
     return this.fill("rgba( 255, 255, 255, " + (bevel.shine * bevel.opacity) + " )");
   };
 
-  CurvedRender.prototype.renderSolid = function(pixels, lineWidth, fill) {
+  Render.prototype.renderSolid = function(lineWidth, fill) {
     var angle, offset;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
     this.begin();
-    this.renderLine(pixels, offset, angle);
-    this.renderCap(pixels[pixels.length - 1], true, offset);
-    this.renderLine(pixels.slice().reverse(), offset, angle);
-    this.renderCap(pixels[0], false, offset);
+    this.renderLine(this.pixels, offset, angle);
+    this.renderCap(this.pixels[this.pixels.length - 1], true, offset);
+    this.renderLine(this.pixels.slice().reverse(), offset, angle);
+    this.renderCap(this.pixels[0], false, offset);
     this.close();
     return this.fill(fill);
   };
 
-  return CurvedRender;
+  return Render;
 
 })(Canvas);
 
-module.exports = CurvedRender;
+module.exports = Render;
 
 
 },{"./canvas.coffee":2}],15:[function(require,module,exports){

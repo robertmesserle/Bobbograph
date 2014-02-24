@@ -1,4 +1,5 @@
 LineOptions     = require( './options/line.coffee' )
+FillOptions     = require( './options/fill.coffee' )
 PaddingOptions  = require( './options/padding.coffee' )
 AxisLineOptions = require( './options/axis-line.coffee' )
 BevelOptions    = require( './options/bevel.coffee' )
@@ -17,6 +18,7 @@ class Options
     for key, value of options then @[ key ] = value
 
     @line         = new LineOptions( @line, this )
+    @fill         = new FillOptions( @fill, this ) if @fill?
     @padding      = new PaddingOptions( @padding, @line.width )
     @xAxis        = new AxisLineOptions( @xAxis )
     @yAxis        = new AxisLineOptions( @yAxis )
