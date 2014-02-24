@@ -1,8 +1,32 @@
 body {
-  padding-top: 70px;
+  padding-top: 50px;
 }
-body .container #wrapper {
+body a {
+  color: #955650;
+}
+body .navbar {
+  margin-top: 0;
+  margin-bottom: 0;
+  background: #fff;
+}
+body .header-block {
+  background: #b3664d;
+  background-image: linear-gradient(#b3664d, #633936);
+  padding: 30px 0 50px;
+}
+body .header-block #wrapper {
   height: 300px;
+}
+body .featurette {
+  text-align: center;
+  padding: 70px 0 30px;
+}
+body .featurette h2 {
+  font-size: 40px;
+}
+body .featurette hr {
+  margin: 40px auto;
+  width: 100px;
 }
 .bbg-container {
   position: relative;
@@ -26,10 +50,10 @@ body .container #wrapper {
 }
 .bbg-container .bbg-axis li div {
   position: absolute;
-  color: #999;
+  color: #ba755e;
 }
 .bbg-container .bbg-y-axis li {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ba755e;
   left: 0;
   right: 0;
 }
@@ -41,7 +65,7 @@ body .container #wrapper {
   line-height: 10px;
 }
 .bbg-container .bbg-x-axis li {
-  border-left: 1px solid #ccc;
+  border-left: 1px solid #ba755e;
   bottom: 0;
   top: 0;
 }

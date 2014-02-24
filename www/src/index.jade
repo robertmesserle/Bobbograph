@@ -5,7 +5,7 @@ html
     link( href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css", rel="stylesheet" )
     link( href="/master.css", rel="stylesheet" )
   body
-    nav.navbar.navbar-fixed-top.navbar-inverse
+    nav.navbar.navbar-fixed-top
       div.container
         div.navbar-header
           a.navbar-brand( href="#" ) Bobbograph
@@ -14,27 +14,21 @@ html
             li: a( href="#" ) Getting Started
             li: a( href="#" ) Documentation
             li: a( href="#" ) Download
-    div.container
-      h1.heading Sample
-      div.jumbotron#wrapper
+    div.header-block
+      div.container
+        div#wrapper
+    div.featurette
+      h2 What is Bobbograph?
+      p.lead Bobbograph is a graphing library built around the idea of providing maximum visual customization.
+      hr
 
     script( src="/js/bobbograph.js" )
     script.
       var data = [ 1, 2, 1, 2, 1, 5, 1, 2, 1, 2, 1 ],
           options = {
-            line: {
-              width:  10,
-              smooth: true,
-              fill:   [ '#c3c', '#3cc' ]
-            },
-            bevel: {
-              smooth: true
-            },
-            xAxis: {
-              increment: 2
-            },
-            yAxis: {
-              increment: 2
-            }
+            line:  { width: 10, smooth: true, fill: 'white' },
+            // bevel: { smooth: true },
+            xAxis: { increment: 2 },
+            yAxis: { increment: 2 }
           };
       new Bobbograph( '#wrapper', data, options )
