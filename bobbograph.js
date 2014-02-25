@@ -225,10 +225,39 @@ Data = (function() {
     var _ref;
     this.options = options;
     this.data = this.formatData(data);
+    this.data = this.shrinkData(this.data);
     this.stats = new Stats(this.data);
     this.points = this.getPoints();
     this.pixels = this.getPixels(this.points, this.options.usableWidth, (_ref = this.options.line) != null ? _ref.smooth : void 0);
   }
+
+  Data.prototype.shrinkData = function(data) {
+    var arr, delta, div, end, i, j, len, max, point, start, x, y;
+    max = this.options.data.maxPoints;
+    if (!max) {
+      return data;
+    }
+    len = data.length;
+    div = Math.ceil(len / max);
+    max = Math.ceil(len / div);
+    return arr = (function() {
+      var _i, _j, _ref, _ref1, _ref2, _results;
+      _results = [];
+      for (i = _i = 0, _ref = max - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+        start = div * i;
+        end = Math.min(len, start + div);
+        delta = end - start;
+        _ref1 = [0, 0], x = _ref1[0], y = _ref1[1];
+        for (j = _j = start, _ref2 = end - 1; start <= _ref2 ? _j <= _ref2 : _j >= _ref2; j = start <= _ref2 ? ++_j : --_j) {
+          point = data[j];
+          x += point.x;
+          y += point.y;
+        }
+        _results.push(new Point(x / delta, y / delta));
+      }
+      return _results;
+    })();
+  };
 
   Data.prototype.scalePoint = function(val, min, delta, scale) {
     var percent, scaled, scoped;
@@ -522,8 +551,8 @@ DataOptions = (function() {
       props = {};
     }
     this.vertex = options.line.smooth;
-    for (key in options) {
-      value = options[key];
+    for (key in props) {
+      value = props[key];
       this[key] = value;
     }
   }

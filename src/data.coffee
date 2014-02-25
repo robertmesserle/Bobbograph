@@ -6,9 +6,27 @@ class Data
 
   constructor: ( data, @options ) ->
     @data   = @formatData( data )
+    @data   = @shrinkData( @data )
     @stats  = new Stats( @data )
     @points = @getPoints()
     @pixels = @getPixels( @points, @options.usableWidth, @options.line?.smooth )
+
+  shrinkData: ( data ) ->
+    max = @options.data.maxPoints
+    return data unless max
+    len = data.length
+    div = Math.ceil( len / max )
+    max = Math.ceil( len / div )
+    arr = for i in [ 0 .. max - 1 ]
+      start = div * i
+      end   = Math.min( len, start + div )
+      delta = end - start
+      [ x, y ] = [ 0, 0 ]
+      for j in [ start .. end - 1 ]
+        point = data[ j ]
+        x += point.x
+        y += point.y
+      new Point( x / delta, y / delta )
 
   scalePoint: ( val, min, delta, scale ) ->
     scoped    = val - min

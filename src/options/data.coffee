@@ -6,7 +6,7 @@ class DataOptions
 
   constructor: ( props = {}, options ) ->
     @vertex = options.line.smooth
-    for key, value of options
+    for key, value of props
       @[ key ] = value
 
 module.exports = DataOptions
