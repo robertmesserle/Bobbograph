@@ -17,7 +17,6 @@
     "gulp-uglify": "~0.2.0",
     "gulp-jade": "~0.4.1",
     "gulp-coffeelint": "~0.2.0",
-    "gulp-connect": "~0.3.0",
     "gulp-util": "~2.2.14",
     "mocha": "~1.17.1",
     "gulp-stylus": "0.0.7",
