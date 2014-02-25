@@ -11,8 +11,7 @@ class Data
     @points = @getPoints()
     @pixels = @getPixels( @points, @options.usableWidth, @options.line?.smooth )
 
-  shrinkData: ( data ) ->
-    max = @options.data.maxPoints
+  shrinkData: ( data, max = @options.data.maxPoints ) ->
     return data unless max
     len = data.length
     div = Math.ceil( len / max )

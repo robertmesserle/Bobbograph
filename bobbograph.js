@@ -231,9 +231,11 @@ Data = (function() {
     this.pixels = this.getPixels(this.points, this.options.usableWidth, (_ref = this.options.line) != null ? _ref.smooth : void 0);
   }
 
-  Data.prototype.shrinkData = function(data) {
-    var arr, delta, div, end, i, j, len, max, point, start, x, y;
-    max = this.options.data.maxPoints;
+  Data.prototype.shrinkData = function(data, max) {
+    var arr, delta, div, end, i, j, len, point, start, x, y;
+    if (max == null) {
+      max = this.options.data.maxPoints;
+    }
     if (!max) {
       return data;
     }
