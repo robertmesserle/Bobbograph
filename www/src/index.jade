@@ -3,13 +3,15 @@ html
   head
     title Bobbograph
     link( href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css", rel="stylesheet" )
+    link( href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", rel="stylesheet" )
     link( href="/master.css", rel="stylesheet" )
   body
     nav.navbar.navbar-fixed-top
       div.container
         div.navbar-header
           a.navbar-brand( href="#" ) Bobbograph
-          ul.nav.navbar-nav
+        div.collapse.navbar-collapse
+          ul.nav.navbar-nav.navbar-right
             li.active: a( href="#" ) Home
             li: a( href="#" ) Getting Started
             li: a( href="#" ) Documentation
@@ -21,6 +23,25 @@ html
       h2 What is Bobbograph?
       p.lead Bobbograph is a graphing library built around the idea of providing maximum visual customization.
       hr
+      h2 Why choose Bobbograph?
+      .container
+        .row
+          .col-sm-4
+            i.fa.fa-5x.fa-gear
+            h3 Customization
+            p  Bobbograph gives you the ability to customize just about any aspect of your graph, giving you complete control.
+          .col-sm-4
+            i.fa.fa-5x.fa-html5
+            h3 Compatibility
+            p  Bobbograph uses best practices in Canvas to ensure that your graphs will look perfect in any browser.
+          .col-sm-4
+            i.fa.fa-5x.fa-thumbs-up
+            h3 Ease-of-use
+            p  Bobbograph is specifically built to be as intuitive as possible.
+      hr
+      h2 Help support Bobbograph.
+      p.lead Bobbograph is hosted on <a href="//github.com">Github</a>.  Please feel free to contribute to the project, or log issues there.
+      a.btn.btn-lg View it on Github
 
     script( src="/js/bobbograph.js" )
     script.

@@ -1,5 +1,6 @@
 body {
   padding-top: 50px;
+  color: #999;
 }
 body a {
   color: #955650;
@@ -8,6 +9,14 @@ body .navbar {
   margin-top: 0;
   margin-bottom: 0;
   background: #fff;
+}
+body .navbar .navbar-brand {
+  font-size: 35px;
+  font-weight: lighter;
+}
+body .navbar .navbar-nav li a {
+  font-weight: lighter;
+  font-size: 20px;
 }
 body .header-block {
   background: #b3664d;
@@ -22,11 +31,38 @@ body .featurette {
   padding: 70px 0 30px;
 }
 body .featurette h2 {
-  font-size: 40px;
+  font-size: 50px;
+  font-weight: lighter;
+}
+body .featurette .lead {
+  padding: 40px 0 10px;
 }
 body .featurette hr {
-  margin: 40px auto;
-  width: 100px;
+  margin: 40px auto 70px;
+  width: 300px;
+  border-color: #ccc;
+}
+body .featurette .container {
+  margin-top: 70px;
+}
+body .featurette .container h3 {
+  margin: 20px 0;
+  font-weight: lighter;
+  font-size: 30px;
+}
+body .featurette .container p {
+  line-height: 1.5em;
+}
+body .featurette a.btn {
+  background: #fff;
+  border: 1px solid #955650;
+  color: #955650;
+  font-weight: lighter;
+  font-size: 25px;
+}
+body .featurette a.btn:hover {
+  background: #955650;
+  color: #fff;
 }
 .bbg-container {
   position: relative;

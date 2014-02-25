@@ -5,12 +5,21 @@ $header-fg2 = lighten( $header-bg2, 15 )
 
 body
   padding-top 50px
+  color hsl(0, 0, 60)
   a
     color $header-fg2
   .navbar
     margin-top 0
     margin-bottom 0
     background white
+    .navbar-brand
+      font-size 35px
+      font-weight lighter
+    .navbar-nav
+      li
+        a
+          font-weight lighter
+          font-size 20px
   .header-block
     background $header-bg
     background-image linear-gradient( $header-bg, $header-bg2 )
@@ -21,10 +30,31 @@ body
     text-align center
     padding 70px 0 30px
     h2
-      font-size 40px
+      font-size 50px
+      font-weight lighter
+    .lead
+      padding 40px 0 10px
     hr
-      margin 40px auto
-      width 100px
+      margin 40px auto 70px
+      width 300px
+      border-color hsl(0, 0, 80)
+    .container
+      margin-top 70px
+      h3
+        margin 20px 0
+        font-weight lighter
+        font-size 30px
+      p
+        line-height 1.5em
+    a.btn
+      background white
+      border 1px solid $header-fg2
+      color $header-fg2
+      font-weight lighter
+      font-size 25px
+      &:hover
+        background $header-fg2
+        color white
 
 .bbg-container
   position relative
