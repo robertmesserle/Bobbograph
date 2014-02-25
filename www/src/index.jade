@@ -8,9 +8,16 @@ html
     link( href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css", rel="stylesheet" )
     link( href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", rel="stylesheet" )
     link( href="/master.css", rel="stylesheet" )
+    script( src="//code.jquery.com/jquery-1.11.0.min.js" )
+    script( src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" )
   body
     nav.navbar.navbar-fixed-top.navbar-default
       div.container
+        button.navbar-toggle( type="button", data-toggle="collapse", data-target=".navbar-collapse" )
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
         div.navbar-header
           a.navbar-brand( href="#" ) Bobbograph
         div.collapse.navbar-collapse

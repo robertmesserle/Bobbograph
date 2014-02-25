@@ -20,7 +20,7 @@ body .navbar .navbar-nav li a {
 }
 body .header-block {
   background: #b3664d;
-  background-image: linear-gradient(#b3664d, #633936);
+  background-image: linear-gradient(#633936, #b3664d);
   padding: 30px 0 50px;
 }
 body .header-block #wrapper {
