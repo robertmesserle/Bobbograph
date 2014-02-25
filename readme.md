@@ -8,7 +8,7 @@ the developer to decide what the graph will look like.
 Here is a basic overview of the available options:
 
 Property    | Type                       | Description
-------------|----------------------------|------------
+--------    | ----                       | -----------
 **width**   | Number                     | This number will set the width of the generated graph.
 **height**  | Number                     | This number will set the height of the generated graph.
 **data**    | [Data Object](#data)       | This allows some mild modification of the data.
@@ -17,14 +17,14 @@ Property    | Type                       | Description
 
 ### Data
 Property      | Type    | Description
---------------|---------|------------
+--------      | ----    | -----------
 **vertex**    | Boolean | This will eliminate unnecessary points in the graph, resulting in a smoother graph.  By default, this is only enabled with line smoothing is enabled.
 **maxPoints** | Number  | This is the maximum number of points you want to display.  This can improve performance, and may be necessary with larger data sets.
 **normalize** | Number  | You can specify how many standard deviations you want to allow.  Points that are too extreme will be removed.
 
 ### Padding 
 Property   | Type   | Description
------------|--------|------------
+--------   | ----   | -----------
 **size**   | Number | This size will be applied to all 4 sides, unless overridden.
 **x**      | Number | This will specify left and right padding.
 **left**   | Number | This will set the left padding.
@@ -35,7 +35,14 @@ Property   | Type   | Description
 
 ### Line 
 Property   | Type         | Description
------------|--------------|------------
+--------   | ----         | -----------
 **fill**   | Array/String | This specifies the line fill.  It can be an array of colors or a single string.
 **width**  | Number       | This sets the thickness of the line.
 **smooth** | Boolean      | When enabled, the graph will be smoothed for a better visual presentation.
+
+### Fill
+Property     | Type    | Description
+--------     | ----    | -----------
+**color**    | String  | A color to fill the area beneath the curve.
+**gradient** | Array   | An array of colors to be used as a gradient fill.
+**vertical** | Boolean | When using a gradient, this will indicate a vertical gradient.
