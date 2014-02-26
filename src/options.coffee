@@ -5,6 +5,7 @@ AxisLineOptions = require( './options/axis-line.coffee' )
 BevelOptions    = require( './options/bevel.coffee' )
 DataOptions     = require( './options/data.coffee' )
 FrameOptions    = require( './options/frame.coffee' )
+ShadowOptions   = require( './options/shadow.coffee' )
 
 class Options
 
@@ -28,6 +29,7 @@ class Options
     @usableHeight = @height - @padding.top  - @padding.bottom
     @data         = new DataOptions( @data, this )
     @frame        = new FrameOptions( @frame )
+    @shadow       = new ShadowOptions( @shadow ) if @shadow?
 
   adjustSize: ( elem, name, extra, styles ) ->
     cssExpand = [ 'top', 'right', 'bottom', 'left' ]
