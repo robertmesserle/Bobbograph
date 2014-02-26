@@ -1,5 +1,64 @@
 /*! Bobbograph v3.0 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
 /*! This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/. */(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var Animator, Easing;
+
+Easing = require('./easing.coffee');
+
+Animator = (function() {
+  Animator.prototype.fps = 77;
+
+  Animator.prototype.duration = 1000;
+
+  Animator.prototype.start = 0;
+
+  Animator.prototype.end = 1;
+
+  Animator.prototype.easing = Easing.curve;
+
+  Animator.prototype.callback = null;
+
+  function Animator(options, step) {
+    var key, value;
+    this.step = step;
+    for (key in options) {
+      value = options[key];
+      this[key] = value;
+    }
+    this.startTime = +new Date();
+    this.wait = Math.floor(1000 / this.fps);
+    this.play();
+  }
+
+  Animator.prototype.stop = function() {
+    clearInterval(this.interval);
+    if (this.callback) {
+      this.callback();
+      return delete this.callback;
+    }
+  };
+
+  Animator.prototype.play = function() {
+    return this.interval = setInterval((function(_this) {
+      return function() {
+        var now, time;
+        now = +new Date();
+        time = now - _this.startTime;
+        _this.step(_this.easing(Math.min(time, _this.duration), _this.start, _this.end - _this.start, _this.duration));
+        if (time > _this.duration) {
+          return _this.stop();
+        }
+      };
+    })(this));
+  };
+
+  return Animator;
+
+})();
+
+module.exports = Animator;
+
+
+},{"./easing.coffee":6}],2:[function(require,module,exports){
 var Axis;
 
 Axis = (function() {
@@ -76,7 +135,7 @@ Axis = (function() {
 module.exports = Axis;
 
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var Canvas;
 
 Canvas = (function() {
@@ -98,6 +157,10 @@ Canvas = (function() {
   Canvas.prototype.close = function() {
     this.context.closePath();
     return this["continue"] = false;
+  };
+
+  Canvas.prototype.clear = function() {
+    return this.context.clearRect(0, 0, this.options.width, this.options.height);
   };
 
   Canvas.prototype.line = function(point) {
@@ -140,8 +203,8 @@ Canvas = (function() {
 module.exports = Canvas;
 
 
-},{}],3:[function(require,module,exports){
-var Bobbograph, Data, Options, Renderer, XAxis, YAxis;
+},{}],4:[function(require,module,exports){
+var Animator, Bobbograph, Data, Options, Renderer, XAxis, YAxis;
 
 Options = require('./options.coffee');
 
@@ -152,6 +215,8 @@ Renderer = require('./renderer.coffee');
 XAxis = require('./x-axis.coffee');
 
 YAxis = require('./y-axis.coffee');
+
+Animator = require('./animator.coffee');
 
 Bobbograph = (function() {
   Bobbograph.prototype.clss = 'bbg-container';
@@ -167,7 +232,17 @@ Bobbograph = (function() {
     this.data = new Data(data, this.options);
     this.xAxis = new XAxis(this.options.xAxis, this.container, this.options, this.data);
     this.yAxis = new YAxis(this.options.yAxis, this.container, this.options, this.data);
-    new Renderer(this.data.pixels, this.context, this.options, this.options.line.smooth);
+    if (this.options.animation) {
+      new Animator(this.options.animation, (function(_this) {
+        return function(percentage) {
+          var pixels;
+          pixels = _this.data.pixels.slice(0, _this.data.pixels.length * percentage);
+          return new Renderer(pixels, _this.context, _this.options);
+        };
+      })(this));
+    } else {
+      new Renderer(this.data.pixels, this.context, this.options);
+    }
   }
 
   Bobbograph.prototype.getContainer = function() {
@@ -211,7 +286,7 @@ if (typeof module !== "undefined" && module !== null) {
 }
 
 
-},{"./data.coffee":4,"./options.coffee":6,"./renderer.coffee":16,"./x-axis.coffee":19,"./y-axis.coffee":20}],4:[function(require,module,exports){
+},{"./animator.coffee":1,"./data.coffee":5,"./options.coffee":7,"./renderer.coffee":18,"./x-axis.coffee":21,"./y-axis.coffee":22}],5:[function(require,module,exports){
 var Data, Easing, Point, Stats;
 
 Stats = require('./stats.coffee');
@@ -374,7 +449,7 @@ Data = (function() {
 module.exports = Data;
 
 
-},{"./easing.coffee":5,"./point.coffee":15,"./stats.coffee":17}],5:[function(require,module,exports){
+},{"./easing.coffee":6,"./point.coffee":17,"./stats.coffee":19}],6:[function(require,module,exports){
 var Easing;
 
 Easing = (function() {
@@ -399,8 +474,8 @@ Easing = (function() {
 module.exports = Easing;
 
 
-},{}],6:[function(require,module,exports){
-var AxisLineOptions, BevelOptions, DataOptions, FillOptions, FrameOptions, LineOptions, Options, PaddingOptions, ShadowOptions;
+},{}],7:[function(require,module,exports){
+var AnimationOptions, AxisLineOptions, BevelOptions, DataOptions, FillOptions, FrameOptions, LineOptions, Options, PaddingOptions, ShadowOptions;
 
 LineOptions = require('./options/line.coffee');
 
@@ -417,6 +492,8 @@ DataOptions = require('./options/data.coffee');
 FrameOptions = require('./options/frame.coffee');
 
 ShadowOptions = require('./options/shadow.coffee');
+
+AnimationOptions = require('./options/animation.coffee');
 
 Options = (function() {
   Options.prototype.height = 300;
@@ -453,6 +530,9 @@ Options = (function() {
     if (this.shadow != null) {
       this.shadow = new ShadowOptions(this.shadow);
     }
+    if (this.animation != null) {
+      this.animation = new AnimationOptions(this.animation);
+    }
   }
 
   Options.prototype.adjustSize = function(elem, name, extra, styles) {
@@ -487,7 +567,30 @@ Options = (function() {
 module.exports = Options;
 
 
-},{"./options/axis-line.coffee":7,"./options/bevel.coffee":8,"./options/data.coffee":9,"./options/fill.coffee":10,"./options/frame.coffee":11,"./options/line.coffee":12,"./options/padding.coffee":13,"./options/shadow.coffee":14}],7:[function(require,module,exports){
+},{"./options/animation.coffee":8,"./options/axis-line.coffee":9,"./options/bevel.coffee":10,"./options/data.coffee":11,"./options/fill.coffee":12,"./options/frame.coffee":13,"./options/line.coffee":14,"./options/padding.coffee":15,"./options/shadow.coffee":16}],8:[function(require,module,exports){
+var AnimationOptions;
+
+AnimationOptions = (function() {
+  AnimationOptions.prototype.duration = 1000;
+
+  AnimationOptions.prototype.callback = null;
+
+  function AnimationOptions(props) {
+    var key, value;
+    for (key in props) {
+      value = props[key];
+      this[key] = value;
+    }
+  }
+
+  return AnimationOptions;
+
+})();
+
+module.exports = AnimationOptions;
+
+
+},{}],9:[function(require,module,exports){
 var AxisLineOptions;
 
 AxisLineOptions = (function() {
@@ -511,7 +614,7 @@ AxisLineOptions = (function() {
 module.exports = AxisLineOptions;
 
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var BevelOptions;
 
 BevelOptions = (function() {
@@ -545,7 +648,7 @@ BevelOptions = (function() {
 module.exports = BevelOptions;
 
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var DataOptions;
 
 DataOptions = (function() {
@@ -574,7 +677,7 @@ DataOptions = (function() {
 module.exports = DataOptions;
 
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var FillOptions;
 
 FillOptions = (function() {
@@ -649,7 +752,7 @@ FillOptions = (function() {
 module.exports = FillOptions;
 
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var FrameOptions;
 
 FrameOptions = (function() {
@@ -676,7 +779,7 @@ FrameOptions = (function() {
 module.exports = FrameOptions;
 
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var FillOptions, LineOptions;
 
 FillOptions = require('./fill.coffee');
@@ -708,7 +811,7 @@ LineOptions = (function() {
 module.exports = LineOptions;
 
 
-},{"./fill.coffee":10}],13:[function(require,module,exports){
+},{"./fill.coffee":12}],15:[function(require,module,exports){
 var PaddingOptions;
 
 PaddingOptions = (function() {
@@ -747,7 +850,7 @@ PaddingOptions = (function() {
 module.exports = PaddingOptions;
 
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var FillOptions, ShadowOptions;
 
 FillOptions = require('./fill.coffee');
@@ -774,7 +877,7 @@ ShadowOptions = (function() {
 module.exports = ShadowOptions;
 
 
-},{"./fill.coffee":10}],15:[function(require,module,exports){
+},{"./fill.coffee":12}],17:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
@@ -817,7 +920,7 @@ Point = (function() {
 module.exports = Point;
 
 
-},{"./trig.coffee":18}],16:[function(require,module,exports){
+},{"./trig.coffee":20}],18:[function(require,module,exports){
 var Canvas, Point, Render,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -845,6 +948,7 @@ Render = (function(_super) {
   }
 
   Render.prototype.render = function(lineWidth, bevel, shadow) {
+    this.clear();
     if (this.options.fill) {
       this.renderFill();
     }
@@ -986,7 +1090,7 @@ Render = (function(_super) {
 module.exports = Render;
 
 
-},{"./canvas.coffee":2,"./point.coffee":15}],17:[function(require,module,exports){
+},{"./canvas.coffee":3,"./point.coffee":17}],19:[function(require,module,exports){
 var Stats;
 
 Stats = (function() {
@@ -1047,7 +1151,7 @@ Stats = (function() {
 module.exports = Stats;
 
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var Trig;
 
 Trig = (function() {
@@ -1145,7 +1249,7 @@ Trig = (function() {
 module.exports = Trig;
 
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var Axis, XAxis,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -1178,7 +1282,7 @@ XAxis = (function(_super) {
 module.exports = XAxis;
 
 
-},{"./axis.coffee":1}],20:[function(require,module,exports){
+},{"./axis.coffee":2}],22:[function(require,module,exports){
 var Axis, YAxis,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -1211,4 +1315,4 @@ YAxis = (function(_super) {
 module.exports = YAxis;
 
 
-},{"./axis.coffee":1}]},{},[3])
+},{"./axis.coffee":2}]},{},[4])

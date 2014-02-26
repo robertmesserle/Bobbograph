@@ -1,8 +1,9 @@
-Options      = require( './options.coffee' )
-Data         = require( './data.coffee' )
-Renderer     = require( './renderer.coffee' )
-XAxis        = require( './x-axis.coffee' )
-YAxis        = require( './y-axis.coffee' )
+Options  = require( './options.coffee' )
+Data     = require( './data.coffee' )
+Renderer = require( './renderer.coffee' )
+XAxis    = require( './x-axis.coffee' )
+YAxis    = require( './y-axis.coffee' )
+Animator = require( './animator.coffee' )
 
 class Bobbograph
 
@@ -20,7 +21,12 @@ class Bobbograph
     @xAxis     = new XAxis( @options.xAxis, @container, @options, @data )
     @yAxis     = new YAxis( @options.yAxis, @container, @options, @data )
 
-    new Renderer( @data.pixels, @context, @options, @options.line.smooth )
+    if @options.animation
+      new Animator( @options.animation, ( percentage ) =>
+        pixels = @data.pixels.slice( 0, @data.pixels.length * percentage )
+        new Renderer( pixels, @context, @options )
+      )
+    else new Renderer( @data.pixels, @context, @options )
 
   getContainer: ->
     container = document.createElement( 'div' )

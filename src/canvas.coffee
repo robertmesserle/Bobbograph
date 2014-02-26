@@ -14,6 +14,9 @@ class Canvas
     @context.closePath()
     @continue = false
 
+  clear: ->
+    @context.clearRect( 0, 0, @options.width, @options.height )
+
   line: ( point ) ->
     left = @scaleX( point.x )
     top  = @scaleY( point.y )

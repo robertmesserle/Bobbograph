@@ -1,11 +1,12 @@
-LineOptions     = require( './options/line.coffee' )
-FillOptions     = require( './options/fill.coffee' )
-PaddingOptions  = require( './options/padding.coffee' )
-AxisLineOptions = require( './options/axis-line.coffee' )
-BevelOptions    = require( './options/bevel.coffee' )
-DataOptions     = require( './options/data.coffee' )
-FrameOptions    = require( './options/frame.coffee' )
-ShadowOptions   = require( './options/shadow.coffee' )
+LineOptions      = require( './options/line.coffee' )
+FillOptions      = require( './options/fill.coffee' )
+PaddingOptions   = require( './options/padding.coffee' )
+AxisLineOptions  = require( './options/axis-line.coffee' )
+BevelOptions     = require( './options/bevel.coffee' )
+DataOptions      = require( './options/data.coffee' )
+FrameOptions     = require( './options/frame.coffee' )
+ShadowOptions    = require( './options/shadow.coffee' )
+AnimationOptions = require( './options/animation.coffee' )
 
 class Options
 
@@ -30,6 +31,7 @@ class Options
     @data         = new DataOptions( @data, this )
     @frame        = new FrameOptions( @frame )
     @shadow       = new ShadowOptions( @shadow ) if @shadow?
+    @animation    = new AnimationOptions( @animation ) if @animation?
 
   adjustSize: ( elem, name, extra, styles ) ->
     cssExpand = [ 'top', 'right', 'bottom', 'left' ]
