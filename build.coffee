@@ -10,6 +10,7 @@ jade       = require( 'gulp-jade' )
 stylus     = require( 'gulp-stylus' )
 lint       = require( 'gulp-coffeelint' )
 nodemon    = require( 'gulp-nodemon' )
+css        = require( 'gulp-minify-css' )
 
 comment = """
   /*! Bobbograph v3.0 by Robert Messerle  |  https://github.com/robertmesserle/Bobbograph */
@@ -32,6 +33,13 @@ gulp.task( 'stylus', ->
     .pipe( stylus( { use: [ 'nib' ], import: [ 'nib' ] } ) )
     .pipe( rename( 'master.css' ) )
     .pipe( gulp.dest( 'www/pub' ) )
+  gulp.src( "styl/master.styl" )
+    .pipe( stylus() )
+    .pipe( rename( 'bobbograph.css' ) )
+    .pipe( gulp.dest( '.' ) )
+    .pipe( css() )
+    .pipe( rename( 'bobbograph.min.css' ) )
+    .pipe( gulp.dest( '.' ) )
 )
 
 gulp.task( 'coffee', [ 'test', 'lint' ], ->

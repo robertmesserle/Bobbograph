@@ -1,3 +1,5 @@
+@import '../../../styl/master.styl'
+
 $header-bg  = hsl( 015, 40, 50 )
 $header-bg2 = hsl( 005, 30, 30 )
 $header-fg  = lighten( $header-bg, 5 )
@@ -63,43 +65,9 @@ body
         color white
 
 .bbg-container
-  position relative
-  canvas
-    z-index 1
-    position relative
-  .bbg-axis
-    position absolute
-    top 0
-    left 0
-    list-style none
-    padding 0
-    margin 0
-    right 0
-    bottom 0 
-    li
-      position absolute
-      div
-        position absolute
-        color $header-fg
-  .bbg-y-axis
-    li
-      border-bottom 1px solid $header-fg
-      left 0
-      right 0
-      div
-        bottom -5px
-        right 100%
-        padding-right 10px
-        text-align right
-        line-height 10px
-  .bbg-x-axis
-    li
-      border-left 1px solid $header-fg
-      bottom 0
-      top 0
-      div
-        left -50px
-        top 100%
-        text-align center
-        width 100px
-        padding-top 10px
+  .bbg-axis li div
+    color $header-fg
+  .bbg-y-axis li
+    border-bottom 1px solid $header-fg
+  .bbg-x-axis li
+    border-left 1px solid $header-fg
