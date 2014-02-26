@@ -95,16 +95,31 @@ describe( 'Data', ->
     )
   )
   describe( '#shrinkData()', ->
-    data = Data::formatData( [ 1, 2, 3, 4, 5, 6 ] )
-    max  = 3
-    newData = Data::shrinkData( data, max )
+    it( 'should support easily divisible sets', ->
+      data    = Data::formatData( [ 1, 2, 3, 4, 5, 6 ] )
+      max     = 3
+      newData = Data::shrinkData( data, max )
 
-    expect( newData.length ).to.be( 3 )
-    expect( newData[ 0 ].x ).to.be( 0.5 )
-    expect( newData[ 0 ].y ).to.be( 1.5 )
-    expect( newData[ 1 ].x ).to.be( 2.5 )
-    expect( newData[ 1 ].y ).to.be( 3.5 )
-    expect( newData[ 2 ].x ).to.be( 4.5 )
-    expect( newData[ 2 ].y ).to.be( 5.5 )
+      expect( newData.length ).to.be( 3 )
+      expect( newData[ 0 ].x ).to.be( 0.5 )
+      expect( newData[ 0 ].y ).to.be( 1.5 )
+      expect( newData[ 1 ].x ).to.be( 2.5 )
+      expect( newData[ 1 ].y ).to.be( 3.5 )
+      expect( newData[ 2 ].x ).to.be( 4.5 )
+      expect( newData[ 2 ].y ).to.be( 5.5 )
+    )
+    it( 'should support non-divisible sets', ->
+      data    = Data::formatData( [ 1, 2, 3, 4, 5, 6, 7 ] )
+      max     = 3
+      newData = Data::shrinkData( data, max )
+
+      expect( newData.length ).to.be( 3 )
+      expect( newData[ 0 ].x ).to.be( 1 )
+      expect( newData[ 0 ].y ).to.be( 2 )
+      expect( newData[ 1 ].x ).to.be( 4 )
+      expect( newData[ 1 ].y ).to.be( 5 )
+      expect( newData[ 2 ].x ).to.be( 6 )
+      expect( newData[ 2 ].y ).to.be( 7 )
+    )
   )
 )
