@@ -20,7 +20,7 @@ body .navbar .navbar-nav li a {
 }
 body .header-block {
   background: #b3664d;
-  background-image: linear-gradient(#b3664d, #633936);
+  background-image: linear-gradient(#633936, #b3664d);
   padding: 30px 0 50px;
 }
 body .header-block #wrapper {
@@ -58,7 +58,7 @@ body .featurette a.btn {
   border: 1px solid #955650;
   color: #955650;
   font-weight: lighter;
-  font-size: 25px;
+  font-size: 20px;
 }
 body .featurette a.btn:hover {
   background: #955650;
