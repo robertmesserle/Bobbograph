@@ -211,7 +211,7 @@ if (typeof module !== "undefined" && module !== null) {
 }
 
 
-},{"./data.coffee":4,"./options.coffee":6,"./renderer.coffee":14,"./x-axis.coffee":17,"./y-axis.coffee":18}],4:[function(require,module,exports){
+},{"./data.coffee":4,"./options.coffee":6,"./renderer.coffee":15,"./x-axis.coffee":18,"./y-axis.coffee":19}],4:[function(require,module,exports){
 var Data, Easing, Point, Stats;
 
 Stats = require('./stats.coffee');
@@ -226,7 +226,7 @@ Data = (function() {
     this.options = options;
     this.data = this.formatData(data);
     this.data = this.shrinkData(this.data);
-    this.stats = new Stats(this.data);
+    this.stats = new Stats(this.data, this.options);
     this.points = this.getPoints();
     this.pixels = this.getPixels(this.points, this.options.usableWidth, (_ref = this.options.line) != null ? _ref.smooth : void 0);
   }
@@ -374,7 +374,7 @@ Data = (function() {
 module.exports = Data;
 
 
-},{"./easing.coffee":5,"./point.coffee":13,"./stats.coffee":15}],5:[function(require,module,exports){
+},{"./easing.coffee":5,"./point.coffee":14,"./stats.coffee":16}],5:[function(require,module,exports){
 var Easing;
 
 Easing = (function() {
@@ -400,7 +400,7 @@ module.exports = Easing;
 
 
 },{}],6:[function(require,module,exports){
-var AxisLineOptions, BevelOptions, DataOptions, FillOptions, LineOptions, Options, PaddingOptions;
+var AxisLineOptions, BevelOptions, DataOptions, FillOptions, FrameOptions, LineOptions, Options, PaddingOptions;
 
 LineOptions = require('./options/line.coffee');
 
@@ -413,6 +413,8 @@ AxisLineOptions = require('./options/axis-line.coffee');
 BevelOptions = require('./options/bevel.coffee');
 
 DataOptions = require('./options/data.coffee');
+
+FrameOptions = require('./options/frame.coffee');
 
 Options = (function() {
   Options.prototype.height = 300;
@@ -445,6 +447,7 @@ Options = (function() {
     this.usableWidth = this.width - this.padding.left - this.padding.right;
     this.usableHeight = this.height - this.padding.top - this.padding.bottom;
     this.data = new DataOptions(this.data, this);
+    this.frame = new FrameOptions(this.frame);
   }
 
   Options.prototype.adjustSize = function(elem, name, extra, styles) {
@@ -479,7 +482,7 @@ Options = (function() {
 module.exports = Options;
 
 
-},{"./options/axis-line.coffee":7,"./options/bevel.coffee":8,"./options/data.coffee":9,"./options/fill.coffee":10,"./options/line.coffee":11,"./options/padding.coffee":12}],7:[function(require,module,exports){
+},{"./options/axis-line.coffee":7,"./options/bevel.coffee":8,"./options/data.coffee":9,"./options/fill.coffee":10,"./options/frame.coffee":11,"./options/line.coffee":12,"./options/padding.coffee":13}],7:[function(require,module,exports){
 var AxisLineOptions;
 
 AxisLineOptions = (function() {
@@ -642,6 +645,33 @@ module.exports = FillOptions;
 
 
 },{}],11:[function(require,module,exports){
+var FrameOptions;
+
+FrameOptions = (function() {
+  FrameOptions.prototype.xmin = null;
+
+  FrameOptions.prototype.xmax = null;
+
+  FrameOptions.prototype.ymin = null;
+
+  FrameOptions.prototype.ymax = null;
+
+  function FrameOptions(props) {
+    var key, value;
+    for (key in props) {
+      value = props[key];
+      this[key] = value;
+    }
+  }
+
+  return FrameOptions;
+
+})();
+
+module.exports = FrameOptions;
+
+
+},{}],12:[function(require,module,exports){
 var FillOptions, LineOptions;
 
 FillOptions = require('./fill.coffee');
@@ -673,7 +703,7 @@ LineOptions = (function() {
 module.exports = LineOptions;
 
 
-},{"./fill.coffee":10}],12:[function(require,module,exports){
+},{"./fill.coffee":10}],13:[function(require,module,exports){
 var PaddingOptions;
 
 PaddingOptions = (function() {
@@ -712,7 +742,7 @@ PaddingOptions = (function() {
 module.exports = PaddingOptions;
 
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
@@ -755,7 +785,7 @@ Point = (function() {
 module.exports = Point;
 
 
-},{"./trig.coffee":16}],14:[function(require,module,exports){
+},{"./trig.coffee":17}],15:[function(require,module,exports){
 var Canvas, Render,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -901,38 +931,56 @@ Render = (function(_super) {
 module.exports = Render;
 
 
-},{"./canvas.coffee":2}],15:[function(require,module,exports){
+},{"./canvas.coffee":2}],16:[function(require,module,exports){
 var Stats;
 
 Stats = (function() {
-  function Stats(data) {
-    this.getRangeData(data);
+  function Stats(data, options) {
+    var key, value, _ref;
+    this.data = data;
+    this.options = options != null ? options : {};
+    _ref = this.options.frame;
+    for (key in _ref) {
+      value = _ref[key];
+      this[key] = value;
+    }
+    this.getRangeData();
   }
 
-  Stats.prototype.getRangeData = function(data) {
+  Stats.prototype.getRangeData = function() {
     var point, xarr, yarr;
     xarr = (function() {
-      var _i, _len, _results;
+      var _i, _len, _ref, _results;
+      _ref = this.data;
       _results = [];
-      for (_i = 0, _len = data.length; _i < _len; _i++) {
-        point = data[_i];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
         _results.push(point.x);
       }
       return _results;
-    })();
+    }).call(this);
     yarr = (function() {
-      var _i, _len, _results;
+      var _i, _len, _ref, _results;
+      _ref = this.data;
       _results = [];
-      for (_i = 0, _len = data.length; _i < _len; _i++) {
-        point = data[_i];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        point = _ref[_i];
         _results.push(point.y);
       }
       return _results;
-    })();
-    this.xmin = Math.min.apply(null, xarr);
-    this.xmax = Math.max.apply(null, xarr);
-    this.ymin = Math.min.apply(null, yarr);
-    this.ymax = Math.max.apply(null, yarr);
+    }).call(this);
+    if (this.xmin == null) {
+      this.xmin = Math.min.apply(null, xarr);
+    }
+    if (this.xmax == null) {
+      this.xmax = Math.max.apply(null, xarr);
+    }
+    if (this.ymin == null) {
+      this.ymin = Math.min.apply(null, yarr);
+    }
+    if (this.ymax == null) {
+      this.ymax = Math.max.apply(null, yarr);
+    }
     this.dx = this.xmax - this.xmin;
     return this.dy = this.ymax - this.ymin;
   };
@@ -944,7 +992,7 @@ Stats = (function() {
 module.exports = Stats;
 
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var Trig;
 
 Trig = (function() {
@@ -1042,7 +1090,7 @@ Trig = (function() {
 module.exports = Trig;
 
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var Axis, XAxis,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -1075,7 +1123,7 @@ XAxis = (function(_super) {
 module.exports = XAxis;
 
 
-},{"./axis.coffee":1}],18:[function(require,module,exports){
+},{"./axis.coffee":1}],19:[function(require,module,exports){
 var Axis, YAxis,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };

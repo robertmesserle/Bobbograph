@@ -14,6 +14,7 @@ Property    | Type                       | Description
 **data**    | [Data Object](#data)       | This allows some mild modification of the data.
 **padding** | [Padding Object](#padding) | This allows customization of padding options.
 **line**    | [Line Object](#line)       | This allows customization of the line style.
+**frame**   | [Frame Object](#frame)     | This allows customization of the framing.
 
 ### Data
 Property      | Type    | Description
@@ -46,3 +47,11 @@ Property     | Type    | Description
 **color**    | String  | A color to fill the area beneath the curve.
 **gradient** | Array   | An array of colors to be used as a gradient fill.
 **vertical** | Boolean | When using a gradient, this will indicate a vertical gradient.
+
+### Frame
+Property | Type   | Description
+-------- | ----   | -----------
+**xmin** | Number | The minimum x-value used to frame the graph.
+**xmax** | Number | The maximum x-value used to frame the graph.
+**ymin** | Number | The minimum y-value used to frame the graph.
+**ymax** | Number | The maximum y-value used to frame the graph.

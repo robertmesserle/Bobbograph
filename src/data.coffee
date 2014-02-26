@@ -7,7 +7,7 @@ class Data
   constructor: ( data, @options ) ->
     @data   = @formatData( data )
     @data   = @shrinkData( @data )
-    @stats  = new Stats( @data )
+    @stats  = new Stats( @data, @options )
     @points = @getPoints()
     @pixels = @getPixels( @points, @options.usableWidth, @options.line?.smooth )
 
