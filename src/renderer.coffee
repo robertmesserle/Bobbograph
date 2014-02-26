@@ -1,21 +1,23 @@
 Canvas = require( './canvas.coffee' )
+Point  = require( './point.coffee' )
 
 class Render extends Canvas
 
   constructor: ( @pixels, @context, @options ) ->
-    @render( @options.line.width, @options.bevel )
+    @render( @options.line.width, @options.bevel, @options.shadow )
     if @options.bevel?.smooth
       bevel = @options.bevel.clone()
       for lineWidth in [ @options.line.width - 2 .. 2 ] by -2
         bevel.opacity /= 2
         @render( lineWidth, bevel )
 
-  render: ( lineWidth, bevel ) ->
+  render: ( lineWidth, bevel, shadow ) ->
     @renderFill() if @options.fill
+    @renderShadow( lineWidth, shadow ) if shadow?
     @renderSolid( lineWidth, @options.line.fill )
     if bevel
-      @renderHighlight( lineWidth, bevel )
-      @renderShadow(    lineWidth, bevel )
+      @renderInnerHighlight( lineWidth, bevel )
+      @renderInnerShadow(    lineWidth, bevel )
 
   renderFill: ->
     offset = @options.line.width / 2
@@ -48,7 +50,7 @@ class Render extends Canvas
     else
       @arc( point, offset, -angle, angle )
 
-  renderShadow: ( lineWidth, bevel) ->
+  renderInnerShadow: ( lineWidth, bevel ) ->
     offset = lineWidth / 2
     angle = Math.PI / 2
     @begin()
@@ -61,7 +63,7 @@ class Render extends Canvas
     @close()
     @fill( "rgba( 0, 0, 0, #{bevel.shadow * bevel.opacity} )" )
 
-  renderHighlight: ( lineWidth, bevel ) ->
+  renderInnerHighlight: ( lineWidth, bevel ) ->
     offset = lineWidth / 2
     angle = Math.PI / 2
     @begin()
@@ -74,15 +76,20 @@ class Render extends Canvas
     @close()
     @fill( "rgba( 255, 255, 255, #{bevel.shine * bevel.opacity} )" )
 
-  renderSolid: ( lineWidth, fill ) ->
+  renderShadow: ( lineWidth, shadow ) ->
+    pixels = for pixel in @pixels then new Point( pixel.x + shadow.x, pixel.y - shadow.y )
+    @renderSolid( lineWidth, shadow.color, pixels )
+
+
+  renderSolid: ( lineWidth, fill, pixels = @pixels ) ->
     offset = lineWidth / 2
     angle  = Math.PI / 2
     @begin()
 
-    @renderLine( @pixels, offset, angle )
-    @renderCap(  @pixels[ @pixels.length - 1 ], true, offset )
-    @renderLine( @pixels.slice().reverse(), offset, angle )
-    @renderCap(  @pixels[ 0 ], false, offset )
+    @renderLine( pixels, offset, angle )
+    @renderCap(  pixels[ pixels.length - 1 ], true, offset )
+    @renderLine( pixels.slice().reverse(), offset, angle )
+    @renderCap(  pixels[ 0 ], false, offset )
     
     @close()
     @fill( fill )

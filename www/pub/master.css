@@ -26,6 +26,14 @@ body .header-block {
 body .header-block #wrapper {
   height: 300px;
 }
+body .header-block h1 {
+  font-weight: lighter;
+  font-size: 50px;
+  color: #fff;
+}
+body .header-block .lead {
+  color: #fff;
+}
 body .featurette {
   text-align: center;
   padding: 70px 0 30px;

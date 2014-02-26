@@ -211,7 +211,7 @@ if (typeof module !== "undefined" && module !== null) {
 }
 
 
-},{"./data.coffee":4,"./options.coffee":6,"./renderer.coffee":15,"./x-axis.coffee":18,"./y-axis.coffee":19}],4:[function(require,module,exports){
+},{"./data.coffee":4,"./options.coffee":6,"./renderer.coffee":16,"./x-axis.coffee":19,"./y-axis.coffee":20}],4:[function(require,module,exports){
 var Data, Easing, Point, Stats;
 
 Stats = require('./stats.coffee');
@@ -374,7 +374,7 @@ Data = (function() {
 module.exports = Data;
 
 
-},{"./easing.coffee":5,"./point.coffee":14,"./stats.coffee":16}],5:[function(require,module,exports){
+},{"./easing.coffee":5,"./point.coffee":15,"./stats.coffee":17}],5:[function(require,module,exports){
 var Easing;
 
 Easing = (function() {
@@ -400,7 +400,7 @@ module.exports = Easing;
 
 
 },{}],6:[function(require,module,exports){
-var AxisLineOptions, BevelOptions, DataOptions, FillOptions, FrameOptions, LineOptions, Options, PaddingOptions;
+var AxisLineOptions, BevelOptions, DataOptions, FillOptions, FrameOptions, LineOptions, Options, PaddingOptions, ShadowOptions;
 
 LineOptions = require('./options/line.coffee');
 
@@ -415,6 +415,8 @@ BevelOptions = require('./options/bevel.coffee');
 DataOptions = require('./options/data.coffee');
 
 FrameOptions = require('./options/frame.coffee');
+
+ShadowOptions = require('./options/shadow.coffee');
 
 Options = (function() {
   Options.prototype.height = 300;
@@ -448,6 +450,9 @@ Options = (function() {
     this.usableHeight = this.height - this.padding.top - this.padding.bottom;
     this.data = new DataOptions(this.data, this);
     this.frame = new FrameOptions(this.frame);
+    if (this.shadow != null) {
+      this.shadow = new ShadowOptions(this.shadow);
+    }
   }
 
   Options.prototype.adjustSize = function(elem, name, extra, styles) {
@@ -482,7 +487,7 @@ Options = (function() {
 module.exports = Options;
 
 
-},{"./options/axis-line.coffee":7,"./options/bevel.coffee":8,"./options/data.coffee":9,"./options/fill.coffee":10,"./options/frame.coffee":11,"./options/line.coffee":12,"./options/padding.coffee":13}],7:[function(require,module,exports){
+},{"./options/axis-line.coffee":7,"./options/bevel.coffee":8,"./options/data.coffee":9,"./options/fill.coffee":10,"./options/frame.coffee":11,"./options/line.coffee":12,"./options/padding.coffee":13,"./options/shadow.coffee":14}],7:[function(require,module,exports){
 var AxisLineOptions;
 
 AxisLineOptions = (function() {
@@ -743,6 +748,33 @@ module.exports = PaddingOptions;
 
 
 },{}],14:[function(require,module,exports){
+var FillOptions, ShadowOptions;
+
+FillOptions = require('./fill.coffee');
+
+ShadowOptions = (function() {
+  ShadowOptions.prototype.x = 0;
+
+  ShadowOptions.prototype.y = 0;
+
+  ShadowOptions.prototype.fill = null;
+
+  function ShadowOptions(props) {
+    var key, value;
+    for (key in props) {
+      value = props[key];
+      this[key] = value;
+    }
+  }
+
+  return ShadowOptions;
+
+})();
+
+module.exports = ShadowOptions;
+
+
+},{"./fill.coffee":10}],15:[function(require,module,exports){
 var Point, Trig;
 
 Trig = require('./trig.coffee');
@@ -785,12 +817,14 @@ Point = (function() {
 module.exports = Point;
 
 
-},{"./trig.coffee":17}],15:[function(require,module,exports){
-var Canvas, Render,
+},{"./trig.coffee":18}],16:[function(require,module,exports){
+var Canvas, Point, Render,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 Canvas = require('./canvas.coffee');
+
+Point = require('./point.coffee');
 
 Render = (function(_super) {
   __extends(Render, _super);
@@ -800,7 +834,7 @@ Render = (function(_super) {
     this.pixels = pixels;
     this.context = context;
     this.options = options;
-    this.render(this.options.line.width, this.options.bevel);
+    this.render(this.options.line.width, this.options.bevel, this.options.shadow);
     if ((_ref = this.options.bevel) != null ? _ref.smooth : void 0) {
       bevel = this.options.bevel.clone();
       for (lineWidth = _i = _ref1 = this.options.line.width - 2; _i >= 2; lineWidth = _i += -2) {
@@ -810,14 +844,17 @@ Render = (function(_super) {
     }
   }
 
-  Render.prototype.render = function(lineWidth, bevel) {
+  Render.prototype.render = function(lineWidth, bevel, shadow) {
     if (this.options.fill) {
       this.renderFill();
     }
+    if (shadow != null) {
+      this.renderShadow(lineWidth, shadow);
+    }
     this.renderSolid(lineWidth, this.options.line.fill);
     if (bevel) {
-      this.renderHighlight(lineWidth, bevel);
-      return this.renderShadow(lineWidth, bevel);
+      this.renderInnerHighlight(lineWidth, bevel);
+      return this.renderInnerShadow(lineWidth, bevel);
     }
   };
 
@@ -877,7 +914,7 @@ Render = (function(_super) {
     }
   };
 
-  Render.prototype.renderShadow = function(lineWidth, bevel) {
+  Render.prototype.renderInnerShadow = function(lineWidth, bevel) {
     var angle, offset, pixel, _i, _len, _ref;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
@@ -894,7 +931,7 @@ Render = (function(_super) {
     return this.fill("rgba( 0, 0, 0, " + (bevel.shadow * bevel.opacity) + " )");
   };
 
-  Render.prototype.renderHighlight = function(lineWidth, bevel) {
+  Render.prototype.renderInnerHighlight = function(lineWidth, bevel) {
     var angle, offset, pixel, _i, _len, _ref;
     offset = lineWidth / 2;
     angle = Math.PI / 2;
@@ -911,15 +948,33 @@ Render = (function(_super) {
     return this.fill("rgba( 255, 255, 255, " + (bevel.shine * bevel.opacity) + " )");
   };
 
-  Render.prototype.renderSolid = function(lineWidth, fill) {
+  Render.prototype.renderShadow = function(lineWidth, shadow) {
+    var pixel, pixels;
+    pixels = (function() {
+      var _i, _len, _ref, _results;
+      _ref = this.pixels;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        pixel = _ref[_i];
+        _results.push(new Point(pixel.x - shadow.x, pixel.y - shadow.y));
+      }
+      return _results;
+    }).call(this);
+    return this.renderSolid(lineWidth, shadow.color, pixels);
+  };
+
+  Render.prototype.renderSolid = function(lineWidth, fill, pixels) {
     var angle, offset;
+    if (pixels == null) {
+      pixels = this.pixels;
+    }
     offset = lineWidth / 2;
     angle = Math.PI / 2;
     this.begin();
-    this.renderLine(this.pixels, offset, angle);
-    this.renderCap(this.pixels[this.pixels.length - 1], true, offset);
-    this.renderLine(this.pixels.slice().reverse(), offset, angle);
-    this.renderCap(this.pixels[0], false, offset);
+    this.renderLine(pixels, offset, angle);
+    this.renderCap(pixels[pixels.length - 1], true, offset);
+    this.renderLine(pixels.slice().reverse(), offset, angle);
+    this.renderCap(pixels[0], false, offset);
     this.close();
     return this.fill(fill);
   };
@@ -931,7 +986,7 @@ Render = (function(_super) {
 module.exports = Render;
 
 
-},{"./canvas.coffee":2}],16:[function(require,module,exports){
+},{"./canvas.coffee":2,"./point.coffee":15}],17:[function(require,module,exports){
 var Stats;
 
 Stats = (function() {
@@ -992,7 +1047,7 @@ Stats = (function() {
 module.exports = Stats;
 
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var Trig;
 
 Trig = (function() {
@@ -1090,7 +1145,7 @@ Trig = (function() {
 module.exports = Trig;
 
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var Axis, XAxis,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -1123,7 +1178,7 @@ XAxis = (function(_super) {
 module.exports = XAxis;
 
 
-},{"./axis.coffee":1}],19:[function(require,module,exports){
+},{"./axis.coffee":1}],20:[function(require,module,exports){
 var Axis, YAxis,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
