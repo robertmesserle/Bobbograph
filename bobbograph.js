@@ -956,7 +956,7 @@ Render = (function(_super) {
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         pixel = _ref[_i];
-        _results.push(new Point(pixel.x - shadow.x, pixel.y - shadow.y));
+        _results.push(new Point(pixel.x + shadow.x, pixel.y - shadow.y));
       }
       return _results;
     }).call(this);
