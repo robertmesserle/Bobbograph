@@ -1,4 +1,4 @@
-# Bobbograph v2.0
+# Bobbograph v3.0.0
 
 Bobbograph is a graphing tool for rendering Canvas-based line-graphs.  This primary focus of this project is to allow as much customization as possible, leaving it up to
 the developer to decide what the graph will look like.
