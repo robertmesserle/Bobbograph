@@ -19,13 +19,18 @@ body
       a
         font-size 28px
         font-weight lighter
-        position relative
-        top -5px
+        @media (min-width: 992px)
+          position relative
+          top -5px
       small
         position relative
         bottom -1px
         white-space nowrap
         color hsl(0, 0, 65)
+        @media (max-width: 991px)
+          display none
+    .navbar-toggle
+      margin-right 0
     .navbar-nav
       li
         a

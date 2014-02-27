@@ -61,14 +61,26 @@ body .navbar {
 body .navbar .navbar-header a {
   font-size: 28px;
   font-weight: lighter;
-  position: relative;
-  top: -5px;
+}
+@media (min-width: 992px) {
+  body .navbar .navbar-header a {
+    position: relative;
+    top: -5px;
+  }
 }
 body .navbar .navbar-header small {
   position: relative;
   bottom: -1px;
   white-space: nowrap;
   color: #a6a6a6;
+}
+@media (max-width: 991px) {
+  body .navbar .navbar-header small {
+    display: none;
+  }
+}
+body .navbar .navbar-toggle {
+  margin-right: 0;
 }
 body .navbar .navbar-nav li a {
   font-weight: lighter;
