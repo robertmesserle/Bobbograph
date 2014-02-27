@@ -7,6 +7,7 @@ html
     title Bobbograph
     link( href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css", rel="stylesheet" )
     link( href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", rel="stylesheet" )
+    link( href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/mono-blue.min.css", rel="stylesheet" )
     link( href="/master.css", rel="stylesheet" )
     script( src="//code.jquery.com/jquery-1.11.0.min.js" )
     script( src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" )
@@ -36,9 +37,9 @@ html
         .col-md-10
           h2#basic Basic Usage
           p Bobbograph can be instantiated one of two ways:
-          pre var graph = new Bobbograph( element, options );
+          pre.js var graph = new Bobbograph( element, options );
           p or...
-          pre var graph = Bobbograph.init( element, options );
+          pre.js var graph = Bobbograph.init( element, options );
           hr
           h2#options Options
           p.lead This is the core object that is passed into Bobbograph.
@@ -312,3 +313,6 @@ html
             li: a( href="#axis"      ) Axis
             li: a( href="#bevel"     ) Bevel
             li: a( href="#shadow"    ) Shadow
+    script( src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/highlight.min.js" )
+    script( src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/languages/javascript.min.js" )
+    script. $( '.js' ).each( function () { hljs.highlightBlock( this ); } )
