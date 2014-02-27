@@ -70,6 +70,13 @@ body h2 {
   font-size: 50px;
   font-weight: lighter;
 }
+body h2:before {
+  display: block;
+  content: ' ';
+  margin-top: -70px;
+  height: 70px;
+  visibility: hidden;
+}
 body .header-block {
   background: #b3664d;
   background-image: linear-gradient(#633936, #b3664d);
