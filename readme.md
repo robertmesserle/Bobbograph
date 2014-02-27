@@ -7,14 +7,19 @@ the developer to decide what the graph will look like.
 
 Here is a basic overview of the available options:
 
-Property  | Type                       | Description
--------:  | ----                       | -----------
-width     | Number                     | This number will set the width of the generated graph.
-height    | Number                     | This number will set the height of the generated graph.
-data      | [Data Object](#data)       | This allows some mild modification of the data.
-padding   | [Padding Object](#padding) | This allows customization of padding options.
-line      | [Line Object](#line)       | This allows customization of the line style.
-frame     | [Frame Object](#frame)     | This allows customization of the framing.
+Property  | Type                           | Description
+-------:  | ----                           | -----------
+width     | Number                         | This number will set the width of the generated graph.
+height    | Number                         | This number will set the height of the generated graph.
+data      | [Data Object](#data)           | Allows some mild modification of the data.
+padding   | [Padding Object](#padding)     | Allows customization of padding options.
+line      | [Line Object](#line)           | Allows customization of the line style.
+frame     | [Frame Object](#frame)         | Allows customization of the framing.
+animation | [Animation Object](#animation) | This allows an intro animation to be customized.
+xAxis     | [Axis Object](#axis)           | Allows you to customize the x-axis.
+yAxis     | [Axis Object](#axis)           | Allows you to customize the y-axis.
+bevel     | [Bevel Object](#bevel)         | Allows you to customize bevel effects on your line.
+shadow    | [Shadow Object](#shadow)       | Allows you to add a drop-shadow to your line.
 
 ### Data
 Property  | Type    | Description
@@ -55,3 +60,29 @@ xmin     | Number | The minimum x-value used to frame the graph.
 xmax     | Number | The maximum x-value used to frame the graph.
 ymin     | Number | The minimum y-value used to frame the graph.
 ymax     | Number | The maximum y-value used to frame the graph.
+
+### Animation
+Property | Type     | Description
+-------: | ----     | -----------
+duration | Number   | The duration (in milliseconds) of the animation.
+callback | Function | A method to be called when the animation has finished.
+
+### Axis
+Property  | Type   | Description
+-------:  | ----   | -----------
+increment | Number | The distance between axis lines.
+
+### Bevel
+Property | Type    | Description
+-------: | ----    | -----------
+shine    | Number  | The intensity of the shine effect. (0-1)
+shadow   | Number  | The intensity of the shadow effect. (0-1)
+smooth   | Boolean | Whether or not you want the bevel effect to be softened. (causes rendering to be a heavier process)
+opacity  | Number  | The overall opacity of the bevel effect. (0-1)
+
+### Shadow
+Property | Type   | Description
+-------: | ----   | -----------
+x        | Number | The x-offset value for the shadow.
+y        | Number | The y-offset value for the shadow.
+color    | String | The color of the shadow.
