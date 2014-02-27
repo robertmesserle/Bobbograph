@@ -73,11 +73,18 @@ body
     padding-top 20px
     .affix
       top 70px
-      width 165px
+      @media (max-width: 991px)
+        display none
+      @media (min-width: 992px)
+        width 131px
+      @media (min-width: 1200px)
+        width 165px
     .nav
       .active
         a
           background-color $header-bg
+          &:hover
+            color white
       li
         a
           &:hover

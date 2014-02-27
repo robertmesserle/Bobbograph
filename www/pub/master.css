@@ -132,10 +132,27 @@ body .toc {
 }
 body .toc .affix {
   top: 70px;
-  width: 165px;
+}
+@media (max-width: 991px) {
+  body .toc .affix {
+    display: none;
+  }
+}
+@media (min-width: 992px) {
+  body .toc .affix {
+    width: 131px;
+  }
+}
+@media (min-width: 1200px) {
+  body .toc .affix {
+    width: 165px;
+  }
 }
 body .toc .nav .active a {
   background-color: #b3664d;
+}
+body .toc .nav .active a:hover {
+  color: #fff;
 }
 body .toc .nav li a:hover {
   color: #b3664d;
