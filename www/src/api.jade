@@ -1,0 +1,295 @@
+doctype html
+html
+  head
+    meta( charset="utf-8" )
+    meta( http-equiv="X-UA-Compatible", content="IE=edge" )
+    meta( name="viewport", content="width=device-width, initial-scale=1" )
+    title Bobbograph
+    link( href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css", rel="stylesheet" )
+    link( href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", rel="stylesheet" )
+    link( href="/master.css", rel="stylesheet" )
+    script( src="//code.jquery.com/jquery-1.11.0.min.js" )
+    script( src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" )
+  body
+    nav.navbar.navbar-fixed-top.navbar-default
+      .container
+        button.navbar-toggle( type="button", data-toggle="collapse", data-target=".navbar-collapse" )
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        .navbar-header: a.navbar-brand( href="#" ) Bobbograph
+        .collapse.navbar-collapse
+          ul.nav.navbar-nav.navbar-right
+            li: a( href="/" ) Home
+            li.active: a API
+    .header-block
+      .container
+        h1 API
+        p.lead A brief overview of the options that are supported by Bobbograph.
+    .container
+      h2 Basic Usage
+      p Bobbograph can be instantiated one of two ways:
+      pre var graph = new Bobbograph( element, options );
+      p or...
+      pre var graph = Bobbograph.init( element, options );
+      hr
+      h2 Options
+      p.lead This is the core object that is passed into Bobbograph.
+      p The following options are available:
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code width
+            td: em Number
+            td The width of the container will be set to this value.
+          tr
+            td: code height
+            td: em Number
+            td The height of the container will be set to this value.
+          tr
+            td: code data
+            td: em: a( href="#data" ) Data Options
+            td Customize the way that your data is parsed.
+          tr
+            td: code padding
+            td: em: a( href="#padding" ) Padding Options
+            td Customize the padding surrounding your graph.
+          tr
+            td: code line
+            td: em: a( href="#line" ) Line Options
+            td Customize the visual details of the line.
+          tr
+            td: code fill
+            td: em: a( href="#fill" ) Fill Options
+            td Customize the fill displayed under the area of the line.
+          tr
+            td: code frame
+            td: em: a( href="#frame" ) Frame Options
+            td Customize the framing of the graph.
+          tr
+            td: code animation
+            td: em: a( href="#animation" ) Animation Options
+            td Customize the intro animation of your graph.
+          tr
+            td: code xAxis
+            td: em: a( href="#axis" ) Axis Options
+            td Customize the x-axis.
+          tr
+            td: code yAxis
+            td: em: a( href="#axis" ) Axis Options
+            td Customize the y-axis.
+          tr
+            td: code bevel
+            td: em: a( href="#bevel" ) Bevel Options
+            td Customize the bevel effect applied to your graph.
+          tr
+            td: code shadow
+            td: em: a( href="#shadow" ) Shadow Options
+            td Customize the drop-shadow applied to your graph.
+      hr
+      h2#data Data
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code vertex
+            td: em Boolean
+            td When enabled, this will remove all points between vertexes, creating a smoother graph.
+          tr
+            td: code maxPoints
+            td: em Number
+            td Your data will be reduced to fit within a maximum number of points.
+          tr
+            td: code normalize
+            td: em Boolean
+            td: span.label.label-warning Not yet available.
+      hr
+      h2#padding Padding
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code size
+            td: em Number
+            td Will be used for all sides unless overridden.
+          tr
+            td: code x
+            td: em Number
+            td Will be used for both <code>left</code> and <code>right</code> values unless overridden.
+          tr
+            td: code y
+            td: em Number
+            td Will be used for both <code>top</code> and <code>bottom</code> values unless overridden.
+          tr
+            td: code left
+            td: em Number
+            td Padding to the left of your graph.
+          tr
+            td: code right
+            td: em Number
+            td Padding to the right of your graph.
+          tr
+            td: code top
+            td: em Number
+            td Padding to the top of your graph.
+          tr
+            td: code bottom
+            td: em Number
+            td Padding to the bottom of your graph.
+      hr
+      h2#line Line
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code fill
+            td: em: a( href="#fill" ) Fill Options
+            td The fill to be applied to the line.
+          tr
+            td: code width
+            td: em Number
+            td The thickness of the line.
+          tr
+            td: code smooth
+            td: em Boolean
+            td When enabled, the line will be smoothed using quadratic curves.
+      hr
+      h2#fill Fill
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code color
+            td: em String
+            td A color to be applied to your line.
+          tr
+            td: code gradient
+            td: em Array
+            td An array of colors to be applied to your line.
+          tr
+            td: code vertical
+            td: em Boolean
+            td When enabled, the gradient will be vertical.
+      hr
+      h2#frame Frame
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code xmax
+            td: em Number
+            td The maximum x-value to be displayed in the graph.
+          tr
+            td: code xmin
+            td: em Number
+            td The minimum x-value to be displayed in the graph.
+          tr
+            td: code ymax
+            td: em Number
+            td The maximum y-value to be displayed in the graph.
+          tr
+            td: code ymin
+            td: em Number
+            td The minimum y-value to be displayed in the graph.
+      hr
+      h2#animation Animation
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code duration
+            td: em Number
+            td The duration (in milliseconds) of the intro animation.
+          tr
+            td: code callback
+            td: em Function
+            td A function to be called after the animation is completed.
+      hr
+      h2#axis Axis
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code increment
+            td: em Number
+            td The distance between axis lines.
+      hr
+      h2#bevel Bevel
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code shine
+            td: em Number
+            td The intensity of the shine applied to your line.
+          tr
+            td: code shadow
+            td: em Number
+            td The intensity of the shadow applied to your line.
+          tr
+            td: code smooth
+            td: em Boolean
+            td When enabled, the bevel effect will be smoothed.
+          tr
+            td: code opacity
+            td: em Number
+            td The overall opacity of the bevel effect.
+      hr
+      h2#shadow Shadow
+      table.table.table-striped
+        thead
+          tr
+            th Property
+            th Type
+            th Description
+        tbody
+          tr
+            td: code x
+            td: em Number
+            td The x-offset of the shadow.
+          tr
+            td: code y
+            td: em Number
+            td The y-offset of the shadow.
+          tr
+            td: code color
+            td: em String
+            td The color of the drop-shadow.

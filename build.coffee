@@ -22,9 +22,8 @@ paths = {
 }
 
 gulp.task( 'jade', ->
-  gulp.src( "www/src/index.jade" )
+  gulp.src( "www/src/*.jade" )
     .pipe( jade() )
-    .pipe( rename( 'index.html' ) )
     .pipe( gulp.dest( 'www/pub' ) )
 )
 
