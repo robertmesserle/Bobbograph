@@ -21,8 +21,12 @@ html
         .navbar-header: a.navbar-brand( href="#" ) Bobbograph
         .collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-right
-            li: a( href="/" ) Home
-            li.active: a API
+            li: a( href="/" )
+              i.fa.fa-home
+              | &nbsp; Home
+            li.active: a
+              i.fa.fa-cogs
+              | &nbsp; API
     .header-block
       .container
         h1 API
