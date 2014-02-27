@@ -58,13 +58,19 @@ body .navbar {
   margin-bottom: 0;
   background: #fff;
 }
-body .navbar .navbar-brand {
-  font-size: 35px;
+body .navbar .navbar-header a {
+  font-size: 28px;
   font-weight: lighter;
+  position: relative;
+  top: -5px;
+}
+body .navbar .navbar-header small {
+  position: relative;
+  bottom: -1px;
 }
 body .navbar .navbar-nav li a {
   font-weight: lighter;
-  font-size: 20px;
+  font-size: 16px;
   padding-left: 25px;
   padding-right: 30px;
 }
@@ -113,7 +119,7 @@ body .featurette .container {
 body .featurette .container h3 {
   margin: 20px 0;
   font-weight: lighter;
-  font-size: 30px;
+  font-size: 28px;
 }
 body .featurette .container p {
   line-height: 1.5em;
@@ -123,7 +129,7 @@ body .featurette a.btn {
   border: 1px solid #ba5e6e;
   color: #ba5e6e;
   font-weight: lighter;
-  font-size: 20px;
+  font-size: 21px;
 }
 body .featurette a.btn:hover {
   background: #ba5e6e;
