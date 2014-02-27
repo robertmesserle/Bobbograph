@@ -127,6 +127,19 @@ body .featurette a.btn:hover {
   background: #955650;
   color: #fff;
 }
+body .toc {
+  padding-top: 20px;
+}
+body .toc .affix {
+  top: 70px;
+  width: 165px;
+}
+body .toc .nav .active a {
+  background-color: #b3664d;
+}
+body .toc .nav li a:hover {
+  color: #b3664d;
+}
 .bbg-container .bbg-axis li div {
   color: #ba755e;
 }
