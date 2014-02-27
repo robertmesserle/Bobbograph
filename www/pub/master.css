@@ -51,7 +51,7 @@ body {
   color: #999;
 }
 body a {
-  color: #955650;
+  color: #ba5e6e;
 }
 body .navbar {
   margin-top: 0;
@@ -80,8 +80,8 @@ body h2:before {
   visibility: hidden;
 }
 body .header-block {
-  background: #b3664d;
-  background-image: linear-gradient(#633936, #b3664d);
+  background: #b34d5e;
+  background-image: linear-gradient(#633645, #b34d5e);
   padding: 30px 0 50px;
 }
 body .header-block #wrapper {
@@ -120,13 +120,13 @@ body .featurette .container p {
 }
 body .featurette a.btn {
   background: #fff;
-  border: 1px solid #955650;
-  color: #955650;
+  border: 1px solid #ba5e6e;
+  color: #ba5e6e;
   font-weight: lighter;
   font-size: 20px;
 }
 body .featurette a.btn:hover {
-  background: #955650;
+  background: #ba5e6e;
   color: #fff;
 }
 body .toc {
@@ -151,20 +151,20 @@ body .toc .affix {
   }
 }
 body .toc .nav .active a {
-  background-color: #b3664d;
+  background-color: #b34d5e;
 }
 body .toc .nav .active a:hover {
   color: #fff;
 }
 body .toc .nav li a:hover {
-  color: #b3664d;
+  color: #b34d5e;
 }
 .bbg-container .bbg-axis li div {
-  color: #ba755e;
+  color: #ba5e6e;
 }
 .bbg-container .bbg-y-axis li {
-  border-bottom: 1px solid #ba755e;
+  border-bottom: 1px solid #ba5e6e;
 }
 .bbg-container .bbg-x-axis li {
-  border-left: 1px solid #ba755e;
+  border-left: 1px solid #ba5e6e;
 }

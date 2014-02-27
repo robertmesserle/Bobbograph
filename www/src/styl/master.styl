@@ -1,15 +1,16 @@
 @import '../../../styl/master.styl'
 
-$header-bg  = hsl( 015, 40, 50 )
-$header-bg2 = hsl( 005, 30, 30 )
-$header-fg  = lighten( $header-bg, 5 )
+$hue        = 340
+$header-bg  = hsl( $hue + 10, 40, 50 )
+$header-bg2 = hsl( $hue,      30, 30 )
+$header-fg  = lighten( $header-bg,  5 )
 $header-fg2 = lighten( $header-bg2, 15 )
 
 body
   padding-top 50px
   color hsl(0, 0, 60)
   a
-    color $header-fg2
+    color $header-fg
   .navbar
     margin-top 0
     margin-bottom 0
@@ -64,12 +65,12 @@ body
         line-height 1.5em
     a.btn
       background white
-      border 1px solid $header-fg2
-      color $header-fg2
+      border 1px solid $header-fg
+      color $header-fg
       font-weight lighter
       font-size 20px
       &:hover
-        background $header-fg2
+        background $header-fg
         color white
   .toc
     padding-top 20px
