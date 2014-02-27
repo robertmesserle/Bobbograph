@@ -1,0 +1,21 @@
+nav.navbar.navbar-fixed-top.navbar-default
+  .container
+    button.navbar-toggle( type="button", data-toggle="collapse", data-target=".navbar-collapse" )
+      span.sr-only Toggle navigation
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    .navbar-header: a.navbar-brand( href="/" ) Bobbograph
+    .collapse.navbar-collapse
+      ul.nav.navbar-nav.navbar-right
+        - var lookup = {}
+        - lookup[ section ] = 'active'
+        li( class=lookup[ 'home' ] ): a( href="/" )
+          i.fa.fa-home
+          | &nbsp; Home
+        li( class=lookup[ 'api' ] ): a( href="/api.html" )
+          i.fa.fa-cogs
+          | &nbsp; API
+        // li( class=lookup[ 'demo' ] ): a( href="/demo.html" )
+        //   i.fa.fa-play-circle-o
+        //   | &nbsp; Demo
