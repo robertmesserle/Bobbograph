@@ -67,6 +67,8 @@ body .navbar .navbar-header a {
 body .navbar .navbar-header small {
   position: relative;
   bottom: -1px;
+  white-space: nowrap;
+  color: #a6a6a6;
 }
 body .navbar .navbar-nav li a {
   font-weight: lighter;
