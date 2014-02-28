@@ -1,0 +1,1 @@
+git push heroku v3:master && git push
