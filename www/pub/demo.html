@@ -1,7 +1,17 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Bobbograph</title><link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet"><link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet"><link href="/master.css" rel="stylesheet"><script src="//code.jquery.com/jquery-1.11.0.min.js"></script><script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><style>.col-md-3 { margin-top: -200px; border-radius: 10px; background: white; }
-form { height: 560px; overflow: auto; }</style></head><body><nav class="navbar navbar-fixed-top navbar-default"><div class="container"><button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><div class="navbar-header"><a href="/" class="navbar-brand">Bobbograph</a><small>The graphing library with a terrible name.</small></div><div class="collapse navbar-collapse"><ul class="nav navbar-nav navbar-right"><li><a href="/"><i class="fa fa-home"></i>&nbsp; Home</a></li><li><a href="/api.html"><i class="fa fa-cogs"></i>&nbsp; API</a></li><li class="active"><a href="/demo.html"><i class="fa fa-play-circle-o"></i>&nbsp; Demo</a></li></ul></div></div></nav><div class="header-block"><div class="container"><h1>Demo</h1><p class="lead">Interactive demo to show what Bobbograph can do.</p></div></div><br><div class="container"><div class="row"><div class="col-md-9"><div class="well"><div id="wrapper"></div></div></div><div class="col-md-3"><form><h2>Line</h2><div class="form-group"><label for="line-color" class="control-label"><code>color</code></label><input id="line-color" type="text" value="#b34d5e" class="form-control"></div><div class="form-group"><label for="line-width" class="control-label"><code>width</code></label><input id="line-width" type="number" value="10" class="form-control"></div><div class="checkbox"><label class="control-label"><input id="line-smooth" type="checkbox" checked><strong><code>smooth</code></strong></label></div><h2>Bevel</h2><div class="checkbox"><label class="control-label"><input id="bevel-enabled" type="checkbox"><strong><code>enabled</code></strong></label></div><div class="checkbox"><label class="control-label"><input id="bevel-smooth" type="checkbox"><strong><code>smooth</code></strong></label></div><div class="form-group"><label for-'bevel-shine class="control-label"><code>shine</code></label><input id="bevel-shine" type="number" value="0.35" class="form-control"></div><div class="form-group"><label for="bevel-shadow" class="control-label"><code>shadow</code></label><input id="bevel-shadow" type="number" value="0.15" class="form-control"></div></form></div></div></div><script src="/js/bobbograph.js"></script><script>function draw () {
-  var data = [ 1, 5, 1, 2, 1, 3, 2 ],
-      $elem = $( '#wrapper' ).empty(),
+form { height: 560px; overflow: auto; }</style></head><body><nav class="navbar navbar-fixed-top navbar-default"><div class="container"><button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><div class="navbar-header"><a href="/" class="navbar-brand">Bobbograph</a><small>The graphing library with a terrible name.</small></div><div class="collapse navbar-collapse"><ul class="nav navbar-nav navbar-right"><li><a href="/"><i class="fa fa-home"></i>&nbsp; Home</a></li><li><a href="/api.html"><i class="fa fa-cogs"></i>&nbsp; API</a></li><li class="active"><a href="/demo.html"><i class="fa fa-play-circle-o"></i>&nbsp; Demo</a></li></ul></div></div></nav><div class="header-block"><div class="container"><h1>Demo</h1><p class="lead">Interactive demo to show what Bobbograph can do.</p></div></div><br><div class="container"><div class="row"><div class="col-md-9"><div class="well"><div id="wrapper"></div></div></div><div class="col-md-3"><form><h2>Data</h2><div class="form-group"><input id="data" type:'text value="1,5,1,2,1,3,2" class="form-control"></div><h2>Line</h2><div class="form-group"><label for="line-color" class="control-label"><code>color</code></label><input id="line-color" type="text" value="#b34d5e" class="form-control"></div><div class="form-group"><label for="line-width" class="control-label"><code>width</code></label><input id="line-width" type="number" value="10" class="form-control"></div><div class="checkbox"><label class="control-label"><input id="line-smooth" type="checkbox" checked><strong><code>smooth</code></strong></label></div><h2>Bevel</h2><div class="checkbox"><label class="control-label"><input id="bevel-enabled" type="checkbox"><strong><code>enabled</code></strong></label></div><div class="checkbox"><label class="control-label"><input id="bevel-smooth" type="checkbox"><strong><code>smooth</code></strong></label></div><div class="form-group"><label for-'bevel-shine class="control-label"><code>shine</code></label><input id="bevel-shine" type="number" value="0.35" class="form-control"></div><div class="form-group"><label for="bevel-shadow" class="control-label"><code>shadow</code></label><input id="bevel-shadow" type="number" value="0.15" class="form-control"></div></form></div></div></div><script src="/js/bobbograph.js"></script><script>function parseData( str ) {
+  var arr = str.split( /, */ ),
+      len = arr.length;
+  while ( len-- ) {
+    if ( isNaN( arr[ len ] ) ) return false;
+    if ( arr[ len ] === '' )   return false;
+    arr[ len ] = parseFloat( arr[ len ] );
+  }
+  return arr;
+}
+function draw () {
+  var data = parseData( $( '#data' ).val() ),
+      $elem = $( '#wrapper' ),
       options = {
         height: 300,
         line:  {
@@ -12,6 +22,7 @@ form { height: 560px; overflow: auto; }</style></head><body><nav class="navbar n
         xAxis: { increment: 2 },
         yAxis: { increment: 2 }
       };
+  if ( !data ) return;
   if ( $( '#bevel-enabled' ).prop( 'checked' ) ) {
     options.bevel = {
       shine: parseFloat( $( '#bevel-shine' ).val() ) || 0.35,
@@ -19,7 +30,7 @@ form { height: 560px; overflow: auto; }</style></head><body><nav class="navbar n
       smooth: $( '#bevel-smooth' ).prop( 'checked' )
     };
   }
-  new Bobbograph( $elem, data, options );
+  new Bobbograph( $elem.empty(), data, options );
 }
 draw();
 $( 'form' ).on( 'click blur change keyup', 'input', draw );</script></body></html>
