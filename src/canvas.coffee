@@ -31,6 +31,12 @@ class Canvas
     top  = @scaleY( point.y )
     @context.arc( left, top, radius, -angle1, -angle2, ccw )
 
+  arcTo: ( point1, point2, radius ) ->
+    @context.arcTo( @scaleX( point1.x ), @scaleY( point1.y ), @scaleX( point2.x ), @scaleY( point2.y ), radius )
+
+  bezierCurveTo: ( point1, point2, point3 ) ->
+    @context.bezierCurveTo( @scaleX( point1.x ), @scaleY( point1.y ), @scaleX( point2.x ), @scaleY( point2.y ), @scaleX( point3.x ), @scaleY( point3.y ) )
+
   stroke: ( fill ) ->
     if fill then @context.strokeStyle = fill
     @context.stroke()

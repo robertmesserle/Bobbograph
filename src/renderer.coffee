@@ -38,10 +38,15 @@ class Render extends Canvas
 
   renderLine: ( pixels, offset, angleOffset ) ->
     for pixel, index in pixels
-      prev    = pixels[ index - 1 ]
-      next    = pixels[ index + 1 ]
-      point = pixel.offsetPoint( prev, next, offset, angleOffset )
-      @line( point )
+      prev   = pixels[ index - 1 ]
+      next   = pixels[ index + 1 ]
+      if pixel.isVertex( prev, next )
+        angle1 = prev.getAngle( pixel ) + angleOffset
+        angle2 = pixel.getAngle( next ) + angleOffset
+        @arc( pixel, offset, angle1, angle2 )
+      else
+        point = pixel.offsetPoint( prev, next, offset, angleOffset )
+        @line( point )
 
   renderCap: ( point, right, offset ) ->
     angle = Math.PI / 2
@@ -79,7 +84,6 @@ class Render extends Canvas
   renderShadow: ( lineWidth, shadow ) ->
     pixels = for pixel in @pixels then new Point( pixel.x + shadow.x, pixel.y - shadow.y )
     @renderSolid( lineWidth, shadow.color, pixels )
-
 
   renderSolid: ( lineWidth, fill, pixels = @pixels ) ->
     offset = lineWidth / 2

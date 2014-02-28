@@ -182,6 +182,14 @@ Canvas = (function() {
     return this.context.arc(left, top, radius, -angle1, -angle2, ccw);
   };
 
+  Canvas.prototype.arcTo = function(point1, point2, radius) {
+    return this.context.arcTo(this.scaleX(point1.x), this.scaleY(point1.y), this.scaleX(point2.x), this.scaleY(point2.y), radius);
+  };
+
+  Canvas.prototype.bezierCurveTo = function(point1, point2, point3) {
+    return this.context.bezierCurveTo(this.scaleX(point1.x), this.scaleY(point1.y), this.scaleX(point2.x), this.scaleY(point2.y), this.scaleX(point3.x), this.scaleY(point3.y));
+  };
+
   Canvas.prototype.stroke = function(fill) {
     if (fill) {
       this.context.strokeStyle = fill;
@@ -1020,14 +1028,20 @@ Render = (function(_super) {
   };
 
   Render.prototype.renderLine = function(pixels, offset, angleOffset) {
-    var index, next, pixel, point, prev, _i, _len, _results;
+    var angle1, angle2, index, next, pixel, point, prev, _i, _len, _results;
     _results = [];
     for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
       pixel = pixels[index];
       prev = pixels[index - 1];
       next = pixels[index + 1];
-      point = pixel.offsetPoint(prev, next, offset, angleOffset);
-      _results.push(this.line(point));
+      if (pixel.isVertex(prev, next)) {
+        angle1 = prev.getAngle(pixel) + angleOffset;
+        angle2 = pixel.getAngle(next) + angleOffset;
+        _results.push(this.arc(pixel, offset, angle1, angle2));
+      } else {
+        point = pixel.offsetPoint(prev, next, offset, angleOffset);
+        _results.push(this.line(point));
+      }
     }
     return _results;
   };

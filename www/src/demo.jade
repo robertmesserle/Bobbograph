@@ -27,9 +27,9 @@ html
             .form-group
               label.control-label(for='line-width'): code width
               input#line-width.form-control(type='number', value=10)
-            // .checkbox: label.control-label
-            //   input#line-smooth(type='checkbox', checked)
-            //   strong: code smooth
+            .checkbox: label.control-label
+              input#line-smooth(type='checkbox', checked)
+              strong: code smooth
             h2 Bevel
             .checkbox: label.control-label
               input#bevel-enabled(type='checkbox')
@@ -53,8 +53,7 @@ html
               height: 300,
               line:  {
                 width:  parseInt( $('#line-width').val(), 10 ) || 10,
-                // smooth: $('#line-smooth').prop( 'checked' ),
-                smooth: false,
+                smooth: $('#line-smooth').prop( 'checked' ),
                 fill:   $('#line-color').val()
               },
               xAxis: { increment: 2 },
