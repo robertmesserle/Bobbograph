@@ -914,6 +914,30 @@ Point = (function() {
     return new Point(point.x, point.y);
   };
 
+  Point.prototype.isVertex = function(prev, next) {
+    return this.isPeak.apply(this, arguments) || this.isValley.apply(this, arguments);
+  };
+
+  Point.prototype.isPeak = function(prev, next) {
+    if (prev == null) {
+      prev = this;
+    }
+    if (next == null) {
+      next = this;
+    }
+    return this.y - prev.y > 0 && this.y - next.y > 0;
+  };
+
+  Point.prototype.isValley = function(prev, next) {
+    if (prev == null) {
+      prev = this;
+    }
+    if (next == null) {
+      next = this;
+    }
+    return this.y - prev.y < 0 && this.y - next.y < 0;
+  };
+
   return Point;
 
 })();

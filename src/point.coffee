@@ -17,4 +17,13 @@ class Point
     point = Trig.getPointFromAngle( this, angle, distance )
     new Point( point.x, point.y )
 
+  isVertex: ( prev, next ) ->
+    @isPeak( arguments... ) or @isValley( arguments... )
+
+  isPeak: ( prev = this, next = this ) ->
+    @y - prev.y > 0 and @y - next.y > 0
+
+  isValley: ( prev = this, next = this ) ->
+    @y - prev.y < 0 and @y - next.y < 0
+
 module.exports = Point
