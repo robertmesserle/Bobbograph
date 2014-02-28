@@ -35,6 +35,9 @@ class Trig
     distance = Math.sqrt( dx * dx + dy * dy )
 
   @getPointFromAngle: ( origin, angle, distance ) ->
+    throw new Error( 'origin is required' )   unless origin
+    throw new Error( 'angle is required' )    unless angle?
+    throw new Error( 'distance is required' ) unless distance?
     { x, y } = origin
     if angle is Math.PI
       { x: x - distance, y: y }

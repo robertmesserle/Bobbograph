@@ -14,6 +14,8 @@ class Point
     point = @getPointFromAngle( perp, offset )
 
   getPointFromAngle: ( angle, distance ) ->
+    throw new Error( 'angle is required' )    unless angle?
+    throw new Error( 'distance is required' ) unless distance?
     point = Trig.getPointFromAngle( this, angle, distance )
     new Point( point.x, point.y )
 

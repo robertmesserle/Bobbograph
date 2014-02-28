@@ -918,6 +918,12 @@ Point = (function() {
 
   Point.prototype.getPointFromAngle = function(angle, distance) {
     var point;
+    if (angle == null) {
+      throw new Error('angle is required');
+    }
+    if (distance == null) {
+      throw new Error('distance is required');
+    }
     point = Trig.getPointFromAngle(this, angle, distance);
     return new Point(point.x, point.y);
   };
@@ -1028,16 +1034,18 @@ Render = (function(_super) {
   };
 
   Render.prototype.renderLine = function(pixels, offset, angleOffset) {
-    var angle1, angle2, index, next, pixel, point, prev, _i, _len, _results;
+    var a1, a2, bot, index, next, pixel, point, prev, top, _i, _len, _results;
+    top = pixels[0].x < pixels[1].x;
+    bot = !top;
     _results = [];
     for (index = _i = 0, _len = pixels.length; _i < _len; index = ++_i) {
       pixel = pixels[index];
       prev = pixels[index - 1];
       next = pixels[index + 1];
-      if (pixel.isVertex(prev, next)) {
-        angle1 = prev.getAngle(pixel) + angleOffset;
-        angle2 = pixel.getAngle(next) + angleOffset;
-        _results.push(this.arc(pixel, offset, angle1, angle2));
+      if (top && pixel.isPeak(prev, next) || bot && pixel.isValley(prev, next)) {
+        a1 = prev.getAngle(pixel) + angleOffset * (top ? 1 : -1);
+        a2 = next.getAngle(pixel) + angleOffset * (top ? 1 : -1);
+        _results.push(this.arc(pixel, offset, a1, a2));
       } else {
         point = pixel.offsetPoint(prev, next, offset, angleOffset);
         _results.push(this.line(point));
@@ -1251,6 +1259,15 @@ Trig = (function() {
 
   Trig.getPointFromAngle = function(origin, angle, distance) {
     var x, y;
+    if (!origin) {
+      throw new Error('origin is required');
+    }
+    if (angle == null) {
+      throw new Error('angle is required');
+    }
+    if (distance == null) {
+      throw new Error('distance is required');
+    }
     x = origin.x, y = origin.y;
     if (angle === Math.PI) {
       return {

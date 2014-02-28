@@ -37,13 +37,15 @@ class Render extends Canvas
     @fill( @options.fill )
 
   renderLine: ( pixels, offset, angleOffset ) ->
+    top = pixels[0].x < pixels[1].x
+    bot = not top
     for pixel, index in pixels
       prev   = pixels[ index - 1 ]
       next   = pixels[ index + 1 ]
-      if pixel.isVertex( prev, next )
-        angle1 = prev.getAngle( pixel ) + angleOffset
-        angle2 = pixel.getAngle( next ) + angleOffset
-        @arc( pixel, offset, angle1, angle2 )
+      if top and pixel.isPeak( prev, next ) or bot and pixel.isValley( prev, next )
+        a1 = prev.getAngle( pixel ) + angleOffset * ( if top then 1 else -1 )
+        a2 = next.getAngle( pixel ) + angleOffset * ( if top then 1 else -1 )
+        @arc( pixel, offset, a1, a2 )
       else
         point = pixel.offsetPoint( prev, next, offset, angleOffset )
         @line( point )
