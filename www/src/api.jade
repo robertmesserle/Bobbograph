@@ -96,8 +96,10 @@ html
                 td Your data will be reduced to fit within a maximum number of points.
               tr
                 td: code normalize
-                td: em Boolean
-                td: span.label.label-warning Not yet available.
+                td: em Number
+                td
+                  span.label.label-warning Not yet supported.
+                  | &nbsp; When enabled, it will remove points beyond <em>n</em> standard deviations.
           hr
           h2#padding Padding
           table.table.table-striped
@@ -219,6 +221,12 @@ html
                 td: code callback
                 td: em Function
                 td A function to be called after the animation is completed.
+              tr
+                td: code step
+                td: em Function
+                td
+                  span.label.label-warning Not yet supported.
+                  | &nbsp; A function to be called before each step of the animation.
           hr
           h2#axis Axis
           table.table.table-striped
@@ -232,6 +240,12 @@ html
                 td: code increment
                 td: em Number
                 td The distance between axis lines.
+              tr
+                td: code format
+                td: em String
+                td
+                  span.label.label-warning Not yet supported.
+                  | &nbsp; A string for what the formatted labels should look like.  Example: <code>"# ft"</code>
           hr
           h2#bevel Bevel
           table.table.table-striped
