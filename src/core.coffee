@@ -24,6 +24,7 @@ class Bobbograph
     if @options.animation
       new Animator( @options.animation, ( percentage ) =>
         pixels = @data.pixels.slice( 0, @data.pixels.length * percentage )
+        @context.clearRect( 0, 0, @options.width, @options.height )
         new Renderer( pixels, @context, @options )
       )
     else new Renderer( @data.pixels, @context, @options )

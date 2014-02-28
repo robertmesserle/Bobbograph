@@ -12,7 +12,6 @@ class Render extends Canvas
         @render( lineWidth, bevel )
 
   render: ( lineWidth, bevel, shadow ) ->
-    @clear()
     @renderFill() if @options.fill
     @renderShadow( lineWidth, shadow ) if shadow?
     @renderSolid( lineWidth, @options.line.fill )

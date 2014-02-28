@@ -179,6 +179,10 @@ body .toc .nav .active a:hover {
 body .toc .nav li a:hover {
   color: #b34d5e;
 }
+body .well #wrapper {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
 .bbg-container .bbg-axis li div {
   color: #ba5e6e;
 }

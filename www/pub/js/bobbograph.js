@@ -237,6 +237,7 @@ Bobbograph = (function() {
         return function(percentage) {
           var pixels;
           pixels = _this.data.pixels.slice(0, _this.data.pixels.length * percentage);
+          _this.context.clearRect(0, 0, _this.options.width, _this.options.height);
           return new Renderer(pixels, _this.context, _this.options);
         };
       })(this));
@@ -948,7 +949,6 @@ Render = (function(_super) {
   }
 
   Render.prototype.render = function(lineWidth, bevel, shadow) {
-    this.clear();
     if (this.options.fill) {
       this.renderFill();
     }
