@@ -72,7 +72,10 @@ body .navbar .navbar-header small {
   position: relative;
   bottom: -1px;
   white-space: nowrap;
-  color: #a6a6a6;
+  color: #8c8c8c;
+  text-transform: uppercase;
+  font-weight: lighter;
+  letter-spacing: 2px;
 }
 @media (max-width: 991px) {
   body .navbar .navbar-header small {
