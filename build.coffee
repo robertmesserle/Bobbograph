@@ -6,7 +6,6 @@ uglify     = require( 'gulp-uglify' )
 browserify = require( 'gulp-browserify' )
 rename     = require( 'gulp-rename' )
 coffee     = require( 'gulp-coffee' )
-jade       = require( 'gulp-jade' )
 stylus     = require( 'gulp-stylus' )
 lint       = require( 'gulp-coffeelint' )
 nodemon    = require( 'gulp-nodemon' )
@@ -21,24 +20,14 @@ paths = {
   coffee: 'src/**/*.coffee'
 }
 
-gulp.task( 'jade', ->
-  gulp.src( "www/src/*.jade" )
-    .pipe( jade() )
-    .pipe( gulp.dest( 'www/pub' ) )
-)
-
 gulp.task( 'stylus', ->
-  gulp.src( "www/src/styl/master.styl" )
-    .pipe( stylus( { use: [ 'nib' ], import: [ 'nib' ] } ) )
-    .pipe( rename( 'master.css' ) )
-    .pipe( gulp.dest( 'www/pub' ) )
   gulp.src( "styl/master.styl" )
     .pipe( stylus() )
     .pipe( rename( 'bobbograph.css' ) )
-    .pipe( gulp.dest( '.' ) )
+    .pipe( gulp.dest( 'dist' ) )
     .pipe( css() )
     .pipe( rename( 'bobbograph.min.css' ) )
-    .pipe( gulp.dest( '.' ) )
+    .pipe( gulp.dest( 'dist' ) )
 )
 
 gulp.task( 'coffee', [ 'test', 'lint' ], ->
@@ -46,11 +35,11 @@ gulp.task( 'coffee', [ 'test', 'lint' ], ->
     .pipe( browserify( { transform: [ 'coffeeify' ], extensions: [ '.coffee' ] } ) )
     .pipe( header( comment ) )
     .pipe( rename( 'bobbograph.js' ) )
-    .pipe( gulp.dest( '.' ) )
-    .pipe( gulp.dest( 'www/pub/js' ) )
+    .pipe( gulp.dest( 'dist' ) )
+    .pipe( gulp.dest( 'www/js' ) )
     .pipe( uglify( { preserveComments: 'some' } ) )
     .pipe( rename( 'bobbograph.min.js' ) )
-    .pipe( gulp.dest( '.' ) )
+    .pipe( gulp.dest( 'dist' ) )
 )
 
 gulp.task( 'lint', ->
@@ -66,17 +55,15 @@ gulp.task( 'test', ->
 )
 
 gulp.task( 'dev', ->
-  nodemon( { script: 'www/server.coffee', ext: 'jade coffee styl' } )
-    .on( 'restart', 'default' )
+  nodemon( { script: 'www/server.coffee', ext: 'jade coffee styl' } ).on( 'restart', 'default' )
 )
 
-gulp.task( 'default', [ 'coffee', 'jade', 'stylus' ] )
+gulp.task( 'default', [ 'coffee', 'stylus' ] )
 
 gulp.task( 'watch', [ 'coffee' ], ->
   gulp.watch( paths.tests, [ 'test' ] )
     .on( 'error', console.log.bind( console ) )
     .on( 'err',   console.log.bind( console ) )
   gulp.watch( paths.coffee, [ 'coffee' ] )
-  gulp.watch( 'www/src/index.jade', [ 'jade' ] )
-  gulp.watch( 'www/src/styl/**/*.styl', [ 'stylus' ] )
+  gulp.watch( '/styl/**/*.styl', [ 'stylus' ] )
 )
