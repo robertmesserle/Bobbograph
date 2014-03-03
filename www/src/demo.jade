@@ -2,6 +2,7 @@ doctype html
 html
   head
     include head.jade
+    link( href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/mono-blue.min.css", rel="stylesheet" )
     style.
       .col-md-3 { margin-top: -200px; border-radius: 10px; background: white; }
   body
@@ -17,6 +18,7 @@ html
         .col-md-9
           .well
             #wrapper
+          pre.js
         .col-md-3
           form
             h2 Data
@@ -46,8 +48,12 @@ html
               label.control-label(for='bevel-shadow'): code shadow
               input#bevel-shadow.form-control(type='number', value=0.15)
 
+    script( src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/highlight.min.js" )
+    script( src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/languages/javascript.min.js" )
     script( src="/js/bobbograph.js" )
     script.
+      var $js = $( 'pre.js' ),
+          $elem = $( '#wrapper' );
       function parseData( str ) {
         var arr = str.split( /, */ ),
             len = arr.length;
@@ -60,7 +66,6 @@ html
       }
       function draw () {
         var data = parseData( $( '#data' ).val() ),
-            $elem = $( '#wrapper' ),
             options = {
               height: 300,
               line:  {
@@ -80,6 +85,8 @@ html
           };
         }
         new Bobbograph( $elem.empty(), data, options );
+        $js.text( 'new Bobbograph( $element, ' + JSON.stringify( data ) + ', ' + JSON.stringify( options, null, 2 ) + ' );' );
+        hljs.highlightBlock( $js.get( 0 ) );
       }
       draw();
       $( 'form' ).on( 'click blur change keyup', 'input', draw );
