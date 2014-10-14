@@ -1,59 +1,9 @@
 doctype html
-html
+html(ng-app="BobbographSite")
   head
     include head.jade
   body
-    - var section = 'home'
     include navbar.jade
-    .header-block
-      .container
-        #wrapper
-    .featurette
-      h2 What is Bobbograph?
-      p.lead
-        | Bobbograph is a JavaScript graphing library built around the idea of providing maximum visual customization.
-        | It is used on <a href="http://www.nikeplus.com">Nike+</a> and a number of other sites to provide visually appealing line-graphs.
-      a.btn.btn-lg( href="https://raw.github.com/robertmesserle/Bobbograph/v3/bobbograph.js" )
-        i.fa.fa-download
-        | 
-        | Download Development Version
-      | &nbsp; &nbsp;
-      a.btn.btn-lg( href="https://raw.github.com/robertmesserle/Bobbograph/v3/bobbograph.min.js" )
-        i.fa.fa-download
-        | 
-        | Download Production Version
-      hr
-      h2 Why choose Bobbograph?
-      .container
-        .row
-          .col-sm-4
-            i.fa.fa-5x.fa-gear
-            h3 Customization
-            p  Bobbograph gives you the ability to customize just about any aspect of your graph, giving you complete control.
-          .col-sm-4
-            i.fa.fa-5x.fa-html5
-            h3 Compatibility
-            p  Bobbograph uses best practices in Canvas to ensure that your graphs will look perfect in any browser.
-          .col-sm-4
-            i.fa.fa-5x.fa-thumbs-up
-            h3 Ease-of-use
-            p  Bobbograph is specifically built to be as intuitive as possible.
-      hr
-      h2 Help support Bobbograph.
-      p.lead Bobbograph is hosted on <a href="//github.com">Github</a>.  Please feel free to contribute to the project, or log issues there.
-      a.btn.btn-lg( href="http://github.com/robertmesserle/Bobbograph" )
-        i.fa.fa-github
-        | 
-        | View it on Github
-    include social.jade
-
-    script( src="/js/bobbograph.js" )
-    script.
-      var data = [ 1, 2, 1, 3, 1, 5, 1, 3, 1, 2, 1 ],
-          options = {
-            line:  { width: 10, smooth: true, fill: 'white' },
-            fill:  { gradient: [ 'rgba(255,255,255,0.25)', 'rgba(255,255,255,0)' ], vertical: true },
-            xAxis: { increment: 2 },
-            yAxis: { increment: 2 }
-          };
-      new Bobbograph( '#wrapper', data, options )
+    div(ng-view)
+    script(type='text/ng-template', id='home.html')
+      include home.jade

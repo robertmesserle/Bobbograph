@@ -1,4 +1,4 @@
-nav.navbar.navbar-fixed-top.navbar-default
+nav.navbar.navbar-fixed-top.navbar-default(ng-controller='NavCtrl')
   .container
     button.navbar-toggle( type="button", data-toggle="collapse", data-target=".navbar-collapse" )
       span.sr-only Toggle navigation
@@ -12,12 +12,12 @@ nav.navbar.navbar-fixed-top.navbar-default
       ul.nav.navbar-nav.navbar-right
         - var lookup = {}
         - lookup[ section ] = 'active'
-        li( class=lookup[ 'home' ] ): a( href="/" )
+        li(ng-class="{ active: isActive('/') }"): a( href="#/" )
           i.fa.fa-home
           | &nbsp; Home
-        li( class=lookup[ 'api' ] ): a( href="/api.html" )
+        li(ng-class="{ active: isActive('/api') }"): a( href="#/api" )
           i.fa.fa-cogs
           | &nbsp; API
-        li( class=lookup[ 'demo' ] ): a( href="/demo.html" )
+        li(ng-class="{ active: isActive('/demo') }"): a( href="#/demo" )
           i.fa.fa-play-circle-o
           | &nbsp; Demo

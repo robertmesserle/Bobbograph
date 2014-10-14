@@ -1,92 +1,39 @@
-doctype html
-html
-  head
-    include head.jade
-    link( href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/mono-blue.min.css", rel="stylesheet" )
-    style.
-      .col-md-3 { margin-top: -200px; border-radius: 10px; background: white; }
-  body
-    - var section = 'demo'
-    include navbar.jade
-    .header-block
-      .container
-        h1 Demo
-        p.lead Interactive demo to show what Bobbograph can do.
-    br
-    .container
-      .row
-        .col-md-9
-          .well
-            #wrapper
-          pre.js
-        .col-md-3
-          form
-            h2 Data
-            .form-group
-              input#data.form-control(type='text', value='1,5,1,2,1,3,2')
-            h2 Line
-            .form-group
-              label.control-label(for='line-color'): code color
-              input#line-color.form-control(type='text', value='#b34d5e')
-            .form-group
-              label.control-label(for='line-width'): code width
-              input#line-width.form-control(type='number', value=10)
-            .checkbox: label.control-label
-              input#line-smooth(type='checkbox', checked)
-              strong: code smooth
-            h2 Bevel
-            .checkbox: label.control-label
-              input#bevel-enabled(type='checkbox')
-              strong: code enabled
-            .checkbox: label.control-label
-              input#bevel-smooth(type='checkbox')
-              strong: code smooth
-            .form-group
-              label.control-label(for='bevel-shine'): code shine
-              input#bevel-shine.form-control(type='number', value=0.35)
-            .form-group
-              label.control-label(for='bevel-shadow'): code shadow
-              input#bevel-shadow.form-control(type='number', value=0.15)
-
-    script( src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/highlight.min.js" )
-    script( src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/languages/javascript.min.js" )
-    script( src="/js/bobbograph.js" )
-    script.
-      var $js = $( 'pre.js' ),
-          $elem = $( '#wrapper' );
-      function parseData( str ) {
-        var arr = str.split( /, */ ),
-            len = arr.length;
-        while ( len-- ) {
-          if ( isNaN( arr[ len ] ) ) return false;
-          if ( arr[ len ] === '' )   return false;
-          arr[ len ] = parseFloat( arr[ len ] );
-        }
-        return arr;
-      }
-      function draw () {
-        var data = parseData( $( '#data' ).val() ),
-            options = {
-              height: 300,
-              line:  {
-                width:  parseInt( $('#line-width').val(), 10 ) || 10,
-                smooth: $('#line-smooth').prop( 'checked' ),
-                fill:   $('#line-color').val()
-              },
-              xAxis: { increment: 2 },
-              yAxis: { increment: 2 }
-            };
-        if ( !data ) return;
-        if ( $( '#bevel-enabled' ).prop( 'checked' ) ) {
-          options.bevel = {
-            shine: parseFloat( $( '#bevel-shine' ).val() ) || 0.35,
-            shadow: parseFloat( $( '#bevel-shadow' ).val() ) || 0.15,
-            smooth: $( '#bevel-smooth' ).prop( 'checked' )
-          };
-        }
-        new Bobbograph( $elem.empty(), data, options );
-        $js.text( 'new Bobbograph( $element, ' + JSON.stringify( data ) + ', ' + JSON.stringify( options, null, 2 ) + ' );' );
-        hljs.highlightBlock( $js.get( 0 ) );
-      }
-      draw();
-      $( 'form' ).on( 'click blur change keyup', 'input', draw );
+.header-block
+  .container
+    h1 Demo
+    p.lead Interactive demo to show what Bobbograph can do.
+br
+.container
+  .row
+    .col-md-9
+      .well
+        #wrapper(rm-graph='graphData()')
+      pre.js(rm-code='codeSample()')
+    .col-md-3
+      form
+        h2 Data
+        .form-group
+          input#data.form-control(type='text', ng-model='data')
+        h2 Line
+        .form-group
+          label.control-label(for='line-color'): code color
+          input#line-color.form-control(type='text', ng-model='options.line.fill')
+        .form-group
+          label.control-label(for='line-width'): code width
+          input#line-width.form-control(type='number', ng-model='options.line.width')
+        .checkbox: label.control-label
+          input#line-smooth(type='checkbox', ng-model='options.line.smooth')
+          strong: code smooth
+        h2 Bevel
+        .checkbox: label.control-label
+          input#bevel-enabled(type='checkbox', ng-model='bevel')
+          strong: code enabled
+        .checkbox(ng-show='bevel'): label.control-label
+          input#bevel-smooth(type='checkbox', ng-model='bevelOptions.smooth')
+          strong: code smooth
+        .form-group(ng-show='bevel')
+          label.control-label(for='bevel-shine'): code shine
+          input#bevel-shine.form-control(type='number', ng-model='bevelOptions.shine')
+        .form-group(ng-show='bevel')
+          label.control-label(for='bevel-shadow'): code shadow
+          input#bevel-shadow.form-control(type='number', ng-model='bevelOptions.shadow')
