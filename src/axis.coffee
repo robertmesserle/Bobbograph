@@ -16,7 +16,7 @@ class Axis
       elem = document.createElement( 'li' )
       elem.style[ @prop ] = line.pos
       text = document.createElement( 'div' )
-      text.innerText = line.number
+      text.textContent = line.number
       elem.appendChild( text )
       axis.appendChild( elem )
     axis
