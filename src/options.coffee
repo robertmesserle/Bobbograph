@@ -42,7 +42,6 @@ class Options
       if extra is 'content'
         value -= parseInt( styles.getPropertyValue( "padding-#{ side }" ), 10 ) or 0
       value -= parseInt( styles.getPropertyValue( "border-#{ side }-width" ), 10 ) or 0
-    console.log( 'adjustedValue', value )
     value
 
   getSize: ( name, elem ) ->

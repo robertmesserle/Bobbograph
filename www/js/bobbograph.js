@@ -556,7 +556,6 @@ Options = (function() {
       }
       value -= parseInt(styles.getPropertyValue("border-" + side + "-width"), 10) || 0;
     }
-    console.log('adjustedValue', value);
     return value;
   };
 
