@@ -1,38 +1,32 @@
 {
   "name": "Bobbograph",
-  "version": "2.0.0",
-  "main": "www/server.coffee",
+  "version": "3.0.0",
+  "main": "www/server.ts",
   "engines": {
     "node": "0.10.9"
   },
   "devDependencies": {
-    "coffeeify": "~0.6.0",
-    "coffee-script": "~1.7.1",
-    "expect.js": "robertmesserle/expect.js",
-    "gulp": "~3.5.2",
-    "gulp-browserify": "~0.4.0",
-    "gulp-coffee": "~1.4.0",
-    "gulp-header": "~1.0.2",
-    "gulp-rename": "~0.2.2",
-    "gulp-uglify": "~0.2.0",
-    "gulp-coffeelint": "~0.2.0",
-    "gulp-util": "~2.2.14",
-    "mocha": "~1.17.1",
-    "gulp-stylus": "0.0.7",
-    "gulp-nodemon": "~1.0.0",
-    "gulp-minify-css": "~0.3.0"
-  },
-  "dependencies": {
-    "nib": "~0.9.0",
-    "coffee-script": "~1.7.1",
-    "harp": "~0.11.2"
+    "browserify": "^10.2.4",
+    "expect.js": "git://github.com/robertmesserle/expect.js.git",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.1.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.6",
+    "mocha": "^2.2.5",
+    "tsify": "^0.11.2",
+    "vinyl-source-stream": "^1.1.0"
   },
   "description": "Bobbograph is a graphing tool for rendering Canvas-based line-graphs.  This primary focus of this project is to allow as much customization as possible, leaving it up to the developer to decide what the graph will look like.",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "webpack": "node node_modules/.bin/webpack",
+    "uglify": "node node_modules/.bin/uglify -s dist/bobbograph.js -o dist/bobbograph.min.js",
+    "copy": "cp dist/*.js www/js",
+    "build": "npm run webpack && npm run uglify && npm run copy"
   },
   "repository": {
     "type": "git",
@@ -43,5 +37,5 @@
   "bugs": {
     "url": "https://github.com/robertmesserle/Bobbograph/issues"
   },
-  "homepage": "https://github.com/robertmesserle/Bobbograph"
+  "homepage": "http://www.bobbograph.com"
 }

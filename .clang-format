@@ -1,0 +1,14 @@
+---
+BasedOnStyle: Google
+IndentWidth: 2
+---
+Language: JavaScript
+ColumnLimit: 100
+AllowShortIfStatementsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakBeforeMultilineStrings: true
+BreakBeforeTernaryOperators: true
+IndentCaseLabels: true
+MaxEmptyLinesToKeep: 1
+---
